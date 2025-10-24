@@ -1,0 +1,4 @@
+repository "ream rame/testplswork@3573569769984@cloud"
+  path "/"
+    br "/main"
+    co "/main"

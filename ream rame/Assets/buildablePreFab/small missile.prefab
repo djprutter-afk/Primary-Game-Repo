@@ -1,0 +1,215 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6234737389751489490
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.35258985
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.19471371
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.1642613
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.50000024
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.50000036
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.49999973
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.49999967
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0dcb60ffd7ceeb2439fc05ab2bf880d5, type: 2}
+    - target: {fileID: -7511558181221131132, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0dcb60ffd7ceeb2439fc05ab2bf880d5, type: 2}
+    - target: {fileID: -7511558181221131132, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0dcb60ffd7ceeb2439fc05ab2bf880d5, type: 2}
+    - target: {fileID: -7511558181221131132, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: 'm_Materials.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0dcb60ffd7ceeb2439fc05ab2bf880d5, type: 2}
+    - target: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_Name
+      value: small missile
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      propertyPath: m_TagString
+      value: unit
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7535402805797391380}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5332248436802235963}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3338517462602955331}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5326956423453081981}
+  m_SourcePrefab: {fileID: 100100000, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+--- !u!1 &6505261982738214531 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+  m_PrefabInstance: {fileID: 6234737389751489490}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7535402805797391380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505261982738214531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d315d55c093b047aeb57687d356776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameOfBuildable: Small missile
+  rotationOfBuildable: {x: 180, y: 0, z: 0}
+  currentlyClicked: 0
+  possibleRangeDiameter: 0.75
+  rangeIndicator: {fileID: 7249241391627663171, guid: 39cbf8452644fa14a95597980b8ddcab, type: 3}
+  tileOn: {fileID: 0}
+  unitFloorDistance: 0.07
+  isMoving: 0
+  timeToWait: 8
+  movePath: []
+  upkeepCosts:
+    moneyExpenses: 3
+    resourceExpenses: 5
+    populationExpenses: 8
+    buildingName: mr skibid
+  possibleActions: 0000000002000000
+--- !u!114 &-5332248436802235963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505261982738214531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf6690f2b52371241bf3db1bc1225af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  missileSpeed: 1
+  explosionpower: 1
+  launchDebug: 0
+  targetDebug: {fileID: 0}
+  forceAmt: 0
+  missileHeight: 0.3
+  explosionObject: {fileID: 714982634637159252, guid: f1767d374f01ef446bef3e06293410ff, type: 3}
+  power: 0.26
+  slope: 1.12
+  endDiameter: 0.15
+--- !u!64 &3338517462602955331
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505261982738214531}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: ad64fdab3bfcf0f45985af1e1bb8c8bb, type: 3}
+--- !u!54 &5326956423453081981
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6505261982738214531}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

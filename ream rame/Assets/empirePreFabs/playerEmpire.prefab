@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2021864630668587882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4343059650108287325}
+  - component: {fileID: 2863133040151930346}
+  - component: {fileID: 523812429575284313}
+  - component: {fileID: 2368823852201324387}
+  m_Layer: 0
+  m_Name: playerEmpire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4343059650108287325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021864630668587882}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.772378, y: -9.253682, z: -4.507915}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2863133040151930346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021864630668587882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115ddf8484ef99a4ea2d39f9866de50b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colonyStartPosition: {fileID: 0}
+  colonyMaterial: {fileID: 2100000, guid: 55a0dfe71d22e144e95f9e7d4ffe62fd, type: 2}
+--- !u!114 &523812429575284313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021864630668587882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ea406579057b0344b9f2db1dcf118b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownedEdgeTiles: []
+  outerUnownedTiles: []
+  allTilesOwned: []
+  ownedBuildables: []
+  colonyFlag: {fileID: 2800000, guid: 4aa40fb3c49469f478b91eff00b8fc81, type: 3}
+  resourcesOwned:
+    moneyExpenses: 0
+    resourceExpenses: 0
+    populationExpenses: 0
+    buildingName: 
+  globalColonyMaterial: {fileID: 0}
+  LOCALColonyMaterial: {fileID: 0}
+  colonyGameManager: {fileID: 0}
+  totalColonyPopGrowth: 1
+--- !u!114 &2368823852201324387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021864630668587882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ada2bef17c20234ea60cfb40a842d26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
