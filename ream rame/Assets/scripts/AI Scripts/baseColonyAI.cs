@@ -1,15 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-using NUnit.Framework;
-using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildables but instead guides them
@@ -52,7 +43,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     }
     void Start()
     {
-        setupTimers();
+        setupTimers();// useless
         setupBeliefs();
         setupActions();
         setupGoals();
@@ -80,18 +71,13 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         beliefFactory factory = new beliefFactory(this, beliefs);
 
         factory.addBeliefs("Nothing", () => false);
-        /*
+        
 
         factory.addBeliefs("isMoneyBroke", () => thisColonyScript.resourcesOwned.moneyExpenses < 0);
         factory.addBeliefs("isMoneyRich", () => thisColonyScript.resourcesOwned.moneyExpenses < 100);
 
 
-        factory.addBeliefs("Is keeping pace with money", () => gameSetup1.avergeResourceAmt.moneyExpenses * 0.8 < thisColonyScript.resourcesOwned.moneyExpenses);
-        factory.addBeliefs("Is keeping pace with resouces", () => gameSetup1.avergeResourceAmt.resourceExpenses * 0.8 < thisColonyScript.resourcesOwned.resourceExpenses);
-        */
-        factory.addBeliefs("skbidi", () => thisColonyScript.tempGoapTestNumber == 1);
-        factory.addBeliefs("ohmahlord", () => thisColonyScript.tempGoapTestNumber == 2);
-        factory.addBeliefs("number1", () =>thisColonyScript.tempGoapTestNumber == 3);
+
 
     }
     
@@ -99,20 +85,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     {
         actions = new HashSet<agentAction>();
 
-        actions.Add(new agentAction.Builder("Relax")
-        .WithStrat(new waitStrat(thisColonyScript, 3,1))
-       .AddEffect(beliefs["skbidi"])
-       .Build());
-        actions.Add(new agentAction.Builder("Relaxv2")
-         .WithStrat(new waitStrat(thisColonyScript, 3,2))
-         .addPreCondition(beliefs["skbidi"])
-        .AddEffect(beliefs["ohmahlord"])
-        .Build());
-      actions.Add(new agentAction.Builder("Relaxv3")
-       .WithStrat(new waitStrat(thisColonyScript,3,3))
-       .addPreCondition(beliefs["ohmahlord"])
-      .AddEffect(beliefs["number1"])
-      .Build());
+       
+
+     //   actions.Add(new agentAction.Builder("settle new land")
+       // .WithStrat(new strat)
 
 
 
@@ -120,30 +96,22 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
     void setupGoals()
     {
+
         goals = new HashSet<AgentGoal>();
+        /*
         goals.Add(new AgentGoal.Builder("Increase wealth")
         .withPriority(0.8f)
         .withdesiredEffects(beliefs["number1"])
         .Build());
-
-        /*
-        goals.Add(new AgentGoal.Builder("Increase wealth")
-        .withPriority(0.8f)
-        .withdesiredEffects(beliefs["isMoneyRich"])
-        .Build());
-         goals.Add(new AgentGoal.Builder("Increase resources")
-        .withPriority(0.8f)
-        .withdesiredEffects(beliefs["isMoneyRich"])
-        .Build());
-         goals.Add(new AgentGoal.Builder("Keep Pace with everyone")
-        .withPriority(1)
-        .withdesiredEffects(beliefs["Is keeping pace with money"])
-        .Build());
-         goals.Add(new AgentGoal.Builder("dont be broke")
-        .withPriority(2)
-        .withdesiredEffects(beliefs["isMoneyRich"])
-        .Build());
         */
+
+        
+        goals.Add(new AgentGoal.Builder("expandSize")
+        .withPriority(0.25f)
+        .withdesiredEffects(beliefs["isMoneyRich"])
+        .Build());
+       
+        
 
     }
     
@@ -262,7 +230,7 @@ public class CountDownTimer
 
     public void tick(float timeElapsed)
     {
-        Debug.LogWarning("time tick" + timeElapsed + " time left: " + timeToWait);
+        Debug.LogWarning("time tick" + timeElapsed + " time left: " + timeLeft);
 
         if (isCounting == false)
         {

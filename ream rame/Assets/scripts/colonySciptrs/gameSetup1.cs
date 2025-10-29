@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class gameSetup1 : MonoBehaviour
+public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as vital game setup functions have been spread across multiple scripts now
 {
     [SerializeField] Material allColonyMaterial;
     public GameObject playerColonyPrefab;
@@ -30,6 +30,7 @@ public class gameSetup1 : MonoBehaviour
     List<colonyScript> allColonieScripts = new List<colonyScript>();
     public static BuildingStruct avergeResourceAmt;
 
+   
 
 
 
@@ -82,8 +83,8 @@ public class gameSetup1 : MonoBehaviour
                 AIAIAIAIAAIAIAIA.theGameManager = gameManager;
             }
 
-            colonyScript bruhsScript = createdColony.GetComponent<colonyScript>();
-            bruhsScript.colonyGameManager = gameManager;
+            colonyScript creaetedColonyScript = createdColony.GetComponent<colonyScript>();
+            creaetedColonyScript.colonyGameManager = gameManager;
 
 
             int randomPositionIndex = Random.Range(0, moonChildren);
@@ -152,8 +153,9 @@ public class gameSetup1 : MonoBehaviour
                 tileInfo thisTilesInfo = colonyStartScript.colonyStartPosition.GetComponent<tileInfo>();
                 if (thisTilesInfo != null)
                 {
-                    
-                    thisTilesInfo.development = 2;
+                   
+                       thisTilesInfo.buildNewBuildable(gameManagerScript.developmentGameObject, creaetedColonyScript);
+                            thisTilesInfo.buildNewBuildable(gameManagerScript.developmentGameObject, creaetedColonyScript);
                     thisTilesInfo.population = 300;
 
                 }
@@ -163,7 +165,7 @@ public class gameSetup1 : MonoBehaviour
             }
             else
             {
-                lastResort(createdColony);
+                lastResort(createdColony,creaetedColonyScript);
 
             }
 
@@ -174,7 +176,7 @@ public class gameSetup1 : MonoBehaviour
 
     }
 
-    void lastResort(GameObject failedColony)
+    void lastResort(GameObject failedColony,colonyScript FailedColonyScript)
     {
         int moonChildren = theMoon.transform.childCount;
 
@@ -203,7 +205,8 @@ public class gameSetup1 : MonoBehaviour
                         {
 
 
-                            thisTilesInfo.development = 2;
+                            thisTilesInfo.buildNewBuildable(gameManagerScript.developmentGameObject, FailedColonyScript);
+                            thisTilesInfo.buildNewBuildable(gameManagerScript.developmentGameObject, FailedColonyScript);
 
                             thisTilesInfo.population = 300;
                         }

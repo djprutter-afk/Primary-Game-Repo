@@ -140,6 +140,12 @@ MonoBehaviour:
     populationExpenses: 0
     buildingName: hgjhub
   possibleActions: 0200000004000000
+  isBuilding: 0
+  purposes:
+  - purpose: 2
+    strength: 1
+  - purpose: 3
+    strength: 0.25
 --- !u!114 &6643086425894213974
 MonoBehaviour:
   m_ObjectHideFlags: 0

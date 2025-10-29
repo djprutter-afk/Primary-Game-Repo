@@ -8,7 +8,7 @@ public class tileInfo : MonoBehaviour
     public float tileProtection = 0f;
     public float populationGrowthPercent = 1.003f;
     public List<BuildingStruct> buildingsOnTile = new List<BuildingStruct>();
-    
+
 
     public float resource;
 
@@ -31,13 +31,13 @@ public class tileInfo : MonoBehaviour
                 resourceExpenses = 20,
                 populationExpenses = 1
             }
-           
+
 
         };
-      
 
 
-       
+
+
     }
 
     public BuildingStruct TotalIncome(bool alsoAdd = false)// this is the formula for determining all products of the tile
@@ -94,10 +94,39 @@ public class tileInfo : MonoBehaviour
 
 
 
+    public void buildNewBuildable(buildableGameObject thisBuildable, colonyScript thisColony)
+    {
+        GameObject newBuildable = Instantiate(thisBuildable.buildableObject, thisColony.gameObject.transform);
 
+        Debug.Log(newBuildable);
+
+        buildableScript newBuildableScript = newBuildable.GetComponent<buildableScript>();
+
+        //newBuildableScript.isBuilding = thisBuildable.isBuilding;
+
+        thisColony.ownedBuildables.Add(newBuildable);
+
+  
+
+        newBuildableScript.tileOn = gameObject;
+
+        newBuildableScript.becomeParellel();
+        if (newBuildableScript.isBuilding == true)
+        {
+
+            buildingsOnTile.Add(newBuildableScript.upkeepCosts);
+            return;
+
+        }
+                
+
+    }
+    
 
 
 }
+
+
 struct buildingSuperStruct
 {
     public BuildingStruct upkeep;

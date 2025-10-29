@@ -11,9 +11,11 @@ public class buildableGameObject//building
     public float moneyExpenses;
     public float resourceExpenses;
     public int populationExpenses;
+
+    // thses expenses above are only buying the buildable NOT THE UPKEEP, UPKEEP IS STORED WITHIN THE BUILDABLESCRIPT ITSELF
     public GameObject buildableObject; // be sure to assign position
     public string nameOfBuildable;
-    public bool isBuilding;
+    //public bool isBuilding;
 
 }
 
@@ -41,11 +43,7 @@ public class gameManagerScript : MonoBehaviour
     public static GameObject baseBuildableUI;
 
 
-    public enum catagoriesEnum
-    {
-        dog
-    
-    }
+   
 
 
     public buildingCatagory[] allCatagories;
@@ -62,9 +60,21 @@ public class gameManagerScript : MonoBehaviour
     
     colonyScript playercolonysscript;
 
-    
 
 
+    [Header("global buildiables")]
+    [SerializeField] GameObject DevelopmentGameObject;
+
+    public static buildableGameObject developmentGameObject;
+    void OnEnable()
+    {
+        developmentGameObject = new buildableGameObject();
+        developmentGameObject.moneyExpenses = 500;
+        developmentGameObject.resourceExpenses = 250;
+        developmentGameObject.populationExpenses = 50;
+        developmentGameObject.buildableObject = DevelopmentGameObject;
+        developmentGameObject.nameOfBuildable = "Development";
+    }
 
 
     void Start()
@@ -119,10 +129,10 @@ public class gameManagerScript : MonoBehaviour
                 currentBuildableScript.thisBuildable.moneyExpenses = currentBuildable.moneyExpenses;
                 currentBuildableScript.thisBuildable.populationExpenses = currentBuildable.populationExpenses;
                 currentBuildableScript.thisBuildable.resourceExpenses = currentBuildable.resourceExpenses;
-                currentBuildableScript.thisBuildable.isBuilding = currentBuildable.isBuilding;
+                //currentBuildableScript.thisBuildable.isBuilding = currentBuildable.isBuilding;
                 currentBuildableScript.nameOfBuildable = currentBuildable.nameOfBuildable;
                 currentBuildableScript.thisColony = playercolonysscript;
-                currentBuildableScript.thisBuildable.isBuilding = currentBuildable.isBuilding;
+                //currentBuildableScript.thisBuildable.isBuilding = currentBuildable.isBuilding;
                 currentBuildableScript.buildablescript = currentbuildableuiscript;
 
                 currentBuildableScript.updateBuildable();

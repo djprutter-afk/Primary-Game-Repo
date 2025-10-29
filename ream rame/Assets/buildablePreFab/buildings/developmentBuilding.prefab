@@ -61,6 +61,8 @@ MonoBehaviour:
     populationExpenses: 0
     buildingName: development
   possibleActions: 
+  isBuilding: 1
+  purposes: []
 --- !u!114 &5640494293122521958
 MonoBehaviour:
   m_ObjectHideFlags: 0

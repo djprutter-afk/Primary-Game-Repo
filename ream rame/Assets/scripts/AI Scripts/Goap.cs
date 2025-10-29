@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
-// this is all made with tuorial: https://www.youtube.com/watch?v=T_sBYgP7_2k&t=613s
+//this is all made with tutorial: https://www.youtube.com/watch?v=T_sBYgP7_2k&t=613s 
 public class beliefFactory
 {
 
@@ -102,7 +102,31 @@ public class spendStrat : iActionStrat
         builtTheThing = true;
     }
 }
+public class useStrat : iActionStrat
+{
+    bool finishedAction = false;
+    public bool canPerform => !complete;
+    public bool complete => finishedAction;
+/// <summary>
+/// constructor for using action on a buildable for ai
+/// </summary>
+/// <param name="performingBuildable">the buildable that is performing the action</param>
+/// <param name="action">the action for the buildable to perform</param>
+/// <param name="target">target for the action, can be null if there isnt a target for the action</param>
 
+    public useStrat( buildableScript performingBuildable, buildableScript.buildableActions action,GameObject target)
+    {
+        performingBuildable.buildableAction(action, target);
+        performingBuildable.finishedAction += hasFinishedAction;
+
+
+    }
+    void hasFinishedAction()
+    {
+        finishedAction = true;
+        
+    }
+}
 
 public class begStrat : iActionStrat
 {
@@ -260,7 +284,7 @@ public interface IGoapPlanner
 
 }
 
-public class GoapPlanner : IGoapPlanner
+public class GoapPlanner : IGoapPlanner // this should be multithreaded at some point TODO
 {
     public ActionPlan Plan(baseColonyAI agent, HashSet<AgentGoal> goals, AgentGoal mostrecentGoal = null)
     {
@@ -317,7 +341,7 @@ public class GoapPlanner : IGoapPlanner
                 newRequiredEffects.UnionWith(action.preconditions);
 
                 var newAvailableActions = new HashSet<agentAction>(actions);
-                newAvailableActions.Remove(action);
+                //newAvailableActions.Remove(action);  // have no idea but removing this line fixed everything, keeping it just in case
 
                 var newNode = new Node(parent, action, newRequiredEffects, parent.Cost + action.cost);
 

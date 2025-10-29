@@ -163,6 +163,7 @@ public class misstileScript : MonoBehaviour
         skbidi.Power = power;
         skbidi.slope = slope;
         skbidi.endDiameter = endDiameter;
+        thisUnitScript.FinsihedAction();
         Destroy(gameObject);
 
     }

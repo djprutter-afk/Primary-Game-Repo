@@ -183,13 +183,13 @@ public class playerMouseInteractions : MonoBehaviour// for the sole player only
             buildableScript currentBuildable = currentBuildableSelection[i].GetComponent<buildableScript>();
 
           
-            bool suceeded = currentBuildable.uiAction(Action, currentTileSelection[randomOrder[tileIndex]]);
+            bool suceeded = currentBuildable.buildableAction(Action, currentTileSelection[randomOrder[tileIndex]]);
 
             if (suceeded == false)
             {
                 foreach (GameObject tile in currentTileSelection)// if above fails then check every tile for validness 
                 {
-                    bool sucess = currentBuildable.uiAction(Action, tile);
+                    bool sucess = currentBuildable.buildableAction(Action, tile);
                     if (sucess == true)
                     {
                         break;

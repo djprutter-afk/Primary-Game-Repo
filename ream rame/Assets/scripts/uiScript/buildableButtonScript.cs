@@ -70,6 +70,11 @@ public class buildableButtonScript : MonoBehaviour
             bool successInBuy = colonyMethoods.purchasableAction(thisColony.gameObject,buildableCost,currentTile, true);
             if (successInBuy == true)
             {
+                tileInfo currentTileInfo = currentTile.GetComponent<tileInfo>();
+                currentTileInfo.buildNewBuildable(thisBuildable, thisColony);
+
+
+                /*
 
                 GameObject newBuildable = Instantiate(thisBuildable.buildableObject,thisColony.gameObject.transform);
                 Debug.Log(newBuildable);
@@ -89,6 +94,7 @@ public class buildableButtonScript : MonoBehaviour
                     return;
                     
                 }
+                */
                 
 
                 

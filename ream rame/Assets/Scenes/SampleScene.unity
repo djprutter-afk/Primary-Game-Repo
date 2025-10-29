@@ -725,7 +725,7 @@ Transform:
   m_GameObject: {fileID: 620351286}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.06431371, y: -1.45, z: 0}
+  m_LocalPosition: {x: -8.71, y: -1.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5999,6 +5999,7 @@ MonoBehaviour:
       nameOfBuildable: holy smokes loisis
       isBuilding: 0
   colonies: {fileID: 1666743407}
+  DevelopmentGameObject: {fileID: 7158736758787451057, guid: bc1cedb700b2cea459a9335c55a0f355, type: 3}
 --- !u!4 &713989427
 Transform:
   m_ObjectHideFlags: 0

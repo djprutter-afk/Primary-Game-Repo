@@ -5,16 +5,18 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.WSA;
-
+using System.Collections.Generic;
 
 public class buildableScript : MonoBehaviour
 {
     public string nameOfBuildable; // must be assinged in editor for more info look in the buildableActionsScript
 
 
-
+    
+    public event System.Action finishedAction; // you should understand
     public event System.Action<GameObject> launch; // GameObject is target position
     public event System.Action<GameObject> Attack;//  GameObject is also target
+    
     public event System.Action<GameObject> Move;
     public event System.Action Repair;
     public event System.Action CancelAll;// should cancel all actions if they are cancelable, uncancelable would be like a missile launch or something
@@ -64,9 +66,39 @@ public class buildableScript : MonoBehaviour
 
     public bool isBuilding;
     colonyScript ownerColonyScript;
-    
 
-    public bool uiAction(buildableActions action, GameObject target)
+
+
+    //[Header("info")]
+    [System.Serializable]
+    public class AIBuildableInfo
+    {
+        [System.Serializable]
+        public enum buildablePurposes
+        {
+            offensive,
+            defensive,
+            expansion,
+            economy,
+            suicidieOffensive,// missiles
+            antiMissile
+
+        }
+        [System.Serializable]
+        public struct biInfoStuct
+        {
+            public buildablePurposes purpose;
+            public float strength; // how effective the builable is at this purpose 0% to 100%
+            
+        }
+
+        
+        
+        
+
+    }
+    public AIBuildableInfo.biInfoStuct[] purposes;
+    public bool buildableAction(buildableActions action, GameObject target)
     {
         if (Vector3.Distance(target.transform.position, transform.position) > possibleRangeDiameter / 2)
         {
@@ -201,6 +233,7 @@ public class buildableScript : MonoBehaviour
 
                     doneMoving?.Invoke();
                     isMoving = false;
+                    FinsihedAction();
                     return;
                 }
                 moveToTile(movePath[movePathPosition]);
@@ -229,7 +262,7 @@ public class buildableScript : MonoBehaviour
 
     public void moveToTileSetup(GameObject endTarget)
     {
-      
+
         movePath = colonyMethoods.pathtingAlgorthim(tileOn, endTarget).ToArray();
         if (movePath == null)
         {
@@ -238,6 +271,12 @@ public class buildableScript : MonoBehaviour
         movePathPosition = 0;
         endTargetTile = endTarget;
         isMoving = true;
+    }
+    
+    public void FinsihedAction()
+    {
+
+        finishedAction?.Invoke();
     }
 
     void upkeepCostsToColony()
@@ -256,9 +295,11 @@ public class buildableScript : MonoBehaviour
 
     }
 
+
     void OnDestroy()
     {
         ownerColonyScript.ownedBuildables.Remove(gameObject);
-        
+
     }
+    
 }

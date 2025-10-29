@@ -10,11 +10,5 @@ public class developmentScript : MonoBehaviour
         tileonInfo.development += 1;
         Destroy(gameObject);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
 // small test
