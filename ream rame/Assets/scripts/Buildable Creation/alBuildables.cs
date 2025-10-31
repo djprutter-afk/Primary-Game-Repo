@@ -25,7 +25,7 @@ public class allBuildables : MonoBehaviour
 
 
 
-[System.Serializable]
+    [System.Serializable]
     public class missileCatagory
     {
         public string catagoryName = "Missiles";
@@ -46,4 +46,6 @@ public class allBuildables : MonoBehaviour
 
 
     public allCatagories allOfThecats;
+    
+    
 }

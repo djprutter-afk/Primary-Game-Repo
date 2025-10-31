@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using System.Linq;
+using NUnit.Framework;
+using System.ComponentModel;
+using UnityEngine.Tilemaps;
 //this is all made with tutorial: https://www.youtube.com/watch?v=T_sBYgP7_2k&t=613s 
 public class beliefFactory
 {
@@ -89,7 +92,9 @@ public interface iActionStrat
 
     }
 }
-
+/// <summary>
+/// should be removed
+/// </summary>
 public class spendStrat : iActionStrat
 {
     bool builtTheThing;
@@ -100,6 +105,91 @@ public class spendStrat : iActionStrat
     {
         colony.resourcesOwned.moneyExpenses = -100;
         builtTheThing = true;
+    }
+}
+public class waitTickStrat : iActionStrat
+{
+
+    int ticksRemaining;
+
+    public bool canPerform => !complete;
+    public bool complete => ticksRemaining == 0;
+    public waitTickStrat(int ticks)
+    {
+        ticksRemaining = ticks;
+        gameManagerScript.GameTick += this.tick;
+
+
+    }
+    void tick()
+    {
+        ticksRemaining--;
+
+    }
+
+
+
+
+}
+
+/// <summary>
+/// UNFINSIED FINSIH IT NOW
+/// </summary>
+public class buildStrat : iActionStrat
+{
+    bool finished = false;
+    BuildingStruct purchciceCost;
+    colonyScript callingColony;
+    
+    public bool canPerform => BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
+    public bool complete => finished;
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="targetPos">the tile position where the strat will try to build the buildables around</param>
+    /// <param name="buildableToBuild"></param>
+    /// <param name="buildingCost"></param>
+    /// <param name="CallingColony"></param>
+    public buildStrat(GameObject targetPos, GameObject buildableToBuild,BuildingStruct BuildCost, int amountTobuild, colonyScript CallingColony)
+    {
+        buildableScript buildableScript = buildableToBuild.GetComponent<buildableScript>();
+     
+
+        GameObject[] ownedTiles = callingColony.allTilesOwned.ToArray();
+        Dictionary<GameObject, float> tileDic = new Dictionary<GameObject, float>();
+        foreach (GameObject currentTile in ownedTiles)
+        {
+            float distance = Vector3.Distance(targetPos.transform.position, currentTile.transform.position);
+            tileDic.Add(currentTile, distance);
+        }
+
+        int amountBuilded = 0;
+
+        foreach(KeyValuePair<GameObject, float> tileKVP in tileDic.OrderBy(x => x.Value))
+        {
+            
+            if(BuildingStruct.comapareCosts(callingColony.resourcesOwned,BuildCost) == true)
+            {
+                tileInfo tileScript = tileKVP.Key.GetComponent<tileInfo>();
+                buildableGameObject buildable = new buildableGameObject
+                {
+                    buildCost = BuildCost,
+                    buildableObject = buildableToBuild,
+                    nameOfBuildable = buildableScript.nameOfBuildable
+
+
+                };
+
+                tileScript.buildNewBuildable(buildable, callingColony);
+                amountBuilded += 1;
+
+        
+            }
+            
+        }
+        
+
+      
     }
 }
 public class useStrat : iActionStrat
@@ -124,8 +214,9 @@ public class useStrat : iActionStrat
     void hasFinishedAction()
     {
         finishedAction = true;
-        
+
     }
+    
 }
 
 public class begStrat : iActionStrat

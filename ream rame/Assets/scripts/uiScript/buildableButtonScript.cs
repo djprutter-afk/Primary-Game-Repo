@@ -41,9 +41,9 @@ public class buildableButtonScript : MonoBehaviour
         TMP_Text moneyText = moneyExpenseText.GetComponent<TMP_Text>();
         TMP_Text popText = populationExpenseText.GetComponent<TMP_Text>();
         TMP_Text resourcetext = resourceExpenseText.GetComponent<TMP_Text>();
-        moneyText.text = thisBuildable.moneyExpenses.ToString();
-        popText.text = thisBuildable.populationExpenses.ToString();
-        resourcetext.text = thisBuildable.resourceExpenses.ToString();
+        moneyText.text = thisBuildable.buildCost.moneyExpenses.ToString();
+        popText.text = thisBuildable.buildCost.populationExpenses.ToString();
+        resourcetext.text = thisBuildable.buildCost.resourceExpenses.ToString();
 
 
 
@@ -53,9 +53,9 @@ public class buildableButtonScript : MonoBehaviour
     { 
          buildableCost = new BuildingStruct
         {
-            moneyExpenses = thisBuildable.moneyExpenses,
-            populationExpenses = thisBuildable.populationExpenses,
-            resourceExpenses = thisBuildable.resourceExpenses
+            moneyExpenses = thisBuildable.buildCost.moneyExpenses,
+            populationExpenses = thisBuildable.buildCost.populationExpenses,
+            resourceExpenses = thisBuildable.buildCost.resourceExpenses
         };
         int tileSelectedAmt = uiScript.tileselected.Length;
         int[] randomOrder = randomAssortment(tileSelectedAmt);

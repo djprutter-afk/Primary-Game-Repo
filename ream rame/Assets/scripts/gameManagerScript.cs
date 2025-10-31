@@ -7,10 +7,8 @@ using UnityEngine.SceneManagement;
 [System.Serializable]
 public class buildableGameObject//building
 {
-    
-    public float moneyExpenses;
-    public float resourceExpenses;
-    public int populationExpenses;
+
+    public BuildingStruct buildCost;
 
     // thses expenses above are only buying the buildable NOT THE UPKEEP, UPKEEP IS STORED WITHIN THE BUILDABLESCRIPT ITSELF
     public GameObject buildableObject; // be sure to assign position
@@ -69,9 +67,9 @@ public class gameManagerScript : MonoBehaviour
     void OnEnable()
     {
         developmentGameObject = new buildableGameObject();
-        developmentGameObject.moneyExpenses = 500;
-        developmentGameObject.resourceExpenses = 250;
-        developmentGameObject.populationExpenses = 50;
+        developmentGameObject.buildCost.moneyExpenses = 500;
+        developmentGameObject.buildCost.resourceExpenses = 250;
+        developmentGameObject.buildCost.populationExpenses = 50;
         developmentGameObject.buildableObject = DevelopmentGameObject;
         developmentGameObject.nameOfBuildable = "Development";
     }
@@ -126,9 +124,9 @@ public class gameManagerScript : MonoBehaviour
                 GameObject buildingButton = Instantiate(uiBuildableItemPrefab, currentCatagoryhere.transform);
                 buildableButtonScript currentBuildableScript = buildingButton.GetComponent<buildableButtonScript>();
                 currentBuildableScript.thisBuildable.buildableObject = currentBuildable.buildableObject;
-                currentBuildableScript.thisBuildable.moneyExpenses = currentBuildable.moneyExpenses;
-                currentBuildableScript.thisBuildable.populationExpenses = currentBuildable.populationExpenses;
-                currentBuildableScript.thisBuildable.resourceExpenses = currentBuildable.resourceExpenses;
+                currentBuildableScript.thisBuildable.buildCost.moneyExpenses = currentBuildable.buildCost.moneyExpenses;
+                currentBuildableScript.thisBuildable.buildCost.populationExpenses = currentBuildable.buildCost.populationExpenses;
+                currentBuildableScript.thisBuildable.buildCost.resourceExpenses = currentBuildable.buildCost.resourceExpenses;
                 //currentBuildableScript.thisBuildable.isBuilding = currentBuildable.isBuilding;
                 currentBuildableScript.nameOfBuildable = currentBuildable.nameOfBuildable;
                 currentBuildableScript.thisColony = playercolonysscript;

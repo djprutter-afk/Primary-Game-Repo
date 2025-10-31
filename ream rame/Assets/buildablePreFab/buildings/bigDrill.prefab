@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7158736758787451057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7456391225198054269}
+  - component: {fileID: 7811488923873645452}
+  - component: {fileID: 8279398763461394640}
+  m_Layer: 0
+  m_Name: bigDrill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7456391225198054269
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7158736758787451057}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.5553803, y: 1.7007786, z: 0.64794046}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7811488923873645452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7158736758787451057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d315d55c093b047aeb57687d356776, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameOfBuildable: Development
+  rotationOfBuildable: {x: 0, y: 0, z: 0}
+  currentlyClicked: 0
+  possibleRangeDiameter: 0
+  rangeIndicator: {fileID: 7249241391627663171, guid: 39cbf8452644fa14a95597980b8ddcab, type: 3}
+  tileOn: {fileID: 0}
+  unitFloorDistance: 1
+  isMoving: 0
+  timeToWait: 1
+  movePath: []
+  upkeepCosts:
+    moneyExpenses: 30
+    resourceExpenses: -60
+    populationExpenses: 0
+    buildingName: Big Drill
+  possibleActions: 
+  isBuilding: 1
+  purposes: []
+--- !u!114 &8279398763461394640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7158736758787451057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c80c4b77dcba4542854682ba73f6b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyOnCreate: 0

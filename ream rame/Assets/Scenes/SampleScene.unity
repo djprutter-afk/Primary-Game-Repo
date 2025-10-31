@@ -5964,26 +5964,22 @@ MonoBehaviour:
       populationExpenses: 0
       buildableObject: {fileID: 6505261982738214531, guid: 5e6b57313da1d8c48a7a18ddefdfc91e, type: 3}
       nameOfBuildable: Small Missile
-      isBuilding: 0
     - moneyExpenses: 250
       resourceExpenses: 100
       populationExpenses: 50
       buildableObject: {fileID: 4611562821212978756, guid: 385d529ebc1c9bc48bf1b35277026829, type: 3}
       nameOfBuildable: Settler
-      isBuilding: 0
     - moneyExpenses: 500
       resourceExpenses: 250
       populationExpenses: 10
       buildableObject: {fileID: 7158736758787451057, guid: bc1cedb700b2cea459a9335c55a0f355, type: 3}
       nameOfBuildable: devlop tile(s)
-      isBuilding: 1
     - moneyExpenses: 100
       resourceExpenses: 50
       populationExpenses: 20
-      buildableObject: {fileID: 0}
+      buildableObject: {fileID: 7158736758787451057, guid: a9a199d570b3c9743b135cc2e56b701b, type: 3}
       nameOfBuildable: Big Drill
-      isBuilding: 1
-  - catagoryName: zoggish
+  - catagoryName: test Cat
     catagoryColour: {r: 0.6886792, g: 0.10070309, b: 0.4828983, a: 1}
     arrayOfBuildings:
     - moneyExpenses: 11.43
@@ -5991,13 +5987,11 @@ MonoBehaviour:
       populationExpenses: -20
       buildableObject: {fileID: 0}
       nameOfBuildable: 4354er3
-      isBuilding: 0
     - moneyExpenses: 3
       resourceExpenses: 1
       populationExpenses: 0
       buildableObject: {fileID: 6505261982738214531, guid: 5e6b57313da1d8c48a7a18ddefdfc91e, type: 3}
-      nameOfBuildable: holy smokes loisis
-      isBuilding: 0
+      nameOfBuildable: me should be removed
   colonies: {fileID: 1666743407}
   DevelopmentGameObject: {fileID: 7158736758787451057, guid: bc1cedb700b2cea459a9335c55a0f355, type: 3}
 --- !u!4 &713989427

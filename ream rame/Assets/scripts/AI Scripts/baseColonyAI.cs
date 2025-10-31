@@ -60,6 +60,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         statsTimer.Start();
 
     }
+  
     void updateStats()
     {
 
@@ -71,10 +72,11 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         beliefFactory factory = new beliefFactory(this, beliefs);
 
         factory.addBeliefs("Nothing", () => false);
-        
 
-        factory.addBeliefs("isMoneyBroke", () => thisColonyScript.resourcesOwned.moneyExpenses < 0);
-        factory.addBeliefs("isMoneyRich", () => thisColonyScript.resourcesOwned.moneyExpenses < 100);
+        factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
+        
+      //  factory.addBeliefs
+       
 
 
 
@@ -87,8 +89,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
        
 
-     //   actions.Add(new agentAction.Builder("settle new land")
-       // .WithStrat(new strat)
+       //actions.Add(new agentAction.Builder("settle new land")
+        //.WithStrat(new useStrat())
 
 
 

@@ -142,5 +142,39 @@ public struct BuildingStruct// poorly named, variables are also poorly named but
     public float resourceExpenses;
     public int populationExpenses; // people sacrfice for the gods
     public string buildingName;
+    /// <summary>
+    /// if firstcost is greater in every way than secondcost then true, elsewise false :()
+    /// </summary>
+    /// <param name="firstCost"></param>
+    /// <param name="secondCost"></param>
+    /// <returns></returns>
+    public static bool comapareCosts(BuildingStruct firstCost,BuildingStruct secondCost,bool alsoSubtract = false)
+    {
+     
+
+        if (firstCost.moneyExpenses < secondCost.moneyExpenses)
+        {
+            return false;
+        }
+         if (firstCost.resourceExpenses < secondCost.resourceExpenses) 
+        {
+            return false;
+        }
+        if (firstCost.populationExpenses < secondCost.populationExpenses)
+        {
+            return false;
+        }
+        if(alsoSubtract)
+        {
+            firstCost.moneyExpenses -= secondCost.moneyExpenses;
+            firstCost.resourceExpenses -= secondCost.resourceExpenses;
+            firstCost.populationExpenses -= secondCost.populationExpenses;
+            
+        }
+       
+        return true;
+
+        
+    }
 
 }

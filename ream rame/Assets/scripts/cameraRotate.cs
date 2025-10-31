@@ -166,16 +166,8 @@ public class cameraRotate : MonoBehaviour
 
             playerCamera.transform.position = Vector3.Lerp(playerCamera.transform.position, playerCameraTarget.transform.position, interpolationRatio);
 
-            //Debug.Log(interpolationRatio + " " + timeElapsed + " " + timeWanted);
-
+            
         }
-
-        if (timeElapsed > timeWanted && false)
-        {
-
-            playerCamera.transform.position = playerCameraTarget.transform.position;
-        }
-
 
 
 
@@ -256,6 +248,7 @@ public class cameraRotate : MonoBehaviour
         float xPosition = UnityEngine.Random.Range(-MovementAmt, MovementAmt);
         float yPosition = UnityEngine.Random.Range(-MovementAmt, MovementAmt);
         float zPosition = UnityEngine.Random.Range(-MovementAmt, MovementAmt);
+
 
         screenShakePos = new Vector3(xPosition, yPosition, zPosition);
         playerCamera.transform.position += screenShakePos;
