@@ -141,7 +141,7 @@ public class buildStrat : iActionStrat
     BuildingStruct purchciceCost;
     colonyScript callingColony;
     
-    public bool canPerform => BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
+    public bool canPerform => callingColony != null && BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
     public bool complete => finished;
     /// <summary>
     /// 
@@ -152,6 +152,8 @@ public class buildStrat : iActionStrat
     /// <param name="CallingColony"></param>
     public buildStrat(GameObject targetPos, GameObject buildableToBuild,BuildingStruct BuildCost, int amountTobuild, colonyScript CallingColony)
     {
+        callingColony = CallingColony;
+    purchciceCost = BuildCost;
         buildableScript buildableScript = buildableToBuild.GetComponent<buildableScript>();
      
 
@@ -159,6 +161,12 @@ public class buildStrat : iActionStrat
         Dictionary<GameObject, float> tileDic = new Dictionary<GameObject, float>();
         foreach (GameObject currentTile in ownedTiles)
         {
+            tileInfo currentTileInfo = currentTile.GetComponent<tileInfo>();
+
+            if(currentTileInfo.occupid == true)
+            {
+                continue;
+            }
             float distance = Vector3.Distance(targetPos.transform.position, currentTile.transform.position);
             tileDic.Add(currentTile, distance);
         }
@@ -167,6 +175,7 @@ public class buildStrat : iActionStrat
 
         foreach(KeyValuePair<GameObject, float> tileKVP in tileDic.OrderBy(x => x.Value))
         {
+            
             
             if(BuildingStruct.comapareCosts(callingColony.resourcesOwned,BuildCost) == true)
             {
@@ -180,8 +189,20 @@ public class buildStrat : iActionStrat
 
                 };
 
-                tileScript.buildNewBuildable(buildable, callingColony);
-                amountBuilded += 1;
+                bool succes = colonyMethoods.purchasableAction(CallingColony.gameObject, BuildCost, tileKVP.Key, true);
+                if (succes == true)
+                {
+                    tileScript.buildNewBuildable(buildable, callingColony);
+                    amountBuilded += 1;
+                }
+                if (amountBuilded >= amountTobuild)
+                {
+                    break;
+                }
+                finished = true;
+            
+
+                
 
         
             }
