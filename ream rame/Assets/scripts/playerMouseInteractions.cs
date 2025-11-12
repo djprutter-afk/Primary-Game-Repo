@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 
 public class playerMouseInteractions : MonoBehaviour// for the sole player only
 {
+    
     public GameObject playerColony;
     [SerializeField] float effectDuration;
     public LayerMask interactionLayerMask;
@@ -293,7 +294,7 @@ public class playerMouseInteractions : MonoBehaviour// for the sole player only
 
     }
     
-      int[] randomAssortment(int length)
+    public static int[] randomAssortment(int length)
     {
         string debugNumbers = "";
         List<int> orderedRandomNummbers = Enumerable.Range(0, length).ToList();

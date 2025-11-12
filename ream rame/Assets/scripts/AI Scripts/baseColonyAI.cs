@@ -74,8 +74,9 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         factory.addBeliefs("Nothing", () => false);
 
         factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
-        
-      //  factory.addBeliefs
+
+        factory.addBeliefs("is happy with size", () => thisColonyScript.allTilesOwned.Count > 3);
+        factory.addBeliefs("has Settlers", () => getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
        
 
 
@@ -86,11 +87,32 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     void setupActions()
     {
         actions = new HashSet<agentAction>();
+        /*
+        actions.Add(new agentAction.Builder("build settlers")
+        .WithStrat(new buildStrat(
+        thisColonyScript.allTilesOwned[0],
+        ,2
+        */
 
-       
 
-       //actions.Add(new agentAction.Builder("settle new land")
-        //.WithStrat(new useStrat())
+
+
+
+
+
+
+        
+
+
+
+        actions.Add(new agentAction.Builder("settle new land")
+        .WithStrat(new useStrat(
+        getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion),
+        buildableScript.buildableActions.GenericAction,
+        colonyMethoods.bestTilesurrouning(gameObject, getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length)
+        )).AddEffect(beliefs["is happy with size"])
+        .addPreCondition(beliefs["has Settlers"])
+        .Build());
 
 
 
@@ -110,7 +132,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
         goals.Add(new AgentGoal.Builder("expandSize")
         .withPriority(0.25f)
-        .withdesiredEffects(beliefs["isMoneyRich"])
+        .withdesiredEffects(beliefs["is happy with size"])
         .Build());
        
         
@@ -201,6 +223,30 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
             actionplan = potentialPlan;
         }
     }
+     buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+    {
+        List<buildableScript> allBuildables = new List<buildableScript>();
+        List<buildableScript> selectedBuildables = new List<buildableScript>();
+        foreach (GameObject currentBuildable in thisColonyScript.ownedBuildables)
+        {
+            buildableScript currentscript = currentBuildable.GetComponent<buildableScript>();
+            foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in currentscript.purposes)
+            {
+                if (infoStuct.purpose == dog && infoStuct.strength < strengthRequired)
+                {
+                    selectedBuildables.Add(currentscript);
+                    break;// if purpose is found then no need to check the rest
+
+                }
+
+            }
+
+
+        }
+        return selectedBuildables.ToArray();
+        
+
+    }
 
 }
 public class CountDownTimer
@@ -246,16 +292,17 @@ public class CountDownTimer
             timerEnd();
         }
     }
-  
-    
+
+
     void timerEnd()
     {
         Debug.Log(timeToWait + " FDF " + timeLeft);
         onTimerEnd?.Invoke();
 
         isCounting = false;
-        
+
     }
+   
 }
 
 

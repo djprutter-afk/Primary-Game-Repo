@@ -28,70 +28,33 @@ this is mostly for ai
 */
 public static class colonyMethoods
 {
-    public static void findEdgeTiles(GameObject colony, bool ignoreIfOwned = true, bool getUnownedTIles = true)
+    public static GameObject[] findEdgeTiles(GameObject colony)
     {
-        GameObject[] ownedTiles = allColonyTiles(colony);
+         colonyScript currentColonyScript = colony.GetComponent<colonyScript>();
+        GameObject[] ownedTiles = currentColonyScript.allTilesOwned.ToArray();
+        List<GameObject> edgeTiles = new List<GameObject>();
 
-        colonyScript currentColonyScript = colony.GetComponent<colonyScript>();
         currentColonyScript.ownedEdgeTiles.Clear();
-        if (getUnownedTIles == true)
+
+        foreach (GameObject tile in ownedTiles)
         {
-            currentColonyScript.outerUnownedTiles.Clear();
-        }
+            Collider[] surroundingTiles = Physics.OverlapSphere(tile.transform.position, 0.05f);
 
-
-        for (int i = 0; i < colony.transform.childCount; i++)
-        {
-
-            Collider[] surroundingTiles = Physics.OverlapSphere(ownedTiles[i].transform.position, 0.05f);
-            for (int k = 0; k < surroundingTiles.Length; k++)
+            foreach (Collider currentSurround in surroundingTiles)
             {
-                Debug.Log(k);
-                if (surroundingTiles[k] == null)
+                tileInfo currentTileInfo = currentSurround.GetComponent<tileInfo>();
+                if (currentTileInfo == null)// means gameobject is most likely not a tile
                 {
-                    Debug.LogError("find edge tiel got a null tile, flip!");
+                    continue;
                 }
-                
-
-                if (surroundingTiles[k].transform.parent.gameObject == colony)//checks if tile is owned by calling empire
+                if (currentSurround.transform.parent != colony)
                 {
-
-                    continue; // go to next tile if true
-                }
-                
-                else if (surroundingTiles[k].transform.parent.gameObject.name == "theMoon")// if the tile is unowned
-                {
-                    Debug.Log("found the shit!");
-                    //ownedEdgeTiles.Add(ownedTiles[i]);
-                    if (getUnownedTIles == true)
-                    {
-                       
-
-                        currentColonyScript.outerUnownedTiles.Add(surroundingTiles[k].gameObject);
-                        Debug.Log("outlinetile legth is " + currentColonyScript.outerUnownedTiles.Count);
-
-                    }
-                    else
-                    {
-                        //return;
-
-
-                    }
-
-                }
-                else if (ignoreIfOwned == false)// if tile isnt unowned and not part of this colony then it must be owned by another colony
-                {
-                    currentColonyScript.ownedEdgeTiles.Add(ownedTiles[i]);
-
+                    edgeTiles.Add(tile);
+                    break;
                 }
             }
         }
-
-      
-    }
-    public static int colonyGetSize(GameObject colony)
-    {
-        return colony.transform.childCount;
+        return edgeTiles.ToArray();
     }
 
     public static GameObject getClosetPoint(GameObject target, GameObject thisColony)
@@ -205,14 +168,14 @@ public static class colonyMethoods
 
         }
       
-        return null; // means it countent find a path
+        return null; // means it couldnt find a path
 
     }
     public static List<GameObject> pathtingAlgorthim(GameObject startTile, GameObject endTile)
     {
 
         Dictionary<GameObject, GameObject> map = findPathingingMap(startTile, endTile);
-        
+
         if (map == null)
         {
             return null;
@@ -227,10 +190,11 @@ public static class colonyMethoods
 
         }
         path.Reverse();
-        
+
         return path;
-        
+
     }
+    /*
 
     public static GameObject bestNextTIle(GameObject colony, List<GameObject> outlineTiles) //determines the colonies best next tile to get
     {
@@ -258,7 +222,7 @@ public static class colonyMethoods
 
         }
 
-        resourcesOfTiles.Sort((a, b) => b.resource.CompareTo(a.resource));// idk how this works, copy pasted it but it makes so that tiles are sorted by resource value
+        resourcesOfTiles.Sort((a, b) => b.resource.CompareTo(a.resource));// makes so that tiles are sorted by resource value
         int bestTileIndex = 0;
 
         if (resourcesOfTiles.Count > 0)// this should always be the case but just to be sure
@@ -318,12 +282,15 @@ public static class colonyMethoods
         return resourcesOfTiles[bestTileIndex].gameObject;
 
     }
+    */
 
 
-    public static GameObject bestTilesurrouning(GameObject colony, List<GameObject> outlineTiles)
+    public static GameObject[] bestTilesurrouning(GameObject colony,int Length)
     {
         baseColonyAI colonyAI = colony.GetComponent<baseColonyAI>();
-        int numberOfOutlineTiles = outlineTiles.Count;
+        colonyScript colonyScript = colony.GetComponent<colonyScript>();
+        GameObject[] outlineTiles = findEdgeTiles(colony);
+        int numberOfOutlineTiles = outlineTiles.Length;
 
 
         if (numberOfOutlineTiles <= 0)
@@ -366,34 +333,35 @@ public static class colonyMethoods
 
             }
 
+            List<KeyValuePair<GameObject, float>> kvpOfTiles = dictonaryOfTiles.ToList();
 
+            var sortedKvpOfTiles = kvpOfTiles.OrderByDescending(pair => pair.Value);
 
+            GameObject[] sortedGameObjects = new GameObject[Length];
 
+            int index = 0;
 
-
-
-
-        }
-
-        float bestValue = 0;
-
-        GameObject bestTile = null;
-
-        foreach (KeyValuePair<GameObject, float> kvp in dictonaryOfTiles)
-        {
-            Debug.Log(kvp.Key + " " + kvp.Value);
-            if (kvp.Value > bestValue)
+            foreach (KeyValuePair<GameObject, float> keyValuePairTiles in sortedKvpOfTiles)
             {
-                Debug.Log(kvp.Key + " " + kvp.Value + " and is best");
-                bestValue = kvp.Value;
-                bestTile = kvp.Key;
+                sortedGameObjects[index] = keyValuePairTiles.Key;
+
             }
 
+            return sortedGameObjects;
+
+
+
+
+
+
+
+
+
+
+
 
         }
-
-        return bestTile;
-
+        return null;
 
 
     }

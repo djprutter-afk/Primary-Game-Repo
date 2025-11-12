@@ -140,7 +140,7 @@ public class buildStrat : iActionStrat
     bool finished = false;
     BuildingStruct purchciceCost;
     colonyScript callingColony;
-    
+
     public bool canPerform => callingColony != null && BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
     public bool complete => finished;
     /// <summary>
@@ -150,12 +150,12 @@ public class buildStrat : iActionStrat
     /// <param name="buildableToBuild"></param>
     /// <param name="buildingCost"></param>
     /// <param name="CallingColony"></param>
-    public buildStrat(GameObject targetPos, GameObject buildableToBuild,BuildingStruct BuildCost, int amountTobuild, colonyScript CallingColony)
+    public buildStrat(GameObject targetPos, GameObject buildableToBuild, BuildingStruct BuildCost, int amountTobuild, colonyScript CallingColony)
     {
         callingColony = CallingColony;
-    purchciceCost = BuildCost;
+        purchciceCost = BuildCost;
         buildableScript buildableScript = buildableToBuild.GetComponent<buildableScript>();
-     
+
 
         GameObject[] ownedTiles = callingColony.allTilesOwned.ToArray();
         Dictionary<GameObject, float> tileDic = new Dictionary<GameObject, float>();
@@ -163,7 +163,7 @@ public class buildStrat : iActionStrat
         {
             tileInfo currentTileInfo = currentTile.GetComponent<tileInfo>();
 
-            if(currentTileInfo.occupid == true)
+            if (currentTileInfo.occupid == true)
             {
                 continue;
             }
@@ -173,11 +173,11 @@ public class buildStrat : iActionStrat
 
         int amountBuilded = 0;
 
-        foreach(KeyValuePair<GameObject, float> tileKVP in tileDic.OrderBy(x => x.Value))
+        foreach (KeyValuePair<GameObject, float> tileKVP in tileDic.OrderBy(x => x.Value))
         {
-            
-            
-            if(BuildingStruct.comapareCosts(callingColony.resourcesOwned,BuildCost) == true)
+
+
+            if (BuildingStruct.comapareCosts(callingColony.resourcesOwned, BuildCost) == true)
             {
                 tileInfo tileScript = tileKVP.Key.GetComponent<tileInfo>();
                 buildableGameObject buildable = new buildableGameObject
@@ -200,35 +200,64 @@ public class buildStrat : iActionStrat
                     break;
                 }
                 finished = true;
-            
 
-                
 
-        
+
+
+
             }
-            
-        }
-        
 
-      
+        }
+
+
+
     }
 }
+
+
+/// <summary>
+/// ironically; mostly useless
+/// </summary>
 public class useStrat : iActionStrat
 {
     bool finishedAction = false;
     public bool canPerform => !complete;
     public bool complete => finishedAction;
-/// <summary>
-/// constructor for using action on a buildable for ai
-/// </summary>
-/// <param name="performingBuildable">the buildable that is performing the action</param>
-/// <param name="action">the action for the buildable to perform</param>
-/// <param name="target">target for the action, can be null if there isnt a target for the action</param>
 
-    public useStrat( buildableScript performingBuildable, buildableScript.buildableActions action,GameObject target)
+    /// <summary>
+    /// perform action at mass
+    /// </summary>
+    /// <param name="performingBuildable"></param>
+    /// <param name="action"></param>
+    /// <param name="target"></param>
+    public useStrat(buildableScript[] performingBuildable, buildableScript.buildableActions action, GameObject[] targets)
+    {
+        int[] order = playerMouseInteractions.randomAssortment(targets.Length);
+        for(int i = 0; i < performingBuildable.Length; i++)
+        {
+            performingBuildable[i].buildableAction(action, targets[order[i]]);
+            performingBuildable[i].finishedAction += hasFinishedAction;
+            if (i >= targets.Length) 
+            {
+                i = 0;
+            }
+        }
+
+
+
+    }
+    /// <summary>
+    /// peform action on only one, single, lonely buildable
+    /// </summary>
+    /// <param name="performingBuildable"></param>
+    /// <param name="action"></param>
+    /// <param name="target"></param>
+     public useStrat( buildableScript performingBuildable, buildableScript.buildableActions action,GameObject target)
     {
         performingBuildable.buildableAction(action, target);
         performingBuildable.finishedAction += hasFinishedAction;
+       
+        
 
 
     }
