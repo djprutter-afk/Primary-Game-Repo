@@ -181,114 +181,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &235848483
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 235848487}
-  - component: {fileID: 235848486}
-  - component: {fileID: 235848485}
-  - component: {fileID: 235848484}
-  m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!65 &235848484
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235848483}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &235848485
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235848483}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 55a0dfe71d22e144e95f9e7d4ffe62fd, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &235848486
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235848483}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &235848487
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 235848483}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.66280353, y: 2.7062573, z: 1.8748734}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &309602033
 GameObject:
   m_ObjectHideFlags: 0
@@ -5959,37 +5851,49 @@ MonoBehaviour:
   - catagoryName: Basics
     catagoryColour: {r: 0.02427632, g: 0, b: 0.8490566, a: 1}
     arrayOfBuildings:
-    - moneyExpenses: 100
-      resourceExpenses: 20
-      populationExpenses: 0
+    - buildCost:
+        moneyExpenses: 0
+        resourceExpenses: 0
+        populationExpenses: 0
+        buildingName: 
       buildableObject: {fileID: 6505261982738214531, guid: 5e6b57313da1d8c48a7a18ddefdfc91e, type: 3}
       nameOfBuildable: Small Missile
-    - moneyExpenses: 250
-      resourceExpenses: 100
-      populationExpenses: 50
+    - buildCost:
+        moneyExpenses: 0
+        resourceExpenses: 0
+        populationExpenses: 0
+        buildingName: 
       buildableObject: {fileID: 4611562821212978756, guid: 385d529ebc1c9bc48bf1b35277026829, type: 3}
       nameOfBuildable: Settler
-    - moneyExpenses: 500
-      resourceExpenses: 250
-      populationExpenses: 10
+    - buildCost:
+        moneyExpenses: 0
+        resourceExpenses: 0
+        populationExpenses: 0
+        buildingName: 
       buildableObject: {fileID: 7158736758787451057, guid: bc1cedb700b2cea459a9335c55a0f355, type: 3}
       nameOfBuildable: devlop tile(s)
-    - moneyExpenses: 100
-      resourceExpenses: 50
-      populationExpenses: 20
+    - buildCost:
+        moneyExpenses: 0
+        resourceExpenses: 0
+        populationExpenses: 0
+        buildingName: 
       buildableObject: {fileID: 7158736758787451057, guid: a9a199d570b3c9743b135cc2e56b701b, type: 3}
       nameOfBuildable: Big Drill
   - catagoryName: test Cat
     catagoryColour: {r: 0.6886792, g: 0.10070309, b: 0.4828983, a: 1}
     arrayOfBuildings:
-    - moneyExpenses: 11.43
-      resourceExpenses: 2.22
-      populationExpenses: -20
+    - buildCost:
+        moneyExpenses: 0
+        resourceExpenses: 0
+        populationExpenses: 0
+        buildingName: 
       buildableObject: {fileID: 0}
       nameOfBuildable: 4354er3
-    - moneyExpenses: 3
-      resourceExpenses: 1
-      populationExpenses: 0
+    - buildCost:
+        moneyExpenses: 0
+        resourceExpenses: 0
+        populationExpenses: 0
+        buildingName: 
       buildableObject: {fileID: 6505261982738214531, guid: 5e6b57313da1d8c48a7a18ddefdfc91e, type: 3}
       nameOfBuildable: me should be removed
   colonies: {fileID: 1666743407}
@@ -6831,4 +6735,3 @@ SceneRoots:
   - {fileID: 84077028}
   - {fileID: 2040768881}
   - {fileID: 1809013963}
-  - {fileID: 235848487}

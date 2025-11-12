@@ -1,10 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildables but instead guides them
 {
+    struct typesOfbuildable
+    {
+        buildableScript.AIBuildableInfo.buildablePurposes[] purposes;
+
+
+    }
+    
+
     
 
     
@@ -75,7 +84,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
 
-        factory.addBeliefs("is happy with size", () => thisColonyScript.allTilesOwned.Count > 3);
+        factory.addBeliefs("is happy with size", () => thisColonyScript.allTilesOwned.Count > 2);
+        factory.addBeliefs("can afford setllers", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned, buildablesPurposesGrouped.buildablePurposeDictonary[buildableScript.AIBuildableInfo.buildablePurposes.expansion][0].buildCost));
         factory.addBeliefs("has Settlers", () => getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
        
 
@@ -87,12 +97,13 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     void setupActions()
     {
         actions = new HashSet<agentAction>();
-        /*
+
         actions.Add(new agentAction.Builder("build settlers")
         .WithStrat(new buildStrat(
-        thisColonyScript.allTilesOwned[0],
-        ,2
-        */
+        thisColonyScript.allTilesOwned[0], buildablesPurposesGrouped.buildablePurposeDictonary[buildableScript.AIBuildableInfo.buildablePurposes.expansion][0].buildableObject, buildablesPurposesGrouped.buildablePurposeDictonary[buildableScript.AIBuildableInfo.buildablePurposes.expansion][0].buildCost, 1, thisColonyScript))
+        .AddEffect(beliefs["has Settlers"]).addPreCondition(beliefs["can afford setllers"]).Build());
+        
+        
 
 
 

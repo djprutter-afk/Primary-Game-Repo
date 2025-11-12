@@ -18,11 +18,60 @@ public class buildableGameObject//building
 }
 
 [System.Serializable]
-    public class buildingCatagory//thing that contains buildings
+public class buildingCatagory//thing that contains buildings
+{
+    public string catagoryName;
+    public Color catagoryColour;
+    public buildableGameObject[] arrayOfBuildings;// building contained within the catagory
+
+}
+
+    class buildablesPurposesGrouped : MonoBehaviour
     {
-        public string catagoryName;
-        public Color catagoryColour;
-        public buildableGameObject[] arrayOfBuildings;// building contained within the catagory
+
+
+    public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, List<buildableGameObject>> purposesDictonary;
+        /// <summary>
+        /// always null check this because it is initalized in OnEnable(), so it may not be ready when things call it
+        /// </summary>
+        public static Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, List<buildableGameObject>> buildablePurposeDictonary;
+        void OnEnable()
+        {
+
+        foreach (buildingCatagory catagory in gameManagerScript.allCats)
+        {
+            foreach (buildableGameObject buildableGameObject in catagory.arrayOfBuildings)
+            {
+                buildableScript thisBuildableScript = buildableGameObject.buildableObject.GetComponent<buildableScript>();
+                if (thisBuildableScript == null)
+                {
+                    continue;
+                }
+                foreach (buildableScript.AIBuildableInfo.biInfoStuct purposes in thisBuildableScript.purposes)
+                {
+                    if (purposesDictonary.ContainsKey(purposes.purpose))
+                    {
+                        purposesDictonary[purposes.purpose].Add(buildableGameObject);
+
+
+                    }
+                    else
+                    {
+                        purposesDictonary.Add(purposes.purpose, new List<buildableGameObject>());
+                        purposesDictonary[purposes.purpose].Add(buildableGameObject);
+
+                    }
+
+                }
+            }
+
+        }
+        buildablePurposeDictonary = purposesDictonary;
+                
+            
+            
+        }
+
 
     }
     /// <summary>
