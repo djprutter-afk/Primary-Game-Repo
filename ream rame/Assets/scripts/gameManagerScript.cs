@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -26,7 +27,7 @@ public class buildingCatagory//thing that contains buildings
 
 }
 
-    class buildablesPurposesGrouped : MonoBehaviour
+    class buildablesPurposesGrouped
     {
 
 
@@ -35,7 +36,7 @@ public class buildingCatagory//thing that contains buildings
         /// always null check this because it is initalized in OnEnable(), so it may not be ready when things call it
         /// </summary>
         public static Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, List<buildableGameObject>> buildablePurposeDictonary;
-        void OnEnable()
+       public  void skbidid()
         {
 
         foreach (buildingCatagory catagory in gameManagerScript.allCats)
@@ -47,18 +48,19 @@ public class buildingCatagory//thing that contains buildings
                 {
                     continue;
                 }
-                foreach (buildableScript.AIBuildableInfo.biInfoStuct purposes in thisBuildableScript.purposes)
+                foreach (buildableScript.AIBuildableInfo.biInfoStuct thisPurposes in thisBuildableScript.purposes)
                 {
-                    if (purposesDictonary.ContainsKey(purposes.purpose))
+                    Debug.Log(thisPurposes + " HELP " + thisBuildableScript.purposes.Count());
+                    if (purposesDictonary.ContainsKey(thisPurposes.purpose))
                     {
-                        purposesDictonary[purposes.purpose].Add(buildableGameObject);
+                        purposesDictonary[thisPurposes.purpose].Add(buildableGameObject);
 
 
                     }
                     else
                     {
-                        purposesDictonary.Add(purposes.purpose, new List<buildableGameObject>());
-                        purposesDictonary[purposes.purpose].Add(buildableGameObject);
+                        purposesDictonary.Add(thisPurposes.purpose, new List<buildableGameObject>());
+                        purposesDictonary[thisPurposes.purpose].Add(buildableGameObject);
 
                     }
 
@@ -127,6 +129,10 @@ public class gameManagerScript : MonoBehaviour
     void Start()
     {
         allCats = allCatagories;
+        buildablesPurposesGrouped newbuildablesPurposesGrouped = new buildablesPurposesGrouped();
+        newbuildablesPurposesGrouped.skbidid();
+        Debug.Log(newbuildablesPurposesGrouped.purposesDictonary.Count);
+        
         
         SceneManager.LoadScene("uiScene", LoadSceneMode.Additive);
 

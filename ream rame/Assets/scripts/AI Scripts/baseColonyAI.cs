@@ -6,12 +6,7 @@ using UnityEngine;
 
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildables but instead guides them
 {
-    struct typesOfbuildable
-    {
-        buildableScript.AIBuildableInfo.buildablePurposes[] purposes;
 
-
-    }
     
 
     
@@ -85,7 +80,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
 
         factory.addBeliefs("is happy with size", () => thisColonyScript.allTilesOwned.Count > 2);
-        factory.addBeliefs("can afford setllers", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned, buildablesPurposesGrouped.buildablePurposeDictonary[buildableScript.AIBuildableInfo.buildablePurposes.expansion][0].buildCost));
+        factory.addBeliefs("can afford setllers", () => true);
         factory.addBeliefs("has Settlers", () => getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
        
 

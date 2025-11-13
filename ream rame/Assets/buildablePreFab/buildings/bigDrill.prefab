@@ -62,7 +62,9 @@ MonoBehaviour:
     buildingName: Big Drill
   possibleActions: 
   isBuilding: 1
-  purposes: []
+  purposes:
+  - purpose: 3
+    strength: 0.5
 --- !u!114 &8279398763461394640
 MonoBehaviour:
   m_ObjectHideFlags: 0
