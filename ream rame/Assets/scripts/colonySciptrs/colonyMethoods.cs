@@ -18,7 +18,7 @@ make methods as self contained as possible
 
 simply every possible thing, no matter how small (mostly)
 
-be more useful than brain destroying
+be more useful than brain destroying ( looking back at this, it was almost certinally more brain destroying)
 
 this is mostly for ai 
 
@@ -287,10 +287,17 @@ public static class colonyMethoods
 
     public static GameObject[] bestTilesurrouning(GameObject colony,int Length)
     {
+         GameObject[] sortedGameObjects = new GameObject[Length];// end result
+
         baseColonyAI colonyAI = colony.GetComponent<baseColonyAI>();
         colonyScript colonyScript = colony.GetComponent<colonyScript>();
         GameObject[] outlineTiles = findEdgeTiles(colony);
         int numberOfOutlineTiles = outlineTiles.Length;
+
+        if(Length > outlineTiles.Length)
+        {
+            Length =  outlineTiles.Length;
+        }
 
 
         if (numberOfOutlineTiles <= 0)
@@ -332,36 +339,23 @@ public static class colonyMethoods
                 dictonaryOfTiles.Add(currentOutLineTile, tileValue);
 
             }
+        }
 
             List<KeyValuePair<GameObject, float>> kvpOfTiles = dictonaryOfTiles.ToList();
 
-            var sortedKvpOfTiles = kvpOfTiles.OrderByDescending(pair => pair.Value);
+            var sortedKvpOfTiles = kvpOfTiles.OrderByDescending(pair => pair.Value).ToList();
 
-            GameObject[] sortedGameObjects = new GameObject[Length];
+           
 
-            int index = 0;
-
-            foreach (KeyValuePair<GameObject, float> keyValuePairTiles in sortedKvpOfTiles)
+            for(int i = 0; i < Length ;i++)
             {
-                sortedGameObjects[index] = keyValuePairTiles.Key;
-
+                sortedGameObjects[i] = sortedKvpOfTiles[i].Key;
             }
 
-            return sortedGameObjects;
+          
 
-
-
-
-
-
-
-
-
-
-
-
-        }
-        return null;
+        
+         return sortedGameObjects;
 
 
     }

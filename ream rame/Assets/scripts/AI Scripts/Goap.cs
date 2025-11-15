@@ -132,9 +132,7 @@ public class waitTickStrat : iActionStrat
 
 }
 
-/// <summary>
-/// UNFINSIED FINSIH IT NOW
-/// </summary>
+
 public class buildStrat : iActionStrat
 {
     bool finished = false;

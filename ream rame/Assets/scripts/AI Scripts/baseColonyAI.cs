@@ -4,8 +4,10 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildables but instead guides them
+public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
+    int desiredSize;
+    BuildingStruct desiredIncome;
 
     
 
@@ -24,6 +26,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
     colonyScript thisColonyScript;
 
+
+// all variables below are for goap
     AgentGoal lastGoal;
     public AgentGoal currentGoal;
     public ActionPlan actionplan;
@@ -47,10 +51,16 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     }
     void Start()
     {
+        
         setupTimers();// useless
         setupBeliefs();
         setupActions();
         setupGoals();
+    }
+
+    void setupBuildableAIValues()
+    {
+        
     }
 
     void setupTimers()
@@ -70,6 +80,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
     }
     
+  
+    
     void setupBeliefs()
     {
         beliefs = new Dictionary<string, agentBelief>();
@@ -80,8 +92,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
 
         factory.addBeliefs("is happy with size", () => thisColonyScript.allTilesOwned.Count > 2);
-        factory.addBeliefs("can afford setllers", () => true);
+   
         factory.addBeliefs("has Settlers", () => getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
+        
+        factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
        
 
 
@@ -93,10 +107,9 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     {
         actions = new HashSet<agentAction>();
 
-        actions.Add(new agentAction.Builder("build settlers")
-        .WithStrat(new buildStrat(
-        thisColonyScript.allTilesOwned[0], buildablesPurposesGrouped.buildablePurposeDictonary[buildableScript.AIBuildableInfo.buildablePurposes.expansion][0].buildableObject, buildablesPurposesGrouped.buildablePurposeDictonary[buildableScript.AIBuildableInfo.buildablePurposes.expansion][0].buildCost, 1, thisColonyScript))
-        .AddEffect(beliefs["has Settlers"]).addPreCondition(beliefs["can afford setllers"]).Build());
+
+
+        
         
         
 
@@ -140,6 +153,11 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withPriority(0.25f)
         .withdesiredEffects(beliefs["is happy with size"])
         .Build());
+        goals.Add(new AgentGoal.Builder("build more Buildables")
+        .withPriority(0.25f)
+        .withdesiredEffects(beliefs["satisfied with buildables"])
+        .Build());
+     
        
         
 

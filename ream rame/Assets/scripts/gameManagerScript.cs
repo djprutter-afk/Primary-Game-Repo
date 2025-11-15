@@ -31,7 +31,7 @@ public class buildingCatagory//thing that contains buildings
     {
 
 
-    public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, List<buildableGameObject>> purposesDictonary;
+    public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, List<buildableGameObject>> purposesDictonary = new Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, List<buildableGameObject>>();
         /// <summary>
         /// always null check this because it is initalized in OnEnable(), so it may not be ready when things call it
         /// </summary>
@@ -50,7 +50,7 @@ public class buildingCatagory//thing that contains buildings
                 }
                 foreach (buildableScript.AIBuildableInfo.biInfoStuct thisPurposes in thisBuildableScript.purposes)
                 {
-                    Debug.Log(thisPurposes + " HELP " + thisBuildableScript.purposes.Count());
+                    Debug.Log(thisPurposes.purpose + " HELP " + thisBuildableScript.purposes.Count());
                     if (purposesDictonary.ContainsKey(thisPurposes.purpose))
                     {
                         purposesDictonary[thisPurposes.purpose].Add(buildableGameObject);
@@ -131,7 +131,7 @@ public class gameManagerScript : MonoBehaviour
         allCats = allCatagories;
         buildablesPurposesGrouped newbuildablesPurposesGrouped = new buildablesPurposesGrouped();
         newbuildablesPurposesGrouped.skbidid();
-        Debug.Log(newbuildablesPurposesGrouped.purposesDictonary.Count);
+        Debug.LogWarning(newbuildablesPurposesGrouped.purposesDictonary.Count + "see this please");
         
         
         SceneManager.LoadScene("uiScene", LoadSceneMode.Additive);
