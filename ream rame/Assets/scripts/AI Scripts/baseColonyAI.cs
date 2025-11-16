@@ -27,7 +27,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     colonyScript thisColonyScript;
 
 
-// all variables below are for goap
+// all variables below are for goap, don't mess with them willy nilly
     AgentGoal lastGoal;
     public AgentGoal currentGoal;
     public ActionPlan actionplan;
@@ -56,10 +56,12 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         setupBeliefs();
         setupActions();
         setupGoals();
+        setupBuildableAIValues();
     }
 
     void setupBuildableAIValues()
     {
+        
         
     }
 
