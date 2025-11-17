@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class moonScript : MonoBehaviour
-{
+{// if youre reading this then say test in the commit
     [SerializeField] float resourceAmount;
 
     
