@@ -9,14 +9,14 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     int desiredSize;
     BuildingStruct desiredIncome;
 
-    
+    buildableGameObject desiredBuildable;
 
     
 
     
     public event Action AITick;
     public GameObject theGameManager;
-
+    public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float> valueOfBuildables;//how much the ai will priorities the buildable
 
 
 
@@ -58,11 +58,25 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         setupGoals();
         setupBuildableAIValues();
     }
-
+    /// <summary>
+    /// assigns how much the ai will care about building this particular buildable, theses values should change as the game progress to reflect how important having that thing at that time is
+    /// </summary>
     void setupBuildableAIValues()
     {
-        
-        
+      
+        foreach(buildableScript.AIBuildableInfo.buildablePurposes purposes in buildablesPurposesGrouped.buildablePurposeDictonary.Keys)  //assign all purposes the same value just in case
+        {
+            valueOfBuildables.Add(purposes,0.5f);
+        }
+
+        // manually assign values here, they should still drift from theses inital values though
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.antiMissile] = 0.15f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.defensive] = 0.20f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] = 0.50f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion] = 0.60f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = 0.25f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = 0.30f;// missiles should be a prevent threat of the game, to like expand the metaphor and stuff
+
     }
 
     void setupTimers()
@@ -118,7 +132,15 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
 
-
+        /*
+        actions.Add(new agentAction.Builder("decide buildable to build")
+        .WithStrat(new useStrat(
+      
+      
+        ))
+        
+        .Build());
+        */
 
 
 
@@ -143,12 +165,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     {
 
         goals = new HashSet<AgentGoal>();
-        /*
-        goals.Add(new AgentGoal.Builder("Increase wealth")
-        .withPriority(0.8f)
-        .withdesiredEffects(beliefs["number1"])
-        .Build());
-        */
+        
 
         
         goals.Add(new AgentGoal.Builder("expandSize")
