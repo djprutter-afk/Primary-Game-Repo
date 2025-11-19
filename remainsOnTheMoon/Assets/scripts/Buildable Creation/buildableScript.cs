@@ -100,6 +100,7 @@ public class buildableScript : MonoBehaviour
     public AIBuildableInfo.biInfoStuct[] purposes;
     public bool buildableAction(buildableActions action, GameObject target)
     {
+        Debug.LogError("GENERIC");
         if (Vector3.Distance(target.transform.position, transform.position) > possibleRangeDiameter / 2)
         {
             Debug.LogError("FAILED FAILED");
@@ -122,7 +123,7 @@ public class buildableScript : MonoBehaviour
                 break;
             case buildableActions.GenericAction:
                 GenericAction?.Invoke(target);
-                Debug.LogError("GENERIC");
+                
                 break;
             case buildableActions.selfDies:
                 selfDies?.Invoke();
