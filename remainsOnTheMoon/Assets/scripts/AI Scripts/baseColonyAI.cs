@@ -132,15 +132,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
 
-        /*
-        actions.Add(new agentAction.Builder("decide buildable to build")
-        .WithStrat(new useStrat(
-      
-      
-        ))
         
-        .Build());
-        */
+    
 
 
 
