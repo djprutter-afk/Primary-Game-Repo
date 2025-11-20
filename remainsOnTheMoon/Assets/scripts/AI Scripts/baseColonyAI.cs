@@ -113,6 +113,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
          factory.addBeliefs("has decided on buildable", () => desiredBuildable != null);
+<<<<<<< Updated upstream
+=======
+         
+>>>>>>> Stashed changes
        
 
 
@@ -138,9 +142,14 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .Build());
         
     
+        /*
 
-
-
+        actions.Add(new agentAction.Builder("buildBuildable")
+        .WithStrat(new buildStrat(gameObject,desiredBuildable.buildableObject,buildableObject.buildCost,1,thisColonyScript))
+        .addPreCondition(beliefs["has decided on buildable"])
+        .AddEffect(beliefs["satisfied with buildables"])
+        .Build());
+        */
         
 
 
