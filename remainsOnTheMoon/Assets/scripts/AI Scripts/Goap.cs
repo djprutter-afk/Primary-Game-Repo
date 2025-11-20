@@ -6,6 +6,7 @@ using System.Linq;
 using NUnit.Framework;
 using System.ComponentModel;
 using UnityEngine.Tilemaps;
+using Unity.Collections;
 //this is all made with tutorial: https://www.youtube.com/watch?v=T_sBYgP7_2k&t=613s 
 public class beliefFactory
 {
@@ -280,6 +281,30 @@ public class begStrat : iActionStrat
     {
         colony.resourcesOwned.moneyExpenses = 100;
         builtTheThing = true;
+    }
+}
+public class chooseBuildableStrat : iActionStrat
+{
+    bool builtTheThing;
+    public bool canPerform => !complete;
+    public bool complete => builtTheThing;
+
+    public chooseBuildableStrat(baseColonyAI colonyAI)
+    {
+       var valuesOrdered =  colonyAI.valueOfBuildables.OrderBy(x=> x.Value).ToArray();
+       if(valuesOrdered.Length < 0)
+        {
+            return;
+        }
+        buildableScript[] allOfACategory = colonyAI.getTypeOfBuildable(valuesOrdered[0].Key);
+        if(allOfACategory.Length <0)
+        {
+            return;
+        }
+        colonyAI.desiredBuildable = baseColonyAI.getBuildableGameObject(allOfACategory[0]);
+
+            
+        
     }
 }
 public class waitStrat : iActionStrat

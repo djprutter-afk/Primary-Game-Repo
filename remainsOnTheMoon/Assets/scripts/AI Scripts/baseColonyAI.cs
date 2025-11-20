@@ -9,7 +9,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     int desiredSize;
     BuildingStruct desiredIncome;
 
-    buildableGameObject desiredBuildable;
+    public buildableGameObject desiredBuildable;
 
     
 
@@ -112,6 +112,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         factory.addBeliefs("has Settlers", () => getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
+         factory.addBeliefs("has decided on buildable", () => desiredBuildable != null);
        
 
 
@@ -131,7 +132,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
 
-
+        actions.Add(new agentAction.Builder("decide Buildable")
+        .WithStrat(new chooseBuildableStrat(this))
+        .AddEffect(beliefs["has decided on buildable"])
+        .Build());
         
     
 
@@ -259,7 +263,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
             actionplan = potentialPlan;
         }
     }
-     buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
     {
         List<buildableScript> allBuildables = new List<buildableScript>();
         List<buildableScript> selectedBuildables = new List<buildableScript>();
@@ -282,6 +286,26 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         return selectedBuildables.ToArray();
         
 
+    }
+    public static buildableGameObject getBuildableGameObject(buildableScript buildableScript)
+    {
+        buildingCatagory[] idk = gameManagerScript.allCats;
+       // List<buildableGameObject> idkv2 = new List<buildableGameObject>();
+        foreach(buildingCatagory individualCat in idk)
+        {
+            foreach(buildableGameObject indvidualBuildable in individualCat.arrayOfBuildings)
+            {
+                if(buildableScript == indvidualBuildable.buildableObject)
+                {
+                    return indvidualBuildable;
+                }
+                
+            }
+            
+        }
+        return null;
+
+       
     }
 
 }
