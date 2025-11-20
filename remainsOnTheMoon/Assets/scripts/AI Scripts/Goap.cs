@@ -266,18 +266,7 @@ public class useStrat : iActionStrat
     }
     
 }
-public class decideBuildableStrat : iActionStrat
-{
-    bool builtTheThing;
-    public bool canPerform => !complete;
-    public bool complete => builtTheThing;
 
-    public decideBuildableStrat(colonyScript colony)
-    {
-        
-       
-    }
-}
 /// <summary>
 /// for testing only, dont actually used
 /// </summary>
