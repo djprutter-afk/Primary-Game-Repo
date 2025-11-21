@@ -311,25 +311,26 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
 
     }
-    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+    /// <summary>
+    /// returns the strongest first
+    /// </summary>
+    /// <param name="dog"></param>
+    /// <returns></returns>
+    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)// NOT FINISHED NOT FINISHED FIX NOW NOW NOW
     {
-        List<buildableScript> allBuildables = new List<buildableScript>();
-        List<buildableScript> selectedBuildables = new List<buildableScript>();
-        foreach (buildingCatagory currentCat in allCats)
+        buildableGameObject[] allSelected = buildablesPurposesGrouped.buildablePurposeDictonary[dog].ToArray();
+        if(allSelected ==null)
         {
-            /*
-            
-            foreach (buildableGameObject currentBuildable in currentCat)
-            {
-                buildableScript FINSIHTHIS = currentBuildable.buildableObject.GetComponent<buildableScript>();
-                
-
-            }
-            */
-
-
+            return null;
         }
-        return selectedBuildables.ToArray();
+        List<buildableScript> buildableScripts = new List<buildableScript>();
+        foreach(buildableGameObject currentSelected in allSelected)
+        {
+            buildableScript buildableScript = currentSelected.buildableObject.GetComponent<buildableScript>();
+        }
+        return null;
+        
+       
     }
     public static buildableGameObject getBuildableGameObject(buildableScript buildableScript)
     {
