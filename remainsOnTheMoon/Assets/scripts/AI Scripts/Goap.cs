@@ -108,6 +108,28 @@ public class spendStrat : iActionStrat
         builtTheThing = true;
     }
 }
+
+public class makeSpaceStrat : iActionStrat
+{
+
+    int ticksRemaining;
+
+    public bool canPerform => !complete;
+    public bool complete => true;
+    public makeSpaceStrat(colonyScript thisColonyScript )
+    {
+
+      
+
+
+    }
+   
+
+
+
+
+}
+
 public class waitTickStrat : iActionStrat
 {
 
@@ -149,9 +171,9 @@ public class buildStrat : iActionStrat
     /// <param name="buildableToBuild"></param>
     /// <param name="buildingCost"></param>
     /// <param name="CallingColony"></param>
-    public buildStrat(GameObject targetPos, GameObject buildableToBuild, BuildingStruct BuildCost, int amountTobuild, colonyScript CallingColony)
+    public buildStrat(GameObject targetPos, GameObject buildableToBuild, BuildingStruct BuildCost, int amountTobuild, baseColonyAI myAI)
     {
-        callingColony = CallingColony;
+        callingColony = myAI.thisColonyScript;
         purchciceCost = BuildCost;
         buildableScript buildableScript = buildableToBuild.GetComponent<buildableScript>();
 
@@ -188,7 +210,7 @@ public class buildStrat : iActionStrat
 
                 };
 
-                bool succes = colonyMethoods.purchasableAction(CallingColony.gameObject, BuildCost, tileKVP.Key, true);
+                bool succes = colonyMethoods.purchasableAction(myAI.gameObject, BuildCost, tileKVP.Key, true);
                 if (succes == true)
                 {
                     tileScript.buildNewBuildable(buildable, callingColony);
@@ -198,6 +220,7 @@ public class buildStrat : iActionStrat
                 {
                     break;
                 }
+                myAI.desiredBuildable = null;
                 finished = true;
 
 
@@ -291,17 +314,20 @@ public class chooseBuildableStrat : iActionStrat
 
     public chooseBuildableStrat(baseColonyAI colonyAI)
     {
-       var valuesOrdered =  colonyAI.valueOfBuildables.OrderBy(x=> x.Value).ToArray();
-       if(valuesOrdered.Length < 0)
+       var valuesOrdered =  colonyAI.valueOfBuildables.OrderByDescending(x=> x.Value).ToArray();
+       if(valuesOrdered.Length <= 0)
         {
+            Debug.LogError("FAIL VALUES ORDER WAS " + valuesOrdered.Length);
             return;
         }
         buildableScript[] allOfACategory = colonyAI.getTypeOfBuildable(valuesOrdered[0].Key);
-        if(allOfACategory.Length <0)
+        if(allOfACategory.Length <= 0)
         {
+             Debug.LogError("FAIL CAT WAS " + allOfACategory.Length);
             return;
         }
         colonyAI.desiredBuildable = baseColonyAI.getBuildableGameObject(allOfACategory[0]);
+        builtTheThing = true;
 
             
         

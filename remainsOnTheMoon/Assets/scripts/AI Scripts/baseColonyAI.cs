@@ -16,7 +16,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     
     public event Action AITick;
     public GameObject theGameManager;
-    public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float> valueOfBuildables;//how much the ai will priorities the buildable
+    public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float> valueOfBuildables = new Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float>();//how much the ai will priorities the buildable
 
 
 
@@ -24,7 +24,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
 
-    colonyScript thisColonyScript;
+    public colonyScript thisColonyScript;
 
 
 // all variables below are for goap, don't mess with them willy nilly
@@ -51,12 +51,12 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     }
     void Start()
     {
-        
+        setupBuildableAIValues();
         setupTimers();// useless
         setupBeliefs();
         setupActions();
         setupGoals();
-        setupBuildableAIValues();
+        
     }
     /// <summary>
     /// assigns how much the ai will care about building this particular buildable, theses values should change as the game progress to reflect how important having that thing at that time is
@@ -109,7 +109,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         factory.addBeliefs("is happy with size", () => thisColonyScript.allTilesOwned.Count > 2);
    
-        factory.addBeliefs("has Settlers", () => getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
+       
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
          factory.addBeliefs("has decided on buildable", () => desiredBuildable != null);
@@ -148,7 +148,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
         
 
-
+        actions.Add(new agentAction.Builder("make space")
+        .WithStrat(new chooseBuildableStrat(this))
+        .AddEffect(beliefs["has decided on buildable"])
+        .Build());
 
         actions.Add(new agentAction.Builder("decide Buildable")
         .WithStrat(new chooseBuildableStrat(this))
@@ -159,7 +162,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
 
         actions.Add(new agentAction.Builder("buildBuildable")
-        .WithStrat(new buildStrat(gameObject,desiredBuildable.buildableObject,desiredBuildable.buildCost,1,thisColonyScript))
+        .WithStrat(new buildStrat(gameObject,desiredBuildable.buildableObject,desiredBuildable.buildCost,1,this))
         .addPreCondition(beliefs["has decided on buildable"])
         .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["satisfied with buildables"])
@@ -189,9 +192,9 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
 
         
-        goals.Add(new AgentGoal.Builder("expandSize")
+        goals.Add(new AgentGoal.Builder("make more buildables")
         .withPriority(0.25f)
-        .withdesiredEffects(beliefs["is happy with size"])
+        .withdesiredEffects(beliefs["satisfied with buildables"])
         .Build());
       
      
@@ -284,7 +287,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
             actionplan = potentialPlan;
         }
     }
-    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+    public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
     {
         List<buildableScript> allBuildables = new List<buildableScript>();
         List<buildableScript> selectedBuildables = new List<buildableScript>();
@@ -307,6 +310,26 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         return selectedBuildables.ToArray();
         
 
+    }
+    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+    {
+        List<buildableScript> allBuildables = new List<buildableScript>();
+        List<buildableScript> selectedBuildables = new List<buildableScript>();
+        foreach (buildingCatagory currentCat in allCats)
+        {
+            /*
+            
+            foreach (buildableGameObject currentBuildable in currentCat)
+            {
+                buildableScript FINSIHTHIS = currentBuildable.buildableObject.GetComponent<buildableScript>();
+                
+
+            }
+            */
+
+
+        }
+        return selectedBuildables.ToArray();
     }
     public static buildableGameObject getBuildableGameObject(buildableScript buildableScript)
     {
