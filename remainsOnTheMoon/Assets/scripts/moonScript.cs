@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MoonScript : MonoBehaviour
 {
+    [SerializeField] GameObject visualMoon;
     [SerializeField] float resourceAmountMax;
      [SerializeField] float resourceAmountMin;
     public Material moonMaterial;
@@ -30,7 +31,7 @@ public class MoonScript : MonoBehaviour
 
             tileInfo TileInformation = transformOfChild.AddComponent<tileInfo>();
             tileVisuals skbidid = transformOfChild.AddComponent<tileVisuals>();
-
+            TileInformation.visualMoon = visualMoon;
             skbidid.setupTileVisuals(moonMaterial);
             TileInformation.resource = Random.Range(resourceAmountMin, resourceAmountMax);
         }

@@ -113,10 +113,24 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
          factory.addBeliefs("has decided on buildable", () => desiredBuildable != null);
-<<<<<<< Updated upstream
-=======
+        factory.addBeliefs("has space to build", hasSpaceToBuild);
+
+        bool hasSpaceToBuild()
+        {
+           
+            foreach(GameObject tile in thisColonyScript.allTilesOwned)
+            {
+                tileInfo tileInfo = tile.GetComponent<tileInfo>();
+
+                if(tileInfo.occupid ==false)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
          
->>>>>>> Stashed changes
        
 
 
@@ -142,14 +156,15 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .Build());
         
     
-        /*
+        
 
         actions.Add(new agentAction.Builder("buildBuildable")
-        .WithStrat(new buildStrat(gameObject,desiredBuildable.buildableObject,buildableObject.buildCost,1,thisColonyScript))
+        .WithStrat(new buildStrat(gameObject,desiredBuildable.buildableObject,desiredBuildable.buildCost,1,thisColonyScript))
         .addPreCondition(beliefs["has decided on buildable"])
+        .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["satisfied with buildables"])
         .Build());
-        */
+        
         
 
 
@@ -178,10 +193,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withPriority(0.25f)
         .withdesiredEffects(beliefs["is happy with size"])
         .Build());
-        goals.Add(new AgentGoal.Builder("build more Buildables")
-        .withPriority(0.25f)
-        .withdesiredEffects(beliefs["satisfied with buildables"])
-        .Build());
+      
      
        
         

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class tileInfo : MonoBehaviour
 {
+    public GameObject visualMoon;
+   
     public bool occupid = false;
     public float tileProtection = 0f;
     public float populationGrowthPercent = 1.003f;
@@ -17,8 +19,11 @@ public class tileInfo : MonoBehaviour
     public int population;
     GameObject ownerColony;
     colonyScript ownerColonyScript;
+    public GameObject visualTile;
     void Start()
     {
+       
+        
         ownerColony = transform.parent.gameObject;
 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
