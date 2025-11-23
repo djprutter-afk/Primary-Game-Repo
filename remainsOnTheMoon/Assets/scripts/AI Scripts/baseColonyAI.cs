@@ -146,10 +146,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         
         
-        
+        /*
 
         actions.Add(new agentAction.Builder("make space")
-        .WithStrat(new chooseBuildableStrat(this))
+        .WithStrat(new (this))
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
 
@@ -158,7 +158,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
         
-    
+        */
         
 
         actions.Add(new agentAction.Builder("buildBuildable")
@@ -319,7 +319,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)// NOT FINISHED NOT FINISHED FIX NOW NOW NOW
     {
         buildableGameObject[] allSelected = buildablesPurposesGrouped.buildablePurposeDictonary[dog].ToArray();
-        if(allSelected ==null)
+        if(allSelected ==null)// should never happen but just in case bc the dic is a bit sketchy
         {
             return null;
         }
