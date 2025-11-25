@@ -146,10 +146,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         
         
-        /*
+        
 
         actions.Add(new agentAction.Builder("make space")
-        .WithStrat(new (this))
+        .WithStrat(new chooseBuildableStrat(this))
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
 
@@ -158,7 +158,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
         
-        */
+    
         
 
         actions.Add(new agentAction.Builder("buildBuildable")
@@ -311,26 +311,12 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
 
     }
-    /// <summary>
-    /// returns the strongest first
-    /// </summary>
-    /// <param name="dog"></param>
-    /// <returns></returns>
-    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)// NOT FINISHED NOT FINISHED FIX NOW NOW NOW
+    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
     {
-        buildableGameObject[] allSelected = buildablesPurposesGrouped.buildablePurposeDictonary[dog].ToArray();
-        if(allSelected ==null)// should never happen but just in case bc the dic is a bit sketchy
-        {
-            return null;
-        }
-        List<buildableScript> buildableScripts = new List<buildableScript>();
-        foreach(buildableGameObject currentSelected in allSelected)
-        {
-            buildableScript buildableScript = currentSelected.buildableObject.GetComponent<buildableScript>();
-        }
-        return null;
-        
+        List<buildableScript> allBuildables = new List<buildableScript>();
+        List<buildableScript> selectedBuildables = new List<buildableScript>();
        
+        return selectedBuildables.ToArray();
     }
     public static buildableGameObject getBuildableGameObject(buildableScript buildableScript)
     {
