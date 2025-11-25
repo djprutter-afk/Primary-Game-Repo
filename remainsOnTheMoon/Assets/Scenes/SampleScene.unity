@@ -11346,7 +11346,7 @@ MonoBehaviour:
   visualMoon: {fileID: 0}
   resourceAmountMax: 1.15
   resourceAmountMin: 1
-  moonMaterial: {fileID: 2100000, guid: 9a0a4c74d4a13e743a80cc9ea2c0ece6, type: 2}
+  moonMaterial: {fileID: 2100000, guid: 7aa1d11f742ce7248b039340b792835f, type: 2}
 --- !u!1 &1666743407
 GameObject:
   m_ObjectHideFlags: 0

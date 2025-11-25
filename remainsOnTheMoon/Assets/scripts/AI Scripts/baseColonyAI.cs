@@ -311,10 +311,19 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
 
     }
-    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)
     {
-        List<buildableScript> allBuildables = new List<buildableScript>();
+    
         List<buildableScript> selectedBuildables = new List<buildableScript>();
+        var dic = buildablesPurposesGrouped.buildablePurposeDictonary;
+       List<buildableGameObject> listOfBuildablesObjects =  dic[dog];
+    
+       foreach(buildableGameObject current in listOfBuildablesObjects)
+        {
+            buildableScript dsafjdbsnfn = current.buildableObject.GetComponent<buildableScript>();
+            selectedBuildables.Add(dsafjdbsnfn);
+        }
+
        
         return selectedBuildables.ToArray();
     }

@@ -94,9 +94,9 @@ public class tileVisuals : MonoBehaviour
         {
             currentDuration -= Time.deltaTime;
 
-            float percentage = Mathf.Clamp01((currentDuration - 0.5f) / fadeDuration);
+            float percentage =0.01f- Mathf.Clamp01((currentDuration - 0.5f) / fadeDuration);
 
-            tileRender.material.color = Color.Lerp(tileColour,changedColour, percentage);
+            tileRender.material.SetFloat("_alpha", percentage);
         }
         
     }
