@@ -301,7 +301,7 @@ public class makeSpaceStrat : iActionStrat
             buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
             if(thisBuildableScript.isBuilding == true)
             {
-                Debug.Log("BUILDABLE WAS BUILDING BUILDABLE WAS BUILDING");
+                Debug.Log("BUILDABLE WAS BUILDING BUILDABLE WAS BUILDING AND WAS " + buildable);
                 continue;
             }
              Debug.Log("im legit bout to move!!!!!!!!!!!!!!!!!!!!!!!!!!! tileon is: "); 
