@@ -32,7 +32,7 @@ public class interiorMoon : MonoBehaviour
             {
                 continue;
             }
-            float chance = UnityEngine.Random.value;
+            float chance = UnityEngine.Random.value * 10;
             if(becomeCratorChance > chance)
             {
                 Debug.LogError("RAND CHAnCE WAs " + chance);

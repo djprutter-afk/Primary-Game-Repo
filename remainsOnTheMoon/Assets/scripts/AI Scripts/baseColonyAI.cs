@@ -107,11 +107,14 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
 
-        factory.addBeliefs("is happy with size", () => thisColonyScript.allTilesOwned.Count > 2);
+        
    
-       
+       factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
+        factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
+
+        
          factory.addBeliefs("has decided on buildable", () => desiredBuildable != null);
         factory.addBeliefs("has space to build", hasSpaceToBuild);
 
@@ -149,8 +152,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
 
         actions.Add(new agentAction.Builder("make space")
-        .WithStrat(new chooseBuildableStrat(this))
-        .AddEffect(beliefs["has decided on buildable"])
+        .WithStrat(new makeSpaceStrat(thisColonyScript))
+        .AddEffect(beliefs["has space to build"])
         .Build());
 
         actions.Add(new agentAction.Builder("decide Buildable")
@@ -177,7 +180,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion),
         buildableScript.buildableActions.GenericAction,
         colonyMethoods.bestTilesurrouning(gameObject, getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length)
-        )).AddEffect(beliefs["is happy with size"])
+        )).AddEffect(beliefs["satisfied with size"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());
 
@@ -195,6 +198,13 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         goals.Add(new AgentGoal.Builder("make more buildables")
         .withPriority(0.25f)
         .withdesiredEffects(beliefs["satisfied with buildables"])
+        .Build());
+
+
+
+        goals.Add(new AgentGoal.Builder("settle land")
+        .withPriority(0.3f)
+        .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
       
      
@@ -327,26 +337,23 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
        
         return selectedBuildables.ToArray();
     }
-    public static buildableGameObject getBuildableGameObject(buildableScript buildableScript)
+    public buildableGameObject[] getTypeOfBuildableObject(buildableScript.AIBuildableInfo.buildablePurposes dog)
     {
-        buildingCatagory[] idk = gameManagerScript.allCats;
-       // List<buildableGameObject> idkv2 = new List<buildableGameObject>();
-        foreach(buildingCatagory individualCat in idk)
+    
+        List<buildableGameObject> selectedBuildables = new List<buildableGameObject>();
+        var dic = buildablesPurposesGrouped.buildablePurposeDictonary;
+       List<buildableGameObject> listOfBuildablesObjects =  dic[dog];
+    
+       foreach(buildableGameObject current in listOfBuildablesObjects)
         {
-            foreach(buildableGameObject indvidualBuildable in individualCat.arrayOfBuildings)
-            {
-                if(buildableScript == indvidualBuildable.buildableObject)
-                {
-                    return indvidualBuildable;
-                }
-                
-            }
             
+            selectedBuildables.Add(current);
         }
-        return null;
 
        
+        return selectedBuildables.ToArray();
     }
+  
 
 }
 public class CountDownTimer

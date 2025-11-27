@@ -109,26 +109,7 @@ public class spendStrat : iActionStrat
     }
 }
 
-public class makeSpaceStrat : iActionStrat
-{
 
-    int ticksRemaining;
-
-    public bool canPerform => !complete;
-    public bool complete => true;
-    public makeSpaceStrat(colonyScript thisColonyScript )
-    {
-
-      
-
-
-    }
-   
-
-
-
-
-}
 
 public class waitTickStrat : iActionStrat
 {
@@ -306,6 +287,39 @@ public class begStrat : iActionStrat
         builtTheThing = true;
     }
 }
+public class makeSpaceStrat : iActionStrat
+{
+    bool foundSpotToMove = false;
+    public bool canPerform => !complete;
+    public bool complete => foundSpotToMove;
+
+    public makeSpaceStrat(colonyScript colony)
+    {
+        foreach(GameObject buildable in colony.ownedBuildables)
+        {
+            buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
+            if(thisBuildableScript.isBuilding == true)
+            {
+                continue;
+            }
+            GameObject theTileWhichTheBuildableIsOn = thisBuildableScript.tileOn;
+            Collider[] surroundingTiles = Physics.OverlapSphere(theTileWhichTheBuildableIsOn.transform.position, 0.05f);
+            foreach(Collider currentTile in surroundingTiles)
+            {
+                tileInfo tileOnInfo = currentTile.GetComponent<tileInfo>();
+                if(tileOnInfo.occupid == false)
+                {
+                    thisBuildableScript.moveToTile(currentTile.gameObject);
+                    foundSpotToMove = true;
+                    return;
+                }
+            }
+            
+            
+        }
+        foundSpotToMove = true; // just incase there were no spots found, redo the script if this becomes a problem
+    }
+}
 public class chooseBuildableStrat : iActionStrat
 {
     bool builtTheThing;
@@ -320,13 +334,13 @@ public class chooseBuildableStrat : iActionStrat
             Debug.LogError("FAIL VALUES ORDER WAS " + valuesOrdered.Length);
             return;
         }
-        buildableScript[] allOfACategory = colonyAI.getTypeOfBuildable(valuesOrdered[0].Key);
+        buildableGameObject[] allOfACategory = colonyAI.getTypeOfBuildableObject(valuesOrdered[0].Key);
         if(allOfACategory.Length <= 0)
         {
              Debug.LogError("FAIL CAT WAS " + allOfACategory.Length);
             return;
         }
-        colonyAI.desiredBuildable = baseColonyAI.getBuildableGameObject(allOfACategory[0]);
+        colonyAI.desiredBuildable = allOfACategory[0];
         builtTheThing = true;
 
             

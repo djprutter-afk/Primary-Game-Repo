@@ -11346,6 +11346,7 @@ MonoBehaviour:
   visualMoon: {fileID: 0}
   resourceAmountMax: 1.15
   resourceAmountMin: 1
+  transparancy: 0
   moonMaterial: {fileID: 2100000, guid: 7aa1d11f742ce7248b039340b792835f, type: 2}
 --- !u!1 &1666743407
 GameObject:
@@ -11397,7 +11398,7 @@ MonoBehaviour:
   playerAmount: 1
   minDistance: 0.7
   theMoon: {fileID: 1507515933}
-  colonyAmount: 1
+  colonyAmount: 2
   gameManager: {fileID: 713989425}
   playerMouseInteractionsObject: {fileID: 309602033}
   colonyTypes:
