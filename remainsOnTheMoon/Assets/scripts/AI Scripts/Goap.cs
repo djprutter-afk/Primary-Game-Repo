@@ -295,21 +295,27 @@ public class makeSpaceStrat : iActionStrat
 
     public makeSpaceStrat(colonyScript colony)
     {
+       
         foreach(GameObject buildable in colony.ownedBuildables)
         {
             buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
             if(thisBuildableScript.isBuilding == true)
             {
+                Debug.Log("BUILDABLE WAS BUILDING BUILDABLE WAS BUILDING");
                 continue;
             }
+             Debug.Log("im legit bout to move!!!!!!!!!!!!!!!!!!!!!!!!!!! tileon is: "); 
             GameObject theTileWhichTheBuildableIsOn = thisBuildableScript.tileOn;
+            Debug.Log("im legit bout to move!!!!!!!!!!!!!!!!!!!!!!!!!!! tileon is: "+ theTileWhichTheBuildableIsOn); 
+       
             Collider[] surroundingTiles = Physics.OverlapSphere(theTileWhichTheBuildableIsOn.transform.position, 0.05f);
+            Debug.Log("im legit bout to move!!!!!!!!!!!!!!!!!!!!!!!!!!! tileon is: "+ theTileWhichTheBuildableIsOn+" and the amount of tiles surrounding is: "+ surroundingTiles.Count()); 
             foreach(Collider currentTile in surroundingTiles)
             {
                 tileInfo tileOnInfo = currentTile.GetComponent<tileInfo>();
                 if(tileOnInfo.occupid == false)
                 {
-                    thisBuildableScript.moveToTile(currentTile.gameObject);
+                    thisBuildableScript.buildableAction(buildableScript.buildableActions.Move,currentTile.gameObject);
                     foundSpotToMove = true;
                     return;
                 }

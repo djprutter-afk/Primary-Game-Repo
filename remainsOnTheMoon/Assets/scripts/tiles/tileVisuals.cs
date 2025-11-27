@@ -61,8 +61,7 @@ public class tileVisuals : MonoBehaviour
 
         tileMaterial = Instantiate(inputMaterial);
 
-        tileColour = inputMaterial.color;
-
+    
 
 
 
