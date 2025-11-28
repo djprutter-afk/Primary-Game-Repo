@@ -311,7 +311,7 @@ public class playerMouseInteractions : MonoBehaviour// for the sole player only
             orderedRandomNummbers.RemoveAt(randIndex);
 
         }
-        Debug.Log(debugNumbers);
+       
         return randomNummbers.ToArray();
 
 

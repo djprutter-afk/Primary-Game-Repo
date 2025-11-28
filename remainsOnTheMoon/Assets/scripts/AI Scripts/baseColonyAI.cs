@@ -109,7 +109,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         
    
-       factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
+       factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);// fix most likely broken 
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
         factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
@@ -177,7 +177,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         actions.Add(new agentAction.Builder("settle new land")
         .WithStrat(new useStrat(
-        getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion),
+        getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion),
         buildableScript.buildableActions.GenericAction,
         colonyMethoods.bestTilesurrouning(gameObject, getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length)
         )).AddEffect(beliefs["satisfied with size"])
@@ -299,14 +299,14 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     }
     public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
     {
-        List<buildableScript> allBuildables = new List<buildableScript>();
+
         List<buildableScript> selectedBuildables = new List<buildableScript>();
         foreach (GameObject currentBuildable in thisColonyScript.ownedBuildables)
         {
             buildableScript currentscript = currentBuildable.GetComponent<buildableScript>();
             foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in currentscript.purposes)
             {
-                if (infoStuct.purpose == dog && infoStuct.strength < strengthRequired)
+                if (infoStuct.purpose == dog && infoStuct.strength > strengthRequired)
                 {
                     selectedBuildables.Add(currentscript);
                     break;// if purpose is found then no need to check the rest

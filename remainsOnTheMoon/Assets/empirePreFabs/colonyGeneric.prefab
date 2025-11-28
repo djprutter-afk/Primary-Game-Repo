@@ -61,11 +61,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e71105b4db47b846839fceddf34cafd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  desiredBuildable:
+    buildCost:
+      moneyExpenses: 0
+      resourceExpenses: 0
+      populationExpenses: 0
+      buildingName: 
+    buildableObject: {fileID: 4611562821212978756, guid: 385d529ebc1c9bc48bf1b35277026829, type: 3}
+    nameOfBuildable: sigma
   theGameManager: {fileID: 0}
   aggression: 0
-  hatred: []
-  REMOVETHIS: {fileID: 2100000, guid: fe7b136d4ebe8e04eb0d5904ee697920, type: 2}
-  showOutline: 1
+  thisColonyScript: {fileID: 0}
 --- !u!114 &523812429575284313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,6 +98,7 @@ MonoBehaviour:
   LOCALColonyMaterial: {fileID: 0}
   colonyGameManager: {fileID: 0}
   totalColonyPopGrowth: 1
+  tempGoapTestNumber: 0
 --- !u!114 &8423657402753773308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,3 +111,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6178d907d9f0943b32ba1d8894b147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resourcesOwned:
+    moneyExpenses: 0
+    resourceExpenses: 0
+    populationExpenses: 0
+    buildingName: 
+  resourceChange:
+    moneyExpenses: 0
+    resourceExpenses: 0
+    populationExpenses: 0
+    buildingName: 
+  OwnedTiles: []
+  OwnedBuildables: []

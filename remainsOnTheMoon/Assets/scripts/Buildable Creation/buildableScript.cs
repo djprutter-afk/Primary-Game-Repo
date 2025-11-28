@@ -100,11 +100,11 @@ public class buildableScript : MonoBehaviour
     public AIBuildableInfo.biInfoStuct[] purposes;
     public bool buildableAction(buildableActions action, GameObject target)
     {
-        Debug.Log(" attempting to work please please " + action+ " and its on a " + gameObject);
+        Debug.Log(" attempting to work please please " + action);
         
         if (Vector3.Distance(target.transform.position, transform.position) > possibleRangeDiameter / 2)
         {
-            Debug.LogError("FAILED FAILED");
+            Debug.LogError("FAILED FAILED, target was: " + target +" le object was also: " + gameObject);
             return false;
         }
       
@@ -181,7 +181,11 @@ public class buildableScript : MonoBehaviour
 
 
         tileInfo tileonInfo = tileOn.GetComponent<tileInfo>();
-        tileonInfo.occupid = true;
+        if(isBuilding == false)
+        {
+            tileonInfo.occupid = true;
+        }
+        
 
     }
 
@@ -230,7 +234,7 @@ public class buildableScript : MonoBehaviour
             if (currentTimeToNextMove <= 0)
             {
                
-                if (movePathPosition >= movePath.Count())
+                if (movePathPosition > movePath.Count())
                 {
 
                     doneMoving?.Invoke();
@@ -257,6 +261,7 @@ public class buildableScript : MonoBehaviour
             
         }
         currentTileInfo.occupid = false;
+        nextTileInfo.occupid = true;
         tileOn = tile;
         becomeParellel();
         currentTimeToNextMove = timeToWait;

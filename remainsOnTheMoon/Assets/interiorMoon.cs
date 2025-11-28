@@ -35,7 +35,7 @@ public class interiorMoon : MonoBehaviour
             float chance = UnityEngine.Random.value * 10;
             if(becomeCratorChance > chance)
             {
-              
+                Debug.LogError("RAND CHAnCE WAs " + chance);
                 createNewCrator(visTile);
             }
         }

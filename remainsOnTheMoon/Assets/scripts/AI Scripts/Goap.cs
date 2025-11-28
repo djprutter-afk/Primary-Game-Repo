@@ -80,34 +80,17 @@ public interface iActionStrat
 {
     bool canPerform { get; }
     bool complete { get; }
-    void Start()
-    {
-
-    }
-    void Update(float deltaTime)
-    {
-
-    }
-    void Stop()
-    {
-
-    }
+    void Start();
+   
+    void Update(float deltaTime){}
+    
+    void Stop(){}
+    
 }
 /// <summary>
 /// should be removed
 /// </summary>
-public class spendStrat : iActionStrat
-{
-    bool builtTheThing;
-    public bool canPerform => !complete;
-    public bool complete => builtTheThing;
 
-    public spendStrat(colonyScript colony)
-    {
-        colony.resourcesOwned.moneyExpenses = -100;
-        builtTheThing = true;
-    }
-}
 
 
 
@@ -130,6 +113,10 @@ public class waitTickStrat : iActionStrat
         ticksRemaining--;
 
     }
+    public void Start()
+    {
+        
+    }
 
 
 
@@ -142,9 +129,14 @@ public class buildStrat : iActionStrat
     bool finished = false;
     BuildingStruct purchciceCost;
     colonyScript callingColony;
+    GameObject deathObject;
+    buildableScript thrbuildableScript;
 
     public bool canPerform => callingColony != null && BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
     public bool complete => finished;
+    GameObject targetPos;
+    int amountTobuild;
+    baseColonyAI myAI;
     /// <summary>
     /// 
     /// </summary>
@@ -152,13 +144,24 @@ public class buildStrat : iActionStrat
     /// <param name="buildableToBuild"></param>
     /// <param name="buildingCost"></param>
     /// <param name="CallingColony"></param>
-    public buildStrat(GameObject targetPos, GameObject buildableToBuild, BuildingStruct BuildCost, int amountTobuild, baseColonyAI myAI)
+    public buildStrat(GameObject sdfsdf, GameObject buildableToBuild, BuildingStruct BuildCost, int dsf, baseColonyAI fdg)
     {
-        callingColony = myAI.thisColonyScript;
+        amountTobuild = dsf;
+        targetPos = sdfsdf;
+        callingColony = fdg.thisColonyScript;
         purchciceCost = BuildCost;
-        buildableScript buildableScript = buildableToBuild.GetComponent<buildableScript>();
+         thrbuildableScript = buildableToBuild.GetComponent<buildableScript>();
+        deathObject = buildableToBuild;
+        myAI = fdg;
 
 
+
+
+
+    }
+    public void Start()
+    {
+        
         GameObject[] ownedTiles = callingColony.allTilesOwned.ToArray();
         Dictionary<GameObject, float> tileDic = new Dictionary<GameObject, float>();
         foreach (GameObject currentTile in ownedTiles)
@@ -179,19 +182,19 @@ public class buildStrat : iActionStrat
         {
 
 
-            if (BuildingStruct.comapareCosts(callingColony.resourcesOwned, BuildCost) == true)
+            if (BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost) == true)
             {
                 tileInfo tileScript = tileKVP.Key.GetComponent<tileInfo>();
                 buildableGameObject buildable = new buildableGameObject
                 {
-                    buildCost = BuildCost,
-                    buildableObject = buildableToBuild,
-                    nameOfBuildable = buildableScript.nameOfBuildable
+                    buildCost = purchciceCost,
+                    buildableObject = deathObject,
+                    nameOfBuildable = thrbuildableScript.nameOfBuildable
 
 
                 };
 
-                bool succes = colonyMethoods.purchasableAction(myAI.gameObject, BuildCost, tileKVP.Key, true);
+                bool succes = colonyMethoods.purchasableAction(myAI.gameObject, purchciceCost, tileKVP.Key, true);
                 if (succes == true)
                 {
                     tileScript.buildNewBuildable(buildable, callingColony);
@@ -202,7 +205,7 @@ public class buildStrat : iActionStrat
                     break;
                 }
                 myAI.desiredBuildable = null;
-                finished = true;
+                
 
 
 
@@ -211,9 +214,7 @@ public class buildStrat : iActionStrat
             }
 
         }
-
-
-
+        finished = true;
     }
 }
 
@@ -226,6 +227,9 @@ public class useStrat : iActionStrat
     bool finishedAction = false;
     public bool canPerform => !complete;
     public bool complete => finishedAction;
+    buildableScript[] performingBuildable;
+     buildableScript.buildableActions action;
+      GameObject[] targets;
 
     /// <summary>
     /// perform action at mass
@@ -233,9 +237,18 @@ public class useStrat : iActionStrat
     /// <param name="performingBuildable"></param>
     /// <param name="action"></param>
     /// <param name="target"></param>
-    public useStrat(buildableScript[] performingBuildable, buildableScript.buildableActions action, GameObject[] targets)
+    public useStrat(buildableScript[] rthb, buildableScript.buildableActions hsejh, GameObject[] rtjrsj)
     {
-        int[] order = playerMouseInteractions.randomAssortment(targets.Length);
+       performingBuildable = rthb;
+       action = hsejh;
+       targets = rtjrsj;
+
+
+
+    }
+    public void Start()
+    {
+         int[] order = playerMouseInteractions.randomAssortment(targets.Length);
         for(int i = 0; i < performingBuildable.Length; i++)
         {
             performingBuildable[i].buildableAction(action, targets[order[i]]);
@@ -245,9 +258,6 @@ public class useStrat : iActionStrat
                 i = 0;
             }
         }
-
-
-
     }
     /// <summary>
     /// peform action on only one, single, lonely buildable
@@ -255,15 +265,7 @@ public class useStrat : iActionStrat
     /// <param name="performingBuildable"></param>
     /// <param name="action"></param>
     /// <param name="target"></param>
-     public useStrat( buildableScript performingBuildable, buildableScript.buildableActions action,GameObject target)
-    {
-        performingBuildable.buildableAction(action, target);
-        performingBuildable.finishedAction += hasFinishedAction;
-       
-        
-
-
-    }
+    
     void hasFinishedAction()
     {
         finishedAction = true;
@@ -275,6 +277,7 @@ public class useStrat : iActionStrat
 /// <summary>
 /// for testing only, dont actually used
 /// </summary>
+/*
 public class begStrat : iActionStrat
 {
     bool builtTheThing;
@@ -287,43 +290,52 @@ public class begStrat : iActionStrat
         builtTheThing = true;
     }
 }
+*/
 public class makeSpaceStrat : iActionStrat
 {
     bool foundSpotToMove = false;
     public bool canPerform => !complete;
     public bool complete => foundSpotToMove;
+    colonyScript localColony;
 
     public makeSpaceStrat(colonyScript colony)
     {
-       
-        foreach(GameObject buildable in colony.ownedBuildables)
+        localColony = colony;
+    }
+        
+    public void Start()
+    {
+        GameObject[] buildables =  localColony.ownedBuildables.ToArray();
+        int[] order =  playerMouseInteractions.randomAssortment(buildables.Length);
+        for(int i = 0; i <buildables.Length;i++)
         {
-            buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
+            buildableScript thisBuildableScript = buildables[order[i]].GetComponent<buildableScript>();
             if(thisBuildableScript.isBuilding == true)
             {
-                Debug.Log("BUILDABLE WAS BUILDING BUILDABLE WAS BUILDING AND WAS " + buildable);
                 continue;
             }
-             Debug.Log("im legit bout to move!!!!!!!!!!!!!!!!!!!!!!!!!!! tileon is: "); 
             GameObject theTileWhichTheBuildableIsOn = thisBuildableScript.tileOn;
-            Debug.Log("im legit bout to move!!!!!!!!!!!!!!!!!!!!!!!!!!! tileon is: "+ theTileWhichTheBuildableIsOn); 
-       
             Collider[] surroundingTiles = Physics.OverlapSphere(theTileWhichTheBuildableIsOn.transform.position, 0.05f);
-            Debug.Log("im legit bout to move!!!!!!!!!!!!!!!!!!!!!!!!!!! tileon is: "+ theTileWhichTheBuildableIsOn+" and the amount of tiles surrounding is: "+ surroundingTiles.Count()); 
             foreach(Collider currentTile in surroundingTiles)
             {
                 tileInfo tileOnInfo = currentTile.GetComponent<tileInfo>();
+                if(tileOnInfo == null)
+                {
+                    continue;
+                }
                 if(tileOnInfo.occupid == false)
                 {
-                    thisBuildableScript.buildableAction(buildableScript.buildableActions.Move,currentTile.gameObject);
-                    foundSpotToMove = true;
-                    return;
+                    bool succeded = thisBuildableScript.buildableAction(buildableScript.buildableActions.Move,currentTile.gameObject);
+                    
+                    
+                   
                 }
             }
             
             
         }
         foundSpotToMove = true; // just incase there were no spots found, redo the script if this becomes a problem
+        
     }
 }
 public class chooseBuildableStrat : iActionStrat
@@ -331,10 +343,18 @@ public class chooseBuildableStrat : iActionStrat
     bool builtTheThing;
     public bool canPerform => !complete;
     public bool complete => builtTheThing;
+    baseColonyAI colonyAI;
 
-    public chooseBuildableStrat(baseColonyAI colonyAI)
+    public chooseBuildableStrat(baseColonyAI sgfa)
     {
-       var valuesOrdered =  colonyAI.valueOfBuildables.OrderByDescending(x=> x.Value).ToArray();
+      colonyAI =sgfa;
+
+            
+        
+    }
+    public void Start()
+    {
+         var valuesOrdered =  colonyAI.valueOfBuildables.OrderByDescending(x=> x.Value).ToArray();
        if(valuesOrdered.Length <= 0)
         {
             Debug.LogError("FAIL VALUES ORDER WAS " + valuesOrdered.Length);
@@ -348,9 +368,6 @@ public class chooseBuildableStrat : iActionStrat
         }
         colonyAI.desiredBuildable = allOfACategory[0];
         builtTheThing = true;
-
-            
-        
     }
 }
 public class waitStrat : iActionStrat
