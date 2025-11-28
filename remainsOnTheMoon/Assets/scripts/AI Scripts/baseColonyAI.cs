@@ -179,7 +179,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .WithStrat(new useStrat(
         getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion),
         buildableScript.buildableActions.GenericAction,
-        colonyMethoods.bestTilesurrouning(gameObject, getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length)
+        colonyMethoods.bestTilesurrouning(gameObject,getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length)
+
+
+    
         )).AddEffect(beliefs["satisfied with size"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());
@@ -299,6 +302,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     }
     public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
     {
+        Debug.Log("searching for buildables with the type of: " + dog);
 
         List<buildableScript> selectedBuildables = new List<buildableScript>();
         foreach (GameObject currentBuildable in thisColonyScript.ownedBuildables)
@@ -309,14 +313,16 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
                 if (infoStuct.purpose == dog && infoStuct.strength > strengthRequired)
                 {
                     selectedBuildables.Add(currentscript);
-                    break;// if purpose is found then no need to check the rest
+                   
 
                 }
+
 
             }
 
 
         }
+        Debug.Log("found: " + selectedBuildables.Count +" of type wanted, length of all buildables owned is: " + thisColonyScript.ownedBuildables.Count);
         return selectedBuildables.ToArray();
         
 

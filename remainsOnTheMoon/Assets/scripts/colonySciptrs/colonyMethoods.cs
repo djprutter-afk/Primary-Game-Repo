@@ -287,6 +287,7 @@ public static class colonyMethoods
 
     public static GameObject[] bestTilesurrouning(GameObject colony,int Length)
     {
+        Debug.Log("ok im going to find:" +Length + " of tiles");
          GameObject[] sortedGameObjects = new GameObject[Length];// end result
 
         baseColonyAI colonyAI = colony.GetComponent<baseColonyAI>();

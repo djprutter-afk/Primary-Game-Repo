@@ -197,14 +197,22 @@ public class buildStrat : iActionStrat
                 bool succes = colonyMethoods.purchasableAction(myAI.gameObject, purchciceCost, tileKVP.Key, true);
                 if (succes == true)
                 {
-                    tileScript.buildNewBuildable(buildable, callingColony);
+                    GameObject objectToCheck =  tileScript.buildNewBuildable(buildable, callingColony);
                     amountBuilded += 1;
+
+                    if(amountBuilded == amountTobuild)// waits until the last buildable is ready
+                    {
+                        buildableScript zogglisihs = objectToCheck.GetComponent<buildableScript>();
+                        zogglisihs.doneCreatingSelf += finsied;
+                    }
+
                 }
                 if (amountBuilded >= amountTobuild)
                 {
                     break;
                 }
-                myAI.desiredBuildable = null;
+              
+               
                 
 
 
@@ -212,9 +220,13 @@ public class buildStrat : iActionStrat
 
 
             }
-
+            myAI.desiredBuildable = null;
         }
-        finished = true;
+        void finsied()
+        {
+            finished = true;
+        }
+        
     }
 }
 
@@ -231,17 +243,12 @@ public class useStrat : iActionStrat
      buildableScript.buildableActions action;
       GameObject[] targets;
 
-    /// <summary>
-    /// perform action at mass
-    /// </summary>
-    /// <param name="performingBuildable"></param>
-    /// <param name="action"></param>
-    /// <param name="target"></param>
-    public useStrat(buildableScript[] rthb, buildableScript.buildableActions hsejh, GameObject[] rtjrsj)
+
+    public useStrat(buildableScript[] buildables, buildableScript.buildableActions actionToPerform, GameObject[] targetsToActOn)
     {
-       performingBuildable = rthb;
-       action = hsejh;
-       targets = rtjrsj;
+       performingBuildable = buildables;
+       action = actionToPerform;
+       targets = targetsToActOn;
 
 
 
@@ -249,6 +256,7 @@ public class useStrat : iActionStrat
     public void Start()
     {
          int[] order = playerMouseInteractions.randomAssortment(targets.Length);
+         Debug.Log("length of action list targets is: " + targets.Length+ " and the objects it's applying to is: " + performingBuildable.Length);
         for(int i = 0; i < performingBuildable.Length; i++)
         {
             performingBuildable[i].buildableAction(action, targets[order[i]]);
@@ -258,14 +266,9 @@ public class useStrat : iActionStrat
                 i = 0;
             }
         }
+
     }
-    /// <summary>
-    /// peform action on only one, single, lonely buildable
-    /// </summary>
-    /// <param name="performingBuildable"></param>
-    /// <param name="action"></param>
-    /// <param name="target"></param>
-    
+
     void hasFinishedAction()
     {
         finishedAction = true;

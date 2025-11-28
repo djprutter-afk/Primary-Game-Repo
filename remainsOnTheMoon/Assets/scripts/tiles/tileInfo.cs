@@ -99,7 +99,7 @@ public class tileInfo : MonoBehaviour
 
 
 
-    public void buildNewBuildable(buildableGameObject thisBuildable, colonyScript thisColony)
+    public GameObject buildNewBuildable(buildableGameObject thisBuildable, colonyScript thisColony)
     {
         GameObject newBuildable = Instantiate(thisBuildable.buildableObject, thisColony.gameObject.transform);
 
@@ -120,9 +120,10 @@ public class tileInfo : MonoBehaviour
         {
 
             buildingsOnTile.Add(newBuildableScript.upkeepCosts);
-            return;
+            
 
         }
+        return newBuildable;
                 
 
     }

@@ -23,6 +23,8 @@ public class buildableScript : MonoBehaviour
     public event System.Action<GameObject> GenericAction; // for anything unit specfifc, GameObject is also target
     public event System.Action selfDies;
 
+    public event System.Action doneCreatingSelf; // for when the buildable is ready
+
 
 
 
@@ -185,6 +187,7 @@ public class buildableScript : MonoBehaviour
         {
             tileonInfo.occupid = true;
         }
+        doneCreatingSelf?.Invoke();
         
 
     }
@@ -234,7 +237,7 @@ public class buildableScript : MonoBehaviour
             if (currentTimeToNextMove <= 0)
             {
                
-                if (movePathPosition > movePath.Count())
+                if (movePathPosition >= movePath.Count())
                 {
 
                     doneMoving?.Invoke();
