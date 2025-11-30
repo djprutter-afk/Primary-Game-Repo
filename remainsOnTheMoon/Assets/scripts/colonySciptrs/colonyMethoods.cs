@@ -34,7 +34,7 @@ public static class colonyMethoods
         GameObject[] ownedTiles = currentColonyScript.allTilesOwned.ToArray();
         List<GameObject> edgeTiles = new List<GameObject>();
 
-        currentColonyScript.ownedEdgeTiles.Clear();
+        
 
         foreach (GameObject tile in ownedTiles)
         {
@@ -51,6 +51,34 @@ public static class colonyMethoods
                 {
                     edgeTiles.Add(tile);
                     break;
+                }
+            }
+        }
+        return edgeTiles.ToArray();
+    }
+    public static GameObject[] findOUterEdgeTiles(GameObject colony)
+    {
+         colonyScript currentColonyScript = colony.GetComponent<colonyScript>();
+        GameObject[] ownedTiles = currentColonyScript.allTilesOwned.ToArray();
+        List<GameObject> edgeTiles = new List<GameObject>();
+
+        
+
+        foreach (GameObject tile in ownedTiles)
+        {
+            Collider[] surroundingTiles = Physics.OverlapSphere(tile.transform.position, 0.05f);
+
+            foreach (Collider currentSurround in surroundingTiles)
+            {
+                tileInfo currentTileInfo = currentSurround.GetComponent<tileInfo>();
+                if (currentTileInfo == null)// means gameobject is most likely not a tile
+                {
+                    continue;
+                }
+                if (currentSurround.transform.parent != colony)
+                {
+                    edgeTiles.Add(currentSurround.gameObject);
+                    
                 }
             }
         }
@@ -292,7 +320,7 @@ public static class colonyMethoods
 
         baseColonyAI colonyAI = colony.GetComponent<baseColonyAI>();
         colonyScript colonyScript = colony.GetComponent<colonyScript>();
-        GameObject[] outlineTiles = findEdgeTiles(colony);
+        GameObject[] outlineTiles = findOUterEdgeTiles(colony);
         int numberOfOutlineTiles = outlineTiles.Length;
 
         if(Length > outlineTiles.Length)
@@ -333,9 +361,8 @@ public static class colonyMethoods
 
                 }
             }
-            Debug.Log(tileValue);
-
-            if (dictonaryOfTiles.ContainsKey(currentOutLineTile) == false)
+          
+            if (dictonaryOfTiles.ContainsKey(currentOutLineTile) == false && colonyScript.allTilesOwned.Contains(currentOutLineTile) == false)
             {
                 dictonaryOfTiles.Add(currentOutLineTile, tileValue);
 

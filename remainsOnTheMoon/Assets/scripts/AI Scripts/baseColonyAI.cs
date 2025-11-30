@@ -176,10 +176,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
         actions.Add(new agentAction.Builder("settle new land")
-        .WithStrat(new useStrat(
-        getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion),
-        buildableScript.buildableActions.GenericAction,
-        colonyMethoods.bestTilesurrouning(gameObject,getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length)
+        .WithStrat(new massUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction
+       
 
 
     
@@ -300,33 +298,29 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
             actionplan = potentialPlan;
         }
     }
-    public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+  public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
+{
+    Debug.Log("searching for buildables with the type of: " + dog);
+
+    List<buildableScript> selectedBuildables = new List<buildableScript>();
+
+    foreach (GameObject currentBuildable in thisColonyScript.ownedBuildables)
     {
-        Debug.Log("searching for buildables with the type of: " + dog);
+        buildableScript currentscript = currentBuildable.GetComponent<buildableScript>();
 
-        List<buildableScript> selectedBuildables = new List<buildableScript>();
-        foreach (GameObject currentBuildable in thisColonyScript.ownedBuildables)
+        foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in currentscript.purposes)
         {
-            buildableScript currentscript = currentBuildable.GetComponent<buildableScript>();
-            foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in currentscript.purposes)
+            if (infoStuct.purpose == dog && infoStuct.strength > strengthRequired)
             {
-                if (infoStuct.purpose == dog && infoStuct.strength > strengthRequired)
-                {
-                    selectedBuildables.Add(currentscript);
-                   
-
-                }
-
-
+                selectedBuildables.Add(currentscript);
             }
-
-
         }
-        Debug.Log("found: " + selectedBuildables.Count +" of type wanted, length of all buildables owned is: " + thisColonyScript.ownedBuildables.Count);
-        return selectedBuildables.ToArray();
-        
-
     }
+     Debug.Log("found: " + selectedBuildables.Count+ " of buildable wanted");
+
+    return selectedBuildables.ToArray();   // <-- THE CRITICAL MISSING LINE
+}
+
     public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)
     {
     

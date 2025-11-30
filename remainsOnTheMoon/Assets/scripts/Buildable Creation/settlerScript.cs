@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class settlerScript : MonoBehaviour
@@ -51,6 +52,7 @@ public class settlerScript : MonoBehaviour
 
 
         thisTileInfo.buildingsOnTile.Add(localadministration);
+        thisTileInfo.occupid = false;
 
             Destroy(gameObject); // destroys the settler cause its like settled
         }

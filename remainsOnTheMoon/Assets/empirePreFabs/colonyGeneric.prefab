@@ -88,7 +88,7 @@ MonoBehaviour:
   outerUnownedTiles: []
   allTilesOwned: []
   ownedBuildables: []
-  colonyFlag: {fileID: 2800000, guid: 4aa40fb3c49469f478b91eff00b8fc81, type: 3}
+  colonyFlag: {fileID: 2800000, guid: b3a4f4b2a7f0e4f4bad196aa3a08ede0, type: 3}
   resourcesOwned:
     moneyExpenses: 0
     resourceExpenses: 0

@@ -76,6 +76,9 @@ public class agentBelief
 
     }
 }
+/// <summary>
+/// very very important to know that everything is intitalized at start and start ONLY, variables CANNOT update
+/// </summary>
 public interface iActionStrat
 {
     bool canPerform { get; }
@@ -229,12 +232,60 @@ public class buildStrat : iActionStrat
         
     }
 }
+public class massUseStrat : iActionStrat
+{
+    bool finishedAction = false;
+    public bool canPerform => !complete;
+    public bool complete => finishedAction;
+    buildableScript.AIBuildableInfo.buildablePurposes performingType;
+     buildableScript.buildableActions action;
+     baseColonyAI colonyScript;
+    
+buildableScript.buildableActions actionToPerform;
+
+    public massUseStrat(baseColonyAI thisColonyScript,buildableScript.AIBuildableInfo.buildablePurposes buildableType, buildableScript.buildableActions actionToPerform)
+    {
+       performingType = buildableType;
+       action = actionToPerform;
+       colonyScript = thisColonyScript;
+    
+       
+
+
+
+    }
+    public void Start()
+    {
+        buildableScript[] theOnesToDance = colonyScript.getTypeOfBuildableOwned(performingType);
+        int amtPeforming = theOnesToDance.Length;
+         int[] order = playerMouseInteractions.randomAssortment(amtPeforming);
+         GameObject[] targets = colonyMethoods.bestTilesurrouning(colonyScript.gameObject,amtPeforming);
+       
+        for(int i = 0; i < amtPeforming; i++)
+        {
+            theOnesToDance[i].buildableAction(action, targets[order[i]]);
+            theOnesToDance[i].finishedAction += hasFinishedAction;
+            if (i >= targets.Length) 
+            {
+                i = 0;
+            }
+        }
+
+    }
+
+    void hasFinishedAction()
+    {
+        finishedAction = true;
+
+    }
+    
+}
 
 
 /// <summary>
 /// ironically; mostly useless
 /// </summary>
-public class useStrat : iActionStrat
+public class useStrat : iActionStrat// this suck but i dont think this will work in anyway, theses strats are initalized when COLONY start so there will never be a good way to feed info into it
 {
     bool finishedAction = false;
     public bool canPerform => !complete;
@@ -249,6 +300,7 @@ public class useStrat : iActionStrat
        performingBuildable = buildables;
        action = actionToPerform;
        targets = targetsToActOn;
+       Debug.LogWarning("loook here shisr: " + action+" le actions i thou "+ targetsToActOn.Length);
 
 
 
