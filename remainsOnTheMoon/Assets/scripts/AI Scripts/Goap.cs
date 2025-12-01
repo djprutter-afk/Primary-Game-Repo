@@ -346,6 +346,57 @@ public class begStrat : iActionStrat
     }
 }
 */
+/// <summary>
+/// destroys the least usefull buildable
+/// </summary>
+/*
+public class deleteStrat : iActionStrat
+{
+    bool builtTheThing;
+    public bool canPerform => !complete;
+    public bool complete => builtTheThing;
+    colonyScript theColony;
+    baseColonyAI colonyAi;
+    float strongest = 0;
+
+    public deleteStrat(colonyScript colony,baseColonyAI superAI)
+    {
+        theColony = colony;
+        colonyAi = superAI;
+    }
+    public void Start()
+    {
+
+       public KeyValuePair<buildableScript.AIBuildableInfo.buildablePurposes, float> lowestValuedPurpose = new KeyValuePair<buildableScript.AIBuildableInfo.buildablePurposes, float>();
+
+        foreach(KeyValuePair<buildableScript.AIBuildableInfo.buildablePurposes, float> purpose in colonyAi.valueOfBuildables)
+        {
+            if(purpose.value < lowestValuedPurpose.value)
+            {
+                lowestValuedPurpose = purpose;
+            }
+        }
+        
+        buildableScript theOnetoDelete = new buildableScript();
+        foreach(GameObject buildable in theColony.ownedBuildables)
+        {
+            buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
+            if(thisBuildableScript.purposes.Contains == lowestValuedPurpose.key)
+            {
+                if(thisBuildableScript.purposes.strength >= strongest)
+                {
+                    theOnetoDelete =thisBuildableScript;
+
+                }
+            }
+
+        }
+        Destroy(theOnetoDelete.gameObject);
+        
+
+    }
+}
+*/
 public class makeSpaceStrat : iActionStrat
 {
     bool foundSpotToMove = false;

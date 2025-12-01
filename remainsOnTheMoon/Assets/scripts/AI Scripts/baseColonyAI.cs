@@ -106,7 +106,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         factory.addBeliefs("Nothing", () => false);
 
         factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
-
+        factory.addBeliefs("is feeling ok abt money", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 > 0);
         
    
        factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);// fix most likely broken 
@@ -160,6 +160,10 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .WithStrat(new chooseBuildableStrat(this))
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
+        //actions.Add(new agentAction.Builder("delete buildable")
+        //.WithStrat(new deleteStrat(thisColonyScript))
+        //.AddEffect(beliefs["is feeling ok abt money"])
+        //.Build());
         
     
         
@@ -207,6 +211,12 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withPriority(0.3f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
+        
+        goals.Add(new AgentGoal.Builder("not be broke")
+        .withPriority(0.9f)
+        .withdesiredEffects(beliefs["is feeling ok abt money"])
+        .Build());
+      
       
      
        
