@@ -3,19 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-
+/// <summary>
+/// putting this here so i dont forget, money you should be able to go into debt but you cant go into debt for resource or population
+/// </summary>
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
     int desiredSize;
     BuildingStruct desiredIncome;
 
-    public buildableGameObject desiredBuildable;
+    public buildableGameObject desiredBuildable = new buildableGameObject();
+    public bool hasFreshDesiredbuildabe = false;
 
     
 
     
     public event Action AITick;
     public GameObject theGameManager;
+   
     public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float> valueOfBuildables = new Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float>();//how much the ai will priorities the buildable
 
 
@@ -38,6 +42,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     public HashSet<AgentGoal> goals;
     CountDownTimer statsTimer;
     IGoapPlanner goapPlanner;
+    BuildingStruct emptyStruct = new BuildingStruct();
+  
 
     
 
@@ -66,16 +72,16 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
       
         foreach(buildableScript.AIBuildableInfo.buildablePurposes purposes in buildablesPurposesGrouped.buildablePurposeDictonary.Keys)  //assign all purposes the same value just in case
         {
-            valueOfBuildables.Add(purposes,0.5f);
+            valueOfBuildables.Add(purposes,0.1f);
         }
 
         // manually assign values here, they should still drift from theses inital values though
         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.antiMissile] = 0.15f;
         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.defensive] = 0.20f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] = 0.50f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] = 0.30f;
         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion] = 0.60f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = 0.25f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = 0.30f;// missiles should be a prevent threat of the game, to like expand the metaphor and stuff
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = 0.35f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = 0.30f;// missiles should be a prevelent threat of the game
 
     }
 
@@ -84,15 +90,16 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         statsTimer = new CountDownTimer(2f);
         statsTimer.onTimerEnd += () =>
         {
-            updateStats();
+            updateValues();
             statsTimer.Start();
         };
         statsTimer.Start();
 
     }
   
-    void updateStats()
+    void updateValues()
     {
+
 
     }
     
@@ -105,17 +112,20 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
         factory.addBeliefs("Nothing", () => false);
 
-        factory.addBeliefs("is going money broke", () => thisColonyScript.resourcesOwned.moneyExpenses - thisColonyScript.totalIncome().moneyExpenses * 2 < 0);
+       
+        factory.addBeliefs("is feeling secure", () => 
+        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(4)),emptyStruct));
 
-        
+       
    
-       factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);// fix most likely broken 
+       factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
         factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
-
         
-         factory.addBeliefs("has decided on buildable", () => desiredBuildable != null);
+
+        factory.addBeliefs("can afford new tile", () => BuildingStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
+         factory.addBeliefs("has decided on buildable", () => hasFreshDesiredbuildabe);
         factory.addBeliefs("has space to build", hasSpaceToBuild);
 
         bool hasSpaceToBuild()
@@ -155,36 +165,40 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .WithStrat(new makeSpaceStrat(thisColonyScript))
         .AddEffect(beliefs["has space to build"])
         .Build());
+        
+        actions.Add(new agentAction.Builder("do nothing")
+        .WithStrat(new waitTickStrat(2))
+        .AddEffect(beliefs["Nothing"])
+        .Build());
 
         actions.Add(new agentAction.Builder("decide Buildable")
         .WithStrat(new chooseBuildableStrat(this))
+        .addPreCondition(beliefs["is feeling secure"])
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
-        
-    
-        
+       
 
         actions.Add(new agentAction.Builder("buildBuildable")
-        .WithStrat(new buildStrat(gameObject,desiredBuildable.buildableObject,desiredBuildable.buildCost,1,this))
+        .WithStrat(new buildStrat(gameObject,this))
         .addPreCondition(beliefs["has decided on buildable"])
         .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["satisfied with buildables"])
         .Build());
-        
-        
+         
 
-
-
-        actions.Add(new agentAction.Builder("settle new land")
-        .WithStrat(new massUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction
-       
-
-
-    
-        )).AddEffect(beliefs["satisfied with size"])
+       actions.Add(new agentAction.Builder("settle new land")
+        .WithStrat(new massUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction))
+        .AddEffect(beliefs["satisfied with size"])
+        .addPreCondition(beliefs["can afford new tile"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());
-
+        
+        
+        
+        
+        
+        
+       //.Build());
 
 
     }
@@ -195,16 +209,20 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         goals = new HashSet<AgentGoal>();
         
 
+        goals.Add(new AgentGoal.Builder("do nothing")
+        .withPriority(0.1f)
+        .withdesiredEffects(beliefs["Nothing"])
+        .Build());
         
         goals.Add(new AgentGoal.Builder("make more buildables")
         .withPriority(0.25f)
         .withdesiredEffects(beliefs["satisfied with buildables"])
         .Build());
-
+       
 
 
         goals.Add(new AgentGoal.Builder("settle land")
-        .withPriority(0.3f)
+        .withPriority(0.70f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
       
@@ -243,7 +261,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
             if (actionplan != null && actionplan.Actions.Count > 0)
             {
                 currentGoal = actionplan.AgentGoal;
-                Debug.Log(thisColonyScript.tempGoapTestNumber);
+               
                 Debug.Log($"Goal: {currentGoal.Name} with {actionplan.Actions.Count} actions in plan");
                 currentAction = actionplan.Actions.Pop();
                 Debug.Log($"Popped action {currentAction.name}");
@@ -298,29 +316,30 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
             actionplan = potentialPlan;
         }
     }
-  public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
-{
-    Debug.Log("searching for buildables with the type of: " + dog);
-
-    List<buildableScript> selectedBuildables = new List<buildableScript>();
-
-    foreach (GameObject currentBuildable in thisColonyScript.ownedBuildables)
+    public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
     {
-        buildableScript currentscript = currentBuildable.GetComponent<buildableScript>();
-
-        foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in currentscript.purposes)
+        List<buildableScript> allBuildables = new List<buildableScript>();
+        List<buildableScript> selectedBuildables = new List<buildableScript>();
+        foreach (GameObject currentBuildable in thisColonyScript.ownedBuildables)
         {
-            if (infoStuct.purpose == dog && infoStuct.strength > strengthRequired)
+            buildableScript currentscript = currentBuildable.GetComponent<buildableScript>();
+            foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in currentscript.purposes)
             {
-                selectedBuildables.Add(currentscript);
+                if (infoStuct.purpose == dog && infoStuct.strength > strengthRequired)
+                {
+                    selectedBuildables.Add(currentscript);
+                   
+
+                }
+
             }
+
+
         }
+        return selectedBuildables.ToArray();
+        
+
     }
-     Debug.Log("found: " + selectedBuildables.Count+ " of buildable wanted");
-
-    return selectedBuildables.ToArray();   // <-- THE CRITICAL MISSING LINE
-}
-
     public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)
     {
     

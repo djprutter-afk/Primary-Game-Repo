@@ -38,7 +38,7 @@ public class settlerScript : MonoBehaviour
             thisTileInfo.population = 50;
             thisTileInfo.development = 1;
 
-            thistileVisuals.setupTileVisuals(ownercolonyscript.LOCALColonyMaterial);
+            thistileVisuals.setupTileVisuals(ownercolonyscript.LOCALColonyMaterial,0.5f);
             ownercolonyscript.allTilesOwned.Add(thisTIle);
              BuildingStruct localadministration = new BuildingStruct
         {

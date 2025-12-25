@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class tileVisuals : MonoBehaviour
 {
+
+public float intialTHING = 0.15F;
     public bool isSelected = false;
     float damageAmount; 
     public Material tileMaterial;//thesess should only change based on ownership
@@ -19,8 +21,12 @@ public class tileVisuals : MonoBehaviour
 
     float currentDuration; //
     MeshRenderer tileRender;
+    void OnEnable()
+    {
+        
+    }
 
-   
+
 
     void OnDestroy()
     {
@@ -44,6 +50,8 @@ public class tileVisuals : MonoBehaviour
 
 
     }
+    
+    
 
     public void damageChange(float changeAmt)
     {
@@ -53,14 +61,14 @@ public class tileVisuals : MonoBehaviour
 
 
 
-    public void setupTileVisuals(Material inputMaterial)
+    public void setupTileVisuals(Material inputMaterial,float alhpa = 0.01f)
     {
         isReady = false;
 
         tileRender = GetComponent<MeshRenderer>();
-
+        
         tileMaterial = Instantiate(inputMaterial);
-
+        intialTHING = alhpa;
         
 
 
@@ -77,6 +85,7 @@ public class tileVisuals : MonoBehaviour
 
     public void fadeEffect(float duration, Material material)
     {
+        
         fadeDuration = duration;
 
         currentDuration = duration;
@@ -94,9 +103,9 @@ public class tileVisuals : MonoBehaviour
         {
             currentDuration -= Time.deltaTime;
 
-            float percentage =0.01f- Mathf.Clamp01((currentDuration - 0.5f) / fadeDuration);
+            float percentage =  Mathf.Clamp01(currentDuration  / fadeDuration) +0.01f;
 
-            tileRender.material.SetFloat("_alpha", percentage);
+            tileRender.material.SetFloat("_alpha", percentage +intialTHING);
         }
         
     }

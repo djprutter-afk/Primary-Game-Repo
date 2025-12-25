@@ -16,7 +16,7 @@ public class tileInfo : MonoBehaviour
 
     public float resourceModifyer = 1;// modifyed by bonuss
     public float development;
-    public int population;
+    public float population;
     GameObject ownerColony;
     colonyScript ownerColonyScript;
     public GameObject visualTile;
@@ -27,19 +27,7 @@ public class tileInfo : MonoBehaviour
         ownerColony = transform.parent.gameObject;
 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
-        buildingSuperStruct development = new buildingSuperStruct
-        {
-            upkeep = new BuildingStruct
-            {
-                buildingName = "local admin building",
-                moneyExpenses = 20,
-                resourceExpenses = 20,
-                populationExpenses = 1
-            }
-
-
-        };
-
+   
 
 
 
@@ -49,13 +37,13 @@ public class tileInfo : MonoBehaviour
     {
         ownerColony = transform.parent.gameObject;// update owner cause might change 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
-        float moneyGainDollars = (development * population) / 33 + 5;
-        float resourceProduction = resource * resourceModifyer * (population / 15);
+        float moneyGainDollars = (development * population) / 24 + 5;
+        float resourceProduction = resource * resourceModifyer * (population / 6);
 
-        int totalPopGrowth = 1;
+        float totalPopGrowth = 1;
         if (ownerColonyScript != null)
         {
-            totalPopGrowth = (int)(population * populationGrowthPercent * ownerColonyScript.totalColonyPopGrowth);// redo sometime to be better
+            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth *  ((1 -(population/(development*300 + 50)))/15);// redo sometime to be better
 
         }
 
@@ -70,7 +58,7 @@ public class tileInfo : MonoBehaviour
 
         if (alsoAdd == true)
         {
-            population = totalPopGrowth;
+            population += totalPopGrowth;
             ownerColonyScript.resourcesOwned.moneyExpenses += moneyGainDollars;
             ownerColonyScript.resourcesOwned.resourceExpenses += resourceProduction;
 
@@ -82,7 +70,7 @@ public class tileInfo : MonoBehaviour
         {
             moneyExpenses = moneyGainDollars,
             resourceExpenses = resourceProduction,
-            populationExpenses = population
+            populationExpenses = totalPopGrowth
 
         };
 
@@ -146,8 +134,52 @@ public struct BuildingStruct// poorly named, variables are also poorly named but
 {
     public float moneyExpenses;
     public float resourceExpenses;
-    public int populationExpenses; // people sacrfice for the gods
+    public float populationExpenses; // people sacrfice for the gods
     public string buildingName;
+    public BuildingStruct multiply(float multiplier, bool apply = false)
+    {
+         BuildingStruct buildingStruct = new BuildingStruct();
+        buildingStruct.moneyExpenses = moneyExpenses * multiplier;
+        buildingStruct.resourceExpenses = resourceExpenses * multiplier;
+        buildingStruct.populationExpenses = populationExpenses * multiplier;
+        if (apply == true)
+        {
+            moneyExpenses *= multiplier;
+            resourceExpenses *= multiplier;
+            populationExpenses *= multiplier;
+        }
+        return buildingStruct;
+    }
+    public BuildingStruct subtract(BuildingStruct subrtract, bool apply = false)
+    {
+        BuildingStruct buildingStruct = new BuildingStruct();
+        buildingStruct.moneyExpenses = moneyExpenses - subrtract.moneyExpenses;
+        buildingStruct.resourceExpenses = resourceExpenses - subrtract.resourceExpenses;
+        buildingStruct.populationExpenses = populationExpenses - subrtract.populationExpenses;
+        if (apply == true)
+        {
+            moneyExpenses -= subrtract.moneyExpenses;
+            resourceExpenses -= subrtract.resourceExpenses;
+            populationExpenses -= subrtract.populationExpenses;
+        }
+        return buildingStruct;
+        
+    }
+    public BuildingStruct addition(BuildingStruct add, bool apply = false)
+    {
+        BuildingStruct buildingStruct = new BuildingStruct();
+        buildingStruct.moneyExpenses = moneyExpenses + add.moneyExpenses;
+        buildingStruct.resourceExpenses = resourceExpenses + add.resourceExpenses;
+        buildingStruct.populationExpenses = populationExpenses + add.populationExpenses;
+        if (apply == true)
+        {
+            moneyExpenses += add.moneyExpenses;
+            resourceExpenses += add.resourceExpenses;
+            populationExpenses += add.populationExpenses;
+        }
+        return buildingStruct;
+        
+    }
     /// <summary>
     /// if firstcost is greater in every way than secondcost then true, elsewise false :()
     /// </summary>
@@ -156,18 +188,20 @@ public struct BuildingStruct// poorly named, variables are also poorly named but
     /// <returns></returns>
     public static bool comapareCosts(BuildingStruct firstCost,BuildingStruct secondCost,bool alsoSubtract = false)
     {
+       
      
 
         if (firstCost.moneyExpenses < secondCost.moneyExpenses)
         {
+            Debug.LogError("FAILED MONEYWiSe");
             return false;
         }
          if (firstCost.resourceExpenses < secondCost.resourceExpenses) 
-        {
+        {Debug.LogError("FAILED RESOURCEWISe");
             return false;
         }
         if (firstCost.populationExpenses < secondCost.populationExpenses)
-        {
+        {Debug.LogError("FAILED POPWISE");
             return false;
         }
         if(alsoSubtract)
@@ -177,6 +211,7 @@ public struct BuildingStruct// poorly named, variables are also poorly named but
             firstCost.populationExpenses -= secondCost.populationExpenses;
             
         }
+      
        
         return true;
 

@@ -30,6 +30,8 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
     List<colonyScript> allColonieScripts = new List<colonyScript>();
     public static BuildingStruct avergeResourceAmt;
 
+    
+
    
 
 

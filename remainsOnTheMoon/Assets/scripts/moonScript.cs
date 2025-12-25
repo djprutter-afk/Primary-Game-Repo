@@ -32,8 +32,9 @@ public class MoonScript : MonoBehaviour
 
             tileInfo TileInformation = transformOfChild.AddComponent<tileInfo>();
             tileVisuals skbidid = transformOfChild.AddComponent<tileVisuals>();
-            
-            skbidid.setupTileVisuals(moonMaterial);
+            //TileInformation.visualMoon = visualMoon;
+            skbidid.setupTileVisuals(moonMaterial,0.01f);
+         
             TileInformation.resource = Random.Range(resourceAmountMin, resourceAmountMax);
         }
 

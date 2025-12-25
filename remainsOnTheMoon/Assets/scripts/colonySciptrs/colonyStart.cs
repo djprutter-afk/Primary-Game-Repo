@@ -19,7 +19,7 @@ public class colonyStart : MonoBehaviour // every tile that is a child of the co
 
             if (startTileVisualss != null)
             {
-                startTileVisualss.setupTileVisuals(colonyMaterial);
+                startTileVisualss.setupTileVisuals(colonyMaterial,0.5f);
             }
             
             

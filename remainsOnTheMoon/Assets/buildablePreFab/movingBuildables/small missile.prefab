@@ -145,7 +145,7 @@ MonoBehaviour:
   isBuilding: 0
   purposes:
   - purpose: 0
-    strength: 0.6
+    strength: 0.5
   - purpose: 4
     strength: 0.25
 --- !u!114 &-5332248436802235963
@@ -164,11 +164,12 @@ MonoBehaviour:
   explosionpower: 1
   launchDebug: 0
   targetDebug: {fileID: 0}
+  thisUnitScript: {fileID: 0}
   forceAmt: 0
   missileHeight: 0.3
   explosionObject: {fileID: 714982634637159252, guid: f1767d374f01ef446bef3e06293410ff, type: 3}
   power: 0.26
-  slope: 1.12
+  timeToFinsishInSeconds: 2.5
   endDiameter: 0.15
 --- !u!64 &3338517462602955331
 MeshCollider:
@@ -199,10 +200,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6505261982738214531}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

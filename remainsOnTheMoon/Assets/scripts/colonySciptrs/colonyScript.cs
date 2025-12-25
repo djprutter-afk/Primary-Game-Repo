@@ -69,7 +69,7 @@ public class colonyScript : MonoBehaviour
     {
         colonyResorceUpdate?.Invoke();
         tileAmount = allTilesOwned.Count;
-        int totalPOP = 0;
+        float totalPOP = 0;
         for (int indexOfTiles = 0; indexOfTiles < tileAmount; indexOfTiles++)
         {
 
@@ -115,26 +115,28 @@ public class colonyScript : MonoBehaviour
         foreach (GameObject tile in allTilesOwned)
         {
             tileInfo thisTileInfo = tile.GetComponent<tileInfo>();
+            
             BuildingStruct totalTileIncome = thisTileInfo.TotalIncome();
-            totalIncome.moneyExpenses -= totalTileIncome.moneyExpenses;
-            totalIncome.resourceExpenses -= totalTileIncome.resourceExpenses;
-            totalIncome.populationExpenses -= totalTileIncome.populationExpenses;
+            totalIncome.moneyExpenses += totalTileIncome.moneyExpenses;
+            totalIncome.resourceExpenses += totalTileIncome.resourceExpenses;
+            totalIncome.populationExpenses += totalTileIncome.populationExpenses;
 
         }
+        Debug.LogWarning("total income is "+totalIncome.moneyExpenses + " " + totalIncome.resourceExpenses+" " + totalIncome.populationExpenses);
         return totalIncome;
     }
 /// <summary>
 /// subtracts people from everytile evenly and randomly
 /// </summary>
 /// <param name="subtractionAmt"></param>
-    public void subtractPopulation(int subtractionAmt)
+    public void subtractPopulation(float subtractionAmt)
     {
         List<tileInfo> canidates = new List<tileInfo>();
 
         int tileAmt = allTilesOwned.Count;
         int canidateAmt = tileAmt;
        
-        int amtToTakeCal(int pop, int tileAmountt) => (int)(pop / tileAmountt);
+        float amtToTakeCal(float pop, int tileAmountt) => (int)(pop / tileAmountt);
         float amtTotake = amtToTakeCal(subtractionAmt, tileAmt);
 
 
@@ -162,7 +164,7 @@ public class colonyScript : MonoBehaviour
         amtTotake = amtToTakeCal(subtractionAmt, canidateAmt);
         foreach(tileInfo currentCanidate in canidates)
         {
-            currentCanidate.population -= (int)amtTotake; // THIS SHOULD BE CHANGED TO FLOAT : TODO
+            currentCanidate.population -= amtTotake;
         }
     }
     

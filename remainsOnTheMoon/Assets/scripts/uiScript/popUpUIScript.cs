@@ -21,7 +21,7 @@ public class popUpUIScript : MonoBehaviour// this script is for the tile popups
 
     public float totalIncome = 0; // money income
     public float totalResources = 0;
-    public int totalpopulation = 0;
+    public float totalpopulation = 0;
     public float totalDevelopment = 0;
     // total of all selected tiles, probs should of though of a better name
 

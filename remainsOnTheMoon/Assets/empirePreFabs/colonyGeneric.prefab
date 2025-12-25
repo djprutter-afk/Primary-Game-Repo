@@ -67,8 +67,8 @@ MonoBehaviour:
       resourceExpenses: 0
       populationExpenses: 0
       buildingName: 
-    buildableObject: {fileID: 4611562821212978756, guid: 385d529ebc1c9bc48bf1b35277026829, type: 3}
-    nameOfBuildable: sigma
+    buildableObject: {fileID: 0}
+    nameOfBuildable: 
   theGameManager: {fileID: 0}
   aggression: 0
   thisColonyScript: {fileID: 0}

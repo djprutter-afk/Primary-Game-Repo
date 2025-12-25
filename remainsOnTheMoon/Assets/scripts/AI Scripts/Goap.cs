@@ -101,15 +101,14 @@ public class waitTickStrat : iActionStrat
 {
 
     int ticksRemaining;
+    int fortniteTicks;
 
     public bool canPerform => !complete;
-    public bool complete => ticksRemaining == 0;
+    public bool complete => ticksRemaining <= 0;
     public waitTickStrat(int ticks)
     {
-        ticksRemaining = ticks;
-        gameManagerScript.GameTick += this.tick;
-
-
+        fortniteTicks = ticks;
+        
     }
     void tick()
     {
@@ -118,7 +117,8 @@ public class waitTickStrat : iActionStrat
     }
     public void Start()
     {
-        
+        ticksRemaining = fortniteTicks;
+       gameManagerScript.GameTick += this.tick; 
     }
 
 
@@ -129,6 +129,7 @@ public class waitTickStrat : iActionStrat
 
 public class buildStrat : iActionStrat
 {
+    buildableScript trackingBuildable; 
     bool finished = false;
     BuildingStruct purchciceCost;
     colonyScript callingColony;
@@ -140,21 +141,14 @@ public class buildStrat : iActionStrat
     GameObject targetPos;
     int amountTobuild;
     baseColonyAI myAI;
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="targetPos">the tile position where the strat will try to build the buildables around</param>
-    /// <param name="buildableToBuild"></param>
-    /// <param name="buildingCost"></param>
-    /// <param name="CallingColony"></param>
-    public buildStrat(GameObject sdfsdf, GameObject buildableToBuild, BuildingStruct BuildCost, int dsf, baseColonyAI fdg)
+    public buildStrat(GameObject sdfsdf,  baseColonyAI fdg)
     {
-        amountTobuild = dsf;
+        amountTobuild = 1;// make better later
         targetPos = sdfsdf;
         callingColony = fdg.thisColonyScript;
-        purchciceCost = BuildCost;
-         thrbuildableScript = buildableToBuild.GetComponent<buildableScript>();
-        deathObject = buildableToBuild;
+        
+        
+ 
         myAI = fdg;
 
 
@@ -163,8 +157,9 @@ public class buildStrat : iActionStrat
 
     }
     public void Start()
-    {
-        
+    { thrbuildableScript =myAI.desiredBuildable.buildableObject.GetComponent<buildableScript>();
+        deathObject = myAI.desiredBuildable.buildableObject;
+        purchciceCost = myAI.desiredBuildable.buildCost;
         GameObject[] ownedTiles = callingColony.allTilesOwned.ToArray();
         Dictionary<GameObject, float> tileDic = new Dictionary<GameObject, float>();
         foreach (GameObject currentTile in ownedTiles)
@@ -206,9 +201,17 @@ public class buildStrat : iActionStrat
                     if(amountBuilded == amountTobuild)// waits until the last buildable is ready
                     {
                         buildableScript zogglisihs = objectToCheck.GetComponent<buildableScript>();
+                        
+                        trackingBuildable = zogglisihs;
                         zogglisihs.doneCreatingSelf += finsied;
+                        
                     }
 
+                }
+                else
+                {
+                    Debug.Log("I FAILED <FMDSKFN");
+                    finsied();
                 }
                 if (amountBuilded >= amountTobuild)
                 {
@@ -223,10 +226,20 @@ public class buildStrat : iActionStrat
 
 
             }
-            myAI.desiredBuildable = null;
+            else
+            {
+                finsied();
+            }
+           
         }
         void finsied()
         {
+            
+           
+            trackingBuildable.doneCreatingSelf -= finsied;
+            
+            myAI.hasFreshDesiredbuildabe = false;
+           
             finished = true;
         }
         
@@ -346,6 +359,67 @@ public class begStrat : iActionStrat
     }
 }
 */
+/// <summary>
+/// destroys the least usefull buildable
+/// </summary>
+
+public class deleteStrat : iActionStrat
+{
+    bool builtTheThing;
+    public bool canPerform => !complete;
+    public bool complete => builtTheThing;
+    colonyScript theColony;
+    baseColonyAI colonyAi;
+buildableScript theOnetoDelete;
+
+    public deleteStrat(colonyScript colony,baseColonyAI superAI)
+    {
+        theColony = colony;
+        colonyAi = superAI;
+    }
+    public void Start()
+    {
+
+        KeyValuePair<buildableScript.AIBuildableInfo.buildablePurposes, float> lowestValuedPurpose = new KeyValuePair<buildableScript.AIBuildableInfo.buildablePurposes, float>();
+
+        foreach(KeyValuePair<buildableScript.AIBuildableInfo.buildablePurposes, float> purpose in colonyAi.valueOfBuildables)
+        {
+            if(purpose.Value < lowestValuedPurpose.Value)
+            {
+                lowestValuedPurpose = purpose;
+            }
+        }
+        
+        float strongest = 0;
+        foreach(GameObject buildable in theColony.ownedBuildables)
+        {
+            buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
+            
+            foreach(var purpose in thisBuildableScript.purposes)
+            {
+                if(purpose.purpose != lowestValuedPurpose.Key)
+                {
+                    continue;
+                }
+                
+                if(purpose.strength >= strongest)
+                {
+                    strongest = purpose.strength;
+                    theOnetoDelete =thisBuildableScript;
+
+                }
+            }
+            
+                
+            
+
+        }
+        GameObject.Destroy(theOnetoDelete);
+        
+
+    }
+}
+
 public class makeSpaceStrat : iActionStrat
 {
     bool foundSpotToMove = false;
@@ -393,6 +467,8 @@ public class makeSpaceStrat : iActionStrat
         
     }
 }
+
+
 public class chooseBuildableStrat : iActionStrat
 {
     bool builtTheThing;
@@ -409,22 +485,71 @@ public class chooseBuildableStrat : iActionStrat
     }
     public void Start()
     {
-         var valuesOrdered =  colonyAI.valueOfBuildables.OrderByDescending(x=> x.Value).ToArray();
-       if(valuesOrdered.Length <= 0)
-        {
-            Debug.LogError("FAIL VALUES ORDER WAS " + valuesOrdered.Length);
-            return;
-        }
-        buildableGameObject[] allOfACategory = colonyAI.getTypeOfBuildableObject(valuesOrdered[0].Key);
-        if(allOfACategory.Length <= 0)
-        {
-             Debug.LogError("FAIL CAT WAS " + allOfACategory.Length);
-            return;
-        }
-        colonyAI.desiredBuildable = allOfACategory[0];
+        
+
+       
+        
+        
+        colonyAI.desiredBuildable = bestBuildableToBuild();
         builtTheThing = true;
+        
+    
+       
     }
+
+    buildableGameObject bestBuildableToBuild()
+    {
+        bool isGoingMoneyBroke = colonyAI.thisColonyScript.resourcesOwned.moneyExpenses + colonyAI.thisColonyScript.totalIncome().moneyExpenses * 5 < 0;
+        bool isGoingResourcebroke = colonyAI.thisColonyScript.resourcesOwned.resourceExpenses + colonyAI.thisColonyScript.totalIncome().resourceExpenses * 5 < 0;
+        bool isGoingPeopleBroke = colonyAI.thisColonyScript.resourcesOwned.populationExpenses + colonyAI.thisColonyScript.totalIncome().populationExpenses * 5 < 0;
+        
+            
+        
+       var valuesOrdered =  colonyAI.valueOfBuildables.OrderByDescending(x=> x.Value).ToArray();
+
+        for(int i = 0; i < valuesOrdered.Length;i++)// for every value
+        {
+           
+            buildableGameObject[] allOfACategory = colonyAI.getTypeOfBuildableObject(valuesOrdered[i].Key);
+            for(int k = 0; k < allOfACategory.Length;k++)
+            {
+               
+                buildableScript currebuildablescript = allOfACategory[k].buildableObject.GetComponent<buildableScript>();
+                BuildingStruct upkeepcosts =  currebuildablescript.upkeepCosts;
+                 Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject);
+                if(isGoingMoneyBroke == true && upkeepcosts.moneyExpenses >0)
+                {
+                     Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed moneywidse");
+                    continue;
+                }
+                if(isGoingResourcebroke == true && upkeepcosts.resourceExpenses >0)
+                {Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed resourcesWise");
+                    continue;
+                }
+                if(isGoingPeopleBroke == true && upkeepcosts.populationExpenses >0)
+                {Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed peoplewise");
+                    continue;
+                }
+                Debug.Log("IM SETTING FRESH BUILDABLE TO TRUE");
+                
+                colonyAI.hasFreshDesiredbuildabe = true;
+
+
+                return allOfACategory[k];
+            }
+
+        }
+        Debug.Log("LOOOOOOOOOOOOOOOOOOOOOOOOk" +" im bout to null"+" length wasss"+ valuesOrdered.Length);
+                
+        return null;
+    }
+
+   
+
+    
+       
 }
+
 public class waitStrat : iActionStrat
 {
 

@@ -15,9 +15,11 @@ public class expansionScript : MonoBehaviour
     Material localGenericMaterial;
 
 
-    public float slope;
+    public float timeToFinishSeconds;
     public float endDiameter;
     [SerializeField] GameObject tilePosition;
+    [SerializeField] GameObject explosionLight;
+
     MeshRenderer thisMesh;
 [SerializeField] Material genericMaterial;
     float time; // seconds
@@ -30,6 +32,8 @@ public class expansionScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Light lightComp = explosionLight.GetComponent<Light>();
+        lightComp.intensity = Power;
         localGenericMaterial = Instantiate(genericMaterial);
 
 
@@ -46,7 +50,7 @@ public class expansionScript : MonoBehaviour
 
 
         thisMesh.material.SetFloat("_fadeout", 1);
-        explosion!.Invoke(gameObject);
+        explosion.Invoke(gameObject);
 
 
 
@@ -62,19 +66,20 @@ public class expansionScript : MonoBehaviour
 
 
 
-
-
-
-        float expansionDiameter = (math.sqrt(time) / slope) * endDiameter;
-        float completenes = 1 - expansionDiameter / endDiameter;
-
-        thisMesh.material.SetFloat("_fadeout", completenes);
-        transform.localScale = new Vector3(expansionDiameter, expansionDiameter, expansionDiameter);
-
         if (transform.localScale.x >= endDiameter)
         {
             Destroy(gameObject);
         }
+
+
+        
+        float expansionDiameter = math.sqrt(time /timeToFinishSeconds) * endDiameter;
+      
+        float completenes = 1 - expansionDiameter / endDiameter;
+
+
+        transform.localScale = new Vector3(expansionDiameter, expansionDiameter, expansionDiameter);
+
 
 
 
@@ -98,23 +103,31 @@ public class expansionScript : MonoBehaviour
         
         
         tileInfo thisTileInfo = thiscollider.gameObject.GetComponent<tileInfo>();
-
-        if (thisTileInfo != null)
+        tileVisuals thistileVis = thiscollider.gameObject.GetComponent<tileVisuals>();
+        if (thisTileInfo != null)// this is so incredibly sloppy but idc
         {
             
-            float tileprotect = 1 - thisTileInfo.tileProtection;
-            thisTileInfo.population /= (int)(Power * tileprotect) + 1;
-            thisTileInfo.development /= Power * tileprotect / 2 + 1;
+          
+            thisTileInfo.population /= (int)(Power) + 1;
+            thisTileInfo.development /= Power ;
 
-            tileVisuals thistileVis = thiscollider.gameObject.GetComponent<tileVisuals>();
-            Material material = thistileVis.tileMaterial;
-            Color newColour = Color.Lerp(material.color, Color.black, Power / 4);
+            
+            tileInfo thistileInfo = thiscollider.gameObject.GetComponent<tileInfo>();
 
+               
+
+           
+            
+
+        }
+        else if(thistileVis != null)
+        {
+             Material material = thistileVis.tileMaterial;
+            Color newColour = Color.Lerp(material.color, Color.black, Power / 2);
             localGenericMaterial.color = newColour;
 
 
             thistileVis.setupTileVisuals(localGenericMaterial);
-            
 
         }
         

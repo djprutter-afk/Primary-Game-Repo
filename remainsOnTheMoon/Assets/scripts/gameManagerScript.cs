@@ -115,6 +115,7 @@ public class gameManagerScript : MonoBehaviour
     [SerializeField] GameObject DevelopmentGameObject;
 
     public static buildableGameObject developmentGameObject;
+
     void OnEnable()
     {
         developmentGameObject = new buildableGameObject();
@@ -123,6 +124,8 @@ public class gameManagerScript : MonoBehaviour
         developmentGameObject.buildCost.populationExpenses = 50;
         developmentGameObject.buildableObject = DevelopmentGameObject;
         developmentGameObject.nameOfBuildable = "Development";
+
+      
     }
 
 
@@ -194,11 +197,16 @@ public class gameManagerScript : MonoBehaviour
 
         }
     }
-
+    public int ticksSinceStart;
+/// <summary>
+/// should be reworked
+/// </summary>
     void gameTick()
     {
         
-      
+      ticksSinceStart += 1;
+        GameTick?.Invoke();
+
         List<GameObject> allColonies = new List<GameObject>();
 
         for (int i = 0; i < colonies.transform.childCount; i++)
@@ -234,8 +242,7 @@ public class gameManagerScript : MonoBehaviour
 
 
         }
-        GameTick?.Invoke();
-
+        
 
 
     }

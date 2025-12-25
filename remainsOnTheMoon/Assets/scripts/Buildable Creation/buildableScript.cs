@@ -245,6 +245,11 @@ public class buildableScript : MonoBehaviour
                     FinsihedAction();
                     return;
                 }
+                if(movePath[movePathPosition] == null)
+                {
+                    moveToTileSetup(endTargetTile);
+                    return;
+                }
                 moveToTile(movePath[movePathPosition]);
                 movePathPosition += 1;
             }
@@ -257,6 +262,10 @@ public class buildableScript : MonoBehaviour
     {
         tileInfo currentTileInfo = tileOn.GetComponent<tileInfo>();
         tileInfo nextTileInfo = tile.GetComponent<tileInfo>();
+        if(currentTileInfo == null || nextTileInfo == null)
+        {
+            return;
+        }
         if (nextTileInfo.occupid == true)
         {
             moveToTileSetup(endTargetTile);

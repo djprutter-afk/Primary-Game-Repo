@@ -12,7 +12,7 @@ public class misstileScript : MonoBehaviour
 
     public bool launchDebug;
     public GameObject targetDebug;
-    buildableScript thisUnitScript;
+    public buildableScript thisUnitScript;
     public float forceAmt;
 
     Rigidbody thisrigidBody;
@@ -30,10 +30,10 @@ public class misstileScript : MonoBehaviour
     bool launching = false;
 
     [Header("explosion setup")]
-    [SerializeField] GameObject explosionObject;
-    [SerializeField] float power;
-    [SerializeField] float slope;
-    [SerializeField] float endDiameter;
+    public GameObject explosionObject;
+    public float power;
+    public float timeToFinsishInSeconds =1;// CANNOT BE ZERO CANNOT BE ZEROs
+    public float endDiameter;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -154,14 +154,14 @@ public class misstileScript : MonoBehaviour
 
     }
 
-    void explode()
+   public virtual void explode()
     {
         GameObject explosion = Instantiate(explosionObject, transform.position, transform.rotation);
 
         expansionScript skbidi = explosion.GetComponent<expansionScript>();
 
         skbidi.Power = power;
-        skbidi.slope = slope;
+        skbidi.timeToFinishSeconds = timeToFinsishInSeconds;
         skbidi.endDiameter = endDiameter;
         thisUnitScript.FinsihedAction();
         Destroy(gameObject);
