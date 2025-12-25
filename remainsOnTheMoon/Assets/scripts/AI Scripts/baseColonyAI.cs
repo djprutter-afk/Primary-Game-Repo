@@ -225,6 +225,12 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withPriority(0.70f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
+        
+        goals.Add(new AgentGoal.Builder("not be broke")
+        .withPriority(0.9f)
+        .withdesiredEffects(beliefs["is feeling ok abt money"])
+        .Build());
+      
       
      
        

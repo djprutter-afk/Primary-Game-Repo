@@ -362,7 +362,6 @@ public class begStrat : iActionStrat
 /// <summary>
 /// destroys the least usefull buildable
 /// </summary>
-
 public class deleteStrat : iActionStrat
 {
     bool builtTheThing;
@@ -419,7 +418,6 @@ buildableScript theOnetoDelete;
 
     }
 }
-
 public class makeSpaceStrat : iActionStrat
 {
     bool foundSpotToMove = false;
