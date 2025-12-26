@@ -86,7 +86,12 @@ public class tileInfo : MonoBehaviour
 
 
 
-
+/// <summary>
+/// DOES NOT TAKE MON/RES/POP AWAY!!!
+/// </summary>
+/// <param name="thisBuildable"></param>
+/// <param name="thisColony"></param>
+/// <returns></returns>
     public GameObject buildNewBuildable(buildableGameObject thisBuildable, colonyScript thisColony)
     {
         GameObject newBuildable = Instantiate(thisBuildable.buildableObject, thisColony.gameObject.transform);

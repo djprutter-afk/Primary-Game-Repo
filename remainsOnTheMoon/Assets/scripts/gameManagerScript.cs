@@ -113,11 +113,13 @@ public class gameManagerScript : MonoBehaviour
 
     [Header("global buildiables")]
     [SerializeField] GameObject DevelopmentGameObject;
-
-    public static buildableGameObject developmentGameObject;
+ 
+    public static buildableGameObject developmentGameObject;// sloppy
 
     void OnEnable()
     {
+
+       
         developmentGameObject = new buildableGameObject();
         developmentGameObject.buildCost.moneyExpenses = 500;
         developmentGameObject.buildCost.resourceExpenses = 250;

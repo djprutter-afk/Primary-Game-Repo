@@ -11520,7 +11520,7 @@ MonoBehaviour:
   playerAmount: 1
   minDistance: 0.7
   theMoon: {fileID: 1507515933}
-  colonyAmount: 2
+  colonyAmount: 1
   gameManager: {fileID: 713989425}
   playerMouseInteractionsObject: {fileID: 309602033}
   colonyTypes:

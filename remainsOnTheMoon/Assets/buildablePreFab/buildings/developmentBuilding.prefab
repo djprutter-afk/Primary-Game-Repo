@@ -56,9 +56,9 @@ MonoBehaviour:
   timeToWait: 1
   movePath: []
   upkeepCosts:
-    moneyExpenses: 0
-    resourceExpenses: 0
-    populationExpenses: 0
+    moneyExpenses: 5
+    resourceExpenses: 6
+    populationExpenses: 1
     buildingName: development
   possibleActions: 
   isBuilding: 1

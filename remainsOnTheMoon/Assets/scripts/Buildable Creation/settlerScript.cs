@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class settlerScript : MonoBehaviour
 {
+    
     buildableScript myBuildableScript;
     bool isSettleing = false;
     
@@ -36,7 +37,11 @@ public class settlerScript : MonoBehaviour
             tileVisuals thistileVisuals = thisTIle.GetComponent<tileVisuals>();
             tileInfo thisTileInfo = thisTIle.GetComponent<tileInfo>();
             thisTileInfo.population = 50;
-            thisTileInfo.development = 1;
+            
+            thisTileInfo.buildNewBuildable(gameManagerScript.developmentGameObject,ownercolonyscript);
+            
+            
+            
 
             thistileVisuals.setupTileVisuals(ownercolonyscript.LOCALColonyMaterial,0.5f);
             ownercolonyscript.allTilesOwned.Add(thisTIle);
@@ -51,7 +56,8 @@ public class settlerScript : MonoBehaviour
         };
 
 
-        thisTileInfo.buildingsOnTile.Add(localadministration);
+        //thisTileInfo.buildingsOnTile.Add(localadministration); // im removing line temporaraly readd if more balance is needed
+        
         thisTileInfo.occupid = false;
 
             Destroy(gameObject); // destroys the settler cause its like settled
