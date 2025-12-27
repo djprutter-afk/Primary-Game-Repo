@@ -44,6 +44,7 @@ public class tileInfo : MonoBehaviour
         if (ownerColonyScript != null)
         {
             totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth *  ((1 -(population/(development*300 + 50)))/15);// redo sometime to be better
+            Debug.Log("FORNTITE NTIEE T "+ totalPopGrowth);
 
         }
 
