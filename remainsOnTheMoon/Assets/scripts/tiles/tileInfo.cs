@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 
 public class tileInfo : MonoBehaviour
 {
-    public GameObject visualMoon;
    
     public bool occupid = false;
-    public float tileProtection = 0f;
+   
     public float populationGrowthPercent = 1.003f;
     public List<BuildingStruct> buildingsOnTile = new List<BuildingStruct>();
 
@@ -17,9 +17,10 @@ public class tileInfo : MonoBehaviour
     public float resourceModifyer = 1;// modifyed by bonuss
     public float development;
     public float population;
+    public MoonScript theMoon;
     GameObject ownerColony;
     colonyScript ownerColonyScript;
-    public GameObject visualTile;
+   
     void Start()
     {
        
@@ -44,7 +45,7 @@ public class tileInfo : MonoBehaviour
         if (ownerColonyScript != null)
         {
             totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth *  ((1 -(population/(development*300 + 50)))/15);// redo sometime to be better
-            Debug.Log("FORNTITE NTIEE T "+ totalPopGrowth);
+            
 
         }
 
@@ -60,12 +61,17 @@ public class tileInfo : MonoBehaviour
         if (alsoAdd == true)
         {
             population += totalPopGrowth;
+            if(population <= 0)// a state cannot cannot express it's authority without people
+            {
+                deSettle();
+            }
             ownerColonyScript.resourcesOwned.moneyExpenses += moneyGainDollars;
             ownerColonyScript.resourcesOwned.resourceExpenses += resourceProduction;
 
 
 
         }
+        
 
         BuildingStruct total = new BuildingStruct
         {
@@ -82,6 +88,15 @@ public class tileInfo : MonoBehaviour
 
 
 
+    }
+    /// <summary>
+    /// FINSIS THIS NOW DANIEL
+    /// </summary>
+    void deSettle()
+    {
+        tileVisuals TileVisual = gameObject.GetComponent<tileVisuals>();
+        TileVisual.setupTileVisuals(theMoon.moonMaterial);
+        transform.SetParent(theMoon.transform);
     }
 
 
@@ -126,12 +141,6 @@ public class tileInfo : MonoBehaviour
 
 }
 
-
-struct buildingSuperStruct
-{
-    public BuildingStruct upkeep;
-    public GameObject buildingObject;
-}
 
 
 

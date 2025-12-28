@@ -36,6 +36,7 @@ public class MoonScript : MonoBehaviour
             skbidid.setupTileVisuals(moonMaterial,0.01f);
          
             TileInformation.resource = Random.Range(resourceAmountMin, resourceAmountMax);
+            TileInformation.theMoon = this;
         }
 
     }

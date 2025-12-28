@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class tileVisuals : MonoBehaviour
 {
+    
 
-public float intialTHING = 0.15F;
+public float intialTHING = 0.1F;
     public bool isSelected = false;
-    float damageAmount; 
-    public Material tileMaterial;//thesess should only change based on ownership
-    [SerializeField]Color tileColour;//thesess should only change based on ownership
 
+    public Material tileMaterial;//thesess should only change based on ownership
     [SerializeField] Material changeMaterial;
     [SerializeField]Color changedColour;
 
@@ -63,6 +62,10 @@ public float intialTHING = 0.15F;
 
     public void setupTileVisuals(Material inputMaterial,float alhpa = 0.01f)
     {
+        if(tileMaterial != null)
+        {
+            Destroy(tileMaterial);
+        }
         isReady = false;
 
         tileRender = GetComponent<MeshRenderer>();
