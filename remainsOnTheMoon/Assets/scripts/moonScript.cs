@@ -6,7 +6,7 @@ public class MoonScript : MonoBehaviour
     [SerializeField] GameObject visualMoon;
     [SerializeField] float resourceAmountMax;
      [SerializeField] float resourceAmountMin;
-     [SerializeField] float transparancy;
+     [SerializeField] float transparancy =  0.01f;
     public Material moonMaterial;
 
     
@@ -33,7 +33,7 @@ public class MoonScript : MonoBehaviour
             tileInfo TileInformation = transformOfChild.AddComponent<tileInfo>();
             tileVisuals skbidid = transformOfChild.AddComponent<tileVisuals>();
             //TileInformation.visualMoon = visualMoon;
-            skbidid.setupTileVisuals(moonMaterial,0.01f);
+            skbidid.setupTileVisuals(moonMaterial,transparancy);
          
             TileInformation.resource = Random.Range(resourceAmountMin, resourceAmountMax);
             TileInformation.theMoon = this;
