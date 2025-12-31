@@ -5,7 +5,7 @@ public class tileVisuals : MonoBehaviour
 {
     
 
-public float intialTHING = 0.1F;
+public float intialTHING = 0.01F;
     public bool isSelected = false;
 
     public Material tileMaterial;//thesess should only change based on ownership
@@ -16,9 +16,9 @@ public float intialTHING = 0.1F;
     bool isReady = false; // if everything is setup
 
 
-    float fadeDuration; // duration of fade effect
+   [SerializeField] float fadeDuration; // duration of fade effect
 
-    float currentDuration; //
+    [SerializeField]float currentDuration; //
     MeshRenderer tileRender;
     void OnEnable()
     {
@@ -51,11 +51,6 @@ public float intialTHING = 0.1F;
     }
     
     
-
-    public void damageChange(float changeAmt)
-    {
-
-    }
 
 
 
@@ -102,7 +97,7 @@ public float intialTHING = 0.1F;
 
     void Update()
     {
-        if ((currentDuration > 0) && isReady)
+        if ((currentDuration >= 0) && isReady)
         {
             currentDuration -= Time.deltaTime;
 
