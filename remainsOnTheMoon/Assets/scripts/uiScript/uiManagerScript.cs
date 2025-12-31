@@ -51,9 +51,9 @@ public class uiManagerScript : MonoBehaviour
 
     void updateText(BuildingStruct currentValues)
     {
-        moneyText.text = currentValues.moneyExpenses.ToString();
-        resourceText.text = currentValues.resourceExpenses.ToString();
-        populationText.text = currentValues.populationExpenses.ToString();
+        moneyText.text = numericUtils.numberShortener(currentValues.moneyExpenses);
+        resourceText.text = numericUtils.numberShortener(currentValues.resourceExpenses);
+        populationText.text = numericUtils.numberShortener(currentValues.populationExpenses);
 
 
 

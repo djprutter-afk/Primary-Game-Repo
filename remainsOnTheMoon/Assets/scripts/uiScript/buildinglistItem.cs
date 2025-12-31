@@ -26,9 +26,9 @@ public class buildinglistItem : MonoBehaviour
 
         quantText.text = "x" + quanitiy.ToString();
 
-        moneyText.text = "money " + (building.moneyExpenses*quanitiy).ToString() + "$";
-        resourceText.text = "resource " + (building.resourceExpenses*quanitiy).ToString();
-        popText.text = "pop " + (building.populationExpenses*quanitiy).ToString();
+        moneyText.text = "money " + numericUtils.numberShortener(building.moneyExpenses*quanitiy) + "$";
+        resourceText.text = "resource " + numericUtils.numberShortener(building.resourceExpenses*quanitiy);
+        popText.text = "pop " + numericUtils.numberShortener(building.populationExpenses*quanitiy);
 
 
     }

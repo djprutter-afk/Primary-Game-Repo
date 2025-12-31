@@ -41,9 +41,9 @@ public class buildableButtonScript : MonoBehaviour
         TMP_Text moneyText = moneyExpenseText.GetComponent<TMP_Text>();
         TMP_Text popText = populationExpenseText.GetComponent<TMP_Text>();
         TMP_Text resourcetext = resourceExpenseText.GetComponent<TMP_Text>();
-        moneyText.text = thisBuildable.buildCost.moneyExpenses.ToString();
-        popText.text = thisBuildable.buildCost.populationExpenses.ToString();
-        resourcetext.text = thisBuildable.buildCost.resourceExpenses.ToString();
+        moneyText.text = numericUtils.numberShortener(thisBuildable.buildCost.moneyExpenses);
+        popText.text = numericUtils.numberShortener(thisBuildable.buildCost.populationExpenses);
+        resourcetext.text =numericUtils.numberShortener( thisBuildable.buildCost.resourceExpenses);
 
 
 

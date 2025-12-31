@@ -213,9 +213,9 @@ public class popUpUIScript : MonoBehaviour// this script is for the tile popups
 
 
 
-        moneyText.text = totalIncome.ToString();
-        resourceText.text = totalResources.ToString() ;
-        popText.text = totalpopulation+ "/" + (totalDevelopment * 250).ToString();
+        moneyText.text = numericUtils.numberShortener(totalIncome);
+        resourceText.text = numericUtils.numberShortener(totalResources) ;
+        popText.text = numericUtils.numberShortener(totalpopulation)+ "/" + numericUtils.numberShortener(totalDevelopment * 250);
 
 
 
