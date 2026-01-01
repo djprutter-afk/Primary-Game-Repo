@@ -60,6 +60,7 @@ public class tileInfo : MonoBehaviour
 
         if (alsoAdd == true)
         {
+            
             population += totalPopGrowth;
             if(population <= 0)// a state cannot cannot express it's authority without people
             {

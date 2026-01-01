@@ -10,10 +10,15 @@ public class uiManagerScript : MonoBehaviour
     [SerializeField] GameObject moneyTextObject;
     [SerializeField] GameObject resourceTextObject;
     [SerializeField] GameObject populationTextObject;
-    [SerializeField] GameObject launchButtonObject;
+    [SerializeField] GameObject incomeMoneyTextObject;
+    [SerializeField] GameObject incomeResourceTextObject;
+    [SerializeField] GameObject incomePopulationTextObject;
     TMP_Text moneyText;
     TMP_Text resourceText;
     TMP_Text populationText;
+    TMP_Text incomeMoneyText;
+    TMP_Text incomeResourceText;
+    TMP_Text incomePopulationText;
 
     List<TMP_Text> textUI;
 
@@ -26,10 +31,13 @@ public class uiManagerScript : MonoBehaviour
 
 
         moneyText = moneyTextObject.GetComponent<TMP_Text>();
-
         resourceText = resourceTextObject.GetComponent<TMP_Text>();
-
         populationText = populationTextObject.GetComponent<TMP_Text>();
+        
+        incomeMoneyText = incomeMoneyTextObject.GetComponent<TMP_Text>();
+        incomeResourceText = incomeResourceTextObject.GetComponent<TMP_Text>();
+        incomePopulationText = incomePopulationTextObject.GetComponent<TMP_Text>();
+
 
 
 
@@ -39,12 +47,7 @@ public class uiManagerScript : MonoBehaviour
     {
         gameManagerScript.onUpdate -= updateText;
     }
-    public void launchButtonPress()
-    {
-        Debug.Log("EVERYTHING DOESN WORK");
-        lunachbuttonPress?.Invoke(true);
-
-    }
+    BuildingStruct previousIncome = new BuildingStruct();
 
 
 
@@ -55,20 +58,15 @@ public class uiManagerScript : MonoBehaviour
         resourceText.text = numericUtils.numberShortener(currentValues.resourceExpenses);
         populationText.text = numericUtils.numberShortener(currentValues.populationExpenses);
 
+        BuildingStruct change = currentValues.subtract(previousIncome);
+
+        incomeMoneyText.text = numericUtils.numberShortener(change.moneyExpenses);
+        incomeResourceText.text = numericUtils.numberShortener(change.resourceExpenses);
+        incomePopulationText.text = numericUtils.numberShortener(change.populationExpenses);
+
 
 
 
     }
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
 
-        }
-    }
-
-    void resizeSelectionBOx()
-    {
-        
-    }
 }

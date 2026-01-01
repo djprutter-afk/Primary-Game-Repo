@@ -47,7 +47,7 @@ public class buildableUiBasicInfo : MonoBehaviour
         nameText.text = nameOfBuildable;
         peopleText.text = numericUtils.numberShortener(Upkeep.populationExpenses * quantity);
         resourceText.text = numericUtils.numberShortener(Upkeep.resourceExpenses * quantity);
-        moneyText.text = numericUtils.numberShortener(Upkeep.moneyExpenses * quantity)+ "$";
+        moneyText.text = numericUtils.numberShortener(Upkeep.moneyExpenses * quantity);
 
     }
 }

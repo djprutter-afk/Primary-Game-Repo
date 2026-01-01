@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -20,10 +21,12 @@ public static class numericUtils
   
    public static string numberShortener(float number)
     {
-        string numberPrefix = "";
+        string Prefix ="";
         if(number<0)
         {
-            numberPrefix = "-";
+
+            Debug.LogWarning("number is negantive!!!!!!");
+            Prefix = "-";
         }
         if(number== 0)// need to have this because log of zero is undefined
         {
@@ -34,9 +37,7 @@ public static class numericUtils
         if(digits <= 3)
         {
             return math.round(absNum).ToString();
-        }
-        int numberToRoundTo = digits -3;
-        int roundedNumber = (int)math.round(absNum);
+        }      
         int suffixIndice = (digits-1) /3;
         float shortenedNumber = math.round(absNum /Mathf.Pow(10,suffixIndice));
         
@@ -46,7 +47,10 @@ public static class numericUtils
             return "Big";
         }
         string suffix =numberSuffix[(int)suffixIndice];
-        return numberPrefix+shortenedNumber/100+suffix;
+        double superShortenedNumber = Math.Round(shortenedNumber/Mathf.Pow(100,suffixIndice),2);
+
+        string completedNumber = Prefix+superShortenedNumber+suffix;
+        return completedNumber;
         
         
         
