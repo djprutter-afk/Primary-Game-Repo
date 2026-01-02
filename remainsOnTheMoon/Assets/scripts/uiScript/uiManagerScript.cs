@@ -64,6 +64,8 @@ public class uiManagerScript : MonoBehaviour
         incomeResourceText.text = numericUtils.numberShortener(change.resourceExpenses);
         incomePopulationText.text = numericUtils.numberShortener(change.populationExpenses);
 
+        previousIncome =currentValues;
+
 
 
 

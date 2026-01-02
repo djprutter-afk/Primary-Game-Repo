@@ -38,7 +38,7 @@ public class tileInfo : MonoBehaviour
     {
         ownerColony = transform.parent.gameObject;// update owner cause might change 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
-        float moneyGainDollars = (development * population) / 24 + 5;
+        float moneyGainDollars = (development * population) / 18 + 5;
         float resourceProduction = resource * resourceModifyer * (population / 6);
 
         float totalPopGrowth = 1;

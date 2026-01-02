@@ -24,8 +24,9 @@ public static class numericUtils
         string Prefix ="";
         if(number<0)
         {
+            
 
-            Debug.LogWarning("number is negantive!!!!!!");
+           
             Prefix = "-";
         }
         if(number== 0)// need to have this because log of zero is undefined
