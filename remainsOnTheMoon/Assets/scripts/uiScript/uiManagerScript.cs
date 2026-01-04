@@ -57,9 +57,10 @@ public class uiManagerScript : MonoBehaviour
         moneyText.text = numericUtils.numberShortener(currentValues.moneyExpenses);
         resourceText.text = numericUtils.numberShortener(currentValues.resourceExpenses);
         populationText.text = numericUtils.numberShortener(currentValues.populationExpenses);
+        
 
         BuildingStruct change = currentValues.subtract(previousIncome);
-
+        Debug.Log(currentValues.moneyExpenses + " " + previousIncome.moneyExpenses + " " + change.moneyExpenses);
         incomeMoneyText.text = numericUtils.numberShortener(change.moneyExpenses);
         incomeResourceText.text = numericUtils.numberShortener(change.resourceExpenses);
         incomePopulationText.text = numericUtils.numberShortener(change.populationExpenses);

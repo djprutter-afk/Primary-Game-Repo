@@ -114,7 +114,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
        
         factory.addBeliefs("is feeling secure", () => 
-        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(4)),emptyStruct));
+        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(10)),emptyStruct));
 
        
    
@@ -226,13 +226,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
         
-        goals.Add(new AgentGoal.Builder("not be broke")
-        .withPriority(0.9f)
-        .withdesiredEffects(beliefs["is feeling ok abt money"])
-        .Build());
-      
-      
-     
+
        
         
 

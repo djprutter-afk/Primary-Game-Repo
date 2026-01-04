@@ -24,6 +24,7 @@ public static class numericUtils
         string Prefix ="";
         if(number<0)
         {
+            Debug.LogWarning("NUMBER SUCKS IT AINT WOEKING");
             
 
            
