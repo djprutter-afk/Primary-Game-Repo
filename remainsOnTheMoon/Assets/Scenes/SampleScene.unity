@@ -11369,6 +11369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1666743409}
   - component: {fileID: 1666743410}
+  - component: {fileID: 1666743411}
   m_Layer: 0
   m_Name: colonies
   m_TagString: Untagged
@@ -11414,6 +11415,18 @@ MonoBehaviour:
   playerMouseInteractionsObject: {fileID: 309602033}
   colonyTypes:
   - {fileID: 2021864630668587882, guid: 83d9a3a049557a640b8b1c0404b11893, type: 3}
+--- !u!114 &1666743411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666743407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62abc7edf9da5054eb34f1688e82fe22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1725798234 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5117700066308340382, guid: 05a8ee067e984b54ab4fbd4cc5e5d236, type: 3}

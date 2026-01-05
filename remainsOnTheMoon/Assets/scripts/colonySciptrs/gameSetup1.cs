@@ -40,6 +40,8 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        AIMultithreader aIMultithreader = GetComponent<AIMultithreader>();
+        
         thePlayerMouseInteractionsInator = playerMouseInteractionsObject.GetComponent<playerMouseInteractions>();
         totalColoniesPlaced = 0;
         colonyPositions = new GameObject[colonyAmount];
@@ -75,6 +77,7 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
                 playercolonies.Add(createdColony);
                 
             }
+         
             colonyStart colonyStartScript = createdColony.GetComponent<colonyStart>();
             colonyScript thisColonyScript = createdColony.GetComponent<colonyScript>();
             allColonieScripts.Add(thisColonyScript);
@@ -83,6 +86,7 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
             if (AIAIAIAIAAIAIAIA != null)
             {
                 AIAIAIAIAAIAIAIA.theGameManager = gameManager;
+                aIMultithreader.artificialIntelligences.Add(AIAIAIAIAAIAIAIA);
             }
 
             colonyScript creaetedColonyScript = createdColony.GetComponent<colonyScript>();

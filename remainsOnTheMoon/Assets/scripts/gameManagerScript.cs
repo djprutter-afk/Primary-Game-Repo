@@ -149,7 +149,7 @@ public class gameManagerScript : MonoBehaviour
 
         gamesetuper = coloniesObject.GetComponent<gameSetup1>();
 
-        Debug.LogError(gamesetuper.playercolonies.Count);
+      
         
         GameObject currentplayercolony = gamesetuper.playercolonies[0];
         playercolonysscript = currentplayercolony.GetComponent<colonyScript>();
