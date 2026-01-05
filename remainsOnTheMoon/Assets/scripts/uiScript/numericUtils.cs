@@ -38,7 +38,7 @@ public static class numericUtils
         int digits = (int)math.log10(absNum) + 1;
         if(digits <= 3)
         {
-            return math.round(absNum).ToString();
+            return Prefix + math.round(absNum).ToString();
         }      
         int suffixIndice = (digits-1) /3;
         float shortenedNumber = math.round(absNum /Mathf.Pow(10,suffixIndice));

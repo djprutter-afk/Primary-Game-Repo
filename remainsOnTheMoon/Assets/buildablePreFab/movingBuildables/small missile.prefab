@@ -139,7 +139,7 @@ MonoBehaviour:
   upkeepCosts:
     moneyExpenses: 3
     resourceExpenses: 5
-    populationExpenses: 8
+    populationExpenses: 0
     buildingName: mr skibid
   possibleActions: 0000000002000000
   isBuilding: 0
