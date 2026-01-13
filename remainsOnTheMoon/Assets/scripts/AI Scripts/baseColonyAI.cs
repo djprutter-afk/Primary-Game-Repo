@@ -10,8 +10,7 @@ using Unity.Collections;
 /// </summary>
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
-    int ticksToWait =2;
-
+  
     int desiredSize;
     BuildingStruct desiredIncome;
 
@@ -20,9 +19,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
     
 
-    
-    public event Action AITick;
-    public GameObject theGameManager;
+        public GameObject theGameManager;
    
     public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float> valueOfBuildables = new Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float>();//how much the ai will priorities the buildable
 
@@ -142,11 +139,11 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
         factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
 
-        factory.addBeliefs("hasnt waited already", () => hasntWaited);// ai can never be satiated
+        factory.addBeliefs("hasnt waited already", () => hasntWaited);
         
         
 
-        factory.addBeliefs("can afford new tile", () => BuildingStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
+        factory.addBeliefs("income fully positive", () => BuildingStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
          factory.addBeliefs("has decided on buildable", () => hasFreshDesiredbuildabe);
         factory.addBeliefs("has space to build", hasSpaceToBuild);
         factory.addBeliefs("has decided on buildable ECO", ()=>hasFreshDesiredbuildabe);
@@ -231,6 +228,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .addPreCondition(beliefs["hasnt waited already"])
         .addPreCondition(beliefs["has decided on buildable ECO"])
         .addPreCondition(beliefs["cant afford ecoBuildable"])
+        .addPreCondition(beliefs["income fully positive"])
         .AddEffect(beliefs["can afford ecoBuildable"])
         .Build());
 
