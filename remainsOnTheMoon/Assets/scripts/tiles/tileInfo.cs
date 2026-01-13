@@ -166,6 +166,20 @@ public struct BuildingStruct// poorly named, variables are also poorly named but
         }
         return buildingStruct;
     }
+    public BuildingStruct divide(BuildingStruct divisor, bool apply = false)
+    {
+         BuildingStruct buildingStruct = new BuildingStruct();
+        buildingStruct.moneyExpenses = moneyExpenses / divisor.moneyExpenses;
+        buildingStruct.resourceExpenses = resourceExpenses / divisor.resourceExpenses;
+        buildingStruct.populationExpenses = populationExpenses / divisor.populationExpenses;
+        if (apply == true)
+        {
+            moneyExpenses /= divisor.moneyExpenses;
+            resourceExpenses /= divisor.resourceExpenses;
+            populationExpenses /= divisor.populationExpenses;
+        }
+        return buildingStruct;
+    }
     public BuildingStruct subtract(BuildingStruct subrtract, bool apply = false)
     {
         BuildingStruct buildingStruct = new BuildingStruct();
@@ -202,7 +216,7 @@ public struct BuildingStruct// poorly named, variables are also poorly named but
     /// <param name="firstCost"></param>
     /// <param name="secondCost"></param>
     /// <returns></returns>
-    public static bool comapareCosts(BuildingStruct firstCost,BuildingStruct secondCost,bool alsoSubtract = false)
+    public static bool comapareCosts(BuildingStruct firstCost,BuildingStruct secondCost = new BuildingStruct(),bool alsoSubtract = false)
     {
        
      

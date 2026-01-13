@@ -54,8 +54,8 @@ public class colonyScript : MonoBehaviour
         currentPrices = colonyGameManager.GetComponent<prices>();
         thisColonyStart = GetComponent<colonyStart>();
         tileAmount = transform.childCount;
-        resourcesOwned.resourceExpenses = 200;
-        resourcesOwned.moneyExpenses = 450;
+        resourcesOwned.resourceExpenses = 500;
+        resourcesOwned.moneyExpenses = 350;
         allTilesOwned.Add(thisColonyStart.colonyStartPosition);
 
 
@@ -88,7 +88,7 @@ public class colonyScript : MonoBehaviour
             }
             else if (tileHousingPercentage <= 1)
             {
-                thisTileInfo.populationGrowthPercent = 1.01f;
+                thisTileInfo.populationGrowthPercent = 1.03f;
 
             }
 
@@ -136,7 +136,7 @@ public class colonyScript : MonoBehaviour
         int tileAmt = allTilesOwned.Count;
         int canidateAmt = tileAmt;
        
-        float amtToTakeCal(float pop, int tileAmountt) => (int)(pop / tileAmountt);
+        float amtToTakeCal(float pop, int tileAmountt) => pop / tileAmountt;
         float amtTotake = amtToTakeCal(subtractionAmt, tileAmt);
 
 

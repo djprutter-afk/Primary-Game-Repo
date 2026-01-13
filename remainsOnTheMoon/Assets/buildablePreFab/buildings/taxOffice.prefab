@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7456391225198054269}
   - component: {fileID: 7811488923873645452}
-  - component: {fileID: 4282932697002007775}
+  - component: {fileID: -2877737394018398585}
   m_Layer: 0
-  m_Name: developmentBuilding
+  m_Name: taxOffice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,16 +56,16 @@ MonoBehaviour:
   timeToWait: 1
   movePath: []
   upkeepCosts:
-    moneyExpenses: 15
-    resourceExpenses: 10
-    populationExpenses: 0
+    moneyExpenses: -50
+    resourceExpenses: 20
+    populationExpenses: 1
     buildingName: development
   possibleActions: 
   isBuilding: 1
   purposes:
   - purpose: 3
-    strength: 0.75
---- !u!114 &4282932697002007775
+    strength: 0.8
+--- !u!114 &-2877737394018398585
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,6 +74,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7158736758787451057}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 653c252be4548fb4dbeaa9428347ff0c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8baaa99f3ad3967419f29ef8f59271fa, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::buildingScript
+  m_EditorClassIdentifier: '::'

@@ -64,7 +64,7 @@ MonoBehaviour:
   isBuilding: 1
   purposes:
   - purpose: 3
-    strength: 0.5
+    strength: 0.7
 --- !u!114 &8279398763461394640
 MonoBehaviour:
   m_ObjectHideFlags: 0

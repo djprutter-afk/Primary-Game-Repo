@@ -5915,6 +5915,16 @@ MonoBehaviour:
         buildingName: ytmkfrkm
       buildableObject: {fileID: 6505261982738214531, guid: 35ca3f006d821dc4db96f1d378a519c3, type: 3}
       nameOfBuildable: cluster bomb
+  - catagoryName: economy
+    catagoryColour: {r: 0.5566038, g: 0.03938234, b: 0.30102465, a: 1}
+    arrayOfBuildings:
+    - buildCost:
+        moneyExpenses: 1000
+        resourceExpenses: 500
+        populationExpenses: 50
+        buildingName: Tax Office
+      buildableObject: {fileID: 7158736758787451057, guid: af744a84eebc64247a06b08f28894c3f, type: 3}
+      nameOfBuildable: Tax Office
   colonies: {fileID: 1666743407}
   DevelopmentGameObject: {fileID: 7158736758787451057, guid: bc1cedb700b2cea459a9335c55a0f355, type: 3}
   ticksSinceStart: 0
@@ -11410,7 +11420,7 @@ MonoBehaviour:
   playerAmount: 1
   minDistance: 0.7
   theMoon: {fileID: 1507515933}
-  colonyAmount: 1
+  colonyAmount: 2
   gameManager: {fileID: 713989425}
   playerMouseInteractionsObject: {fileID: 309602033}
   colonyTypes:
@@ -11427,6 +11437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62abc7edf9da5054eb34f1688e82fe22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  artificialIntelligences: []
 --- !u!1 &1725798234 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -5117700066308340382, guid: 05a8ee067e984b54ab4fbd4cc5e5d236, type: 3}

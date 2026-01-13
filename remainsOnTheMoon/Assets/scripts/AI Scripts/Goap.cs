@@ -76,9 +76,8 @@ public class agentBelief
 
     }
 }
-/// <summary>
-/// very very important to know that everything is intitalized at start and start ONLY, variables CANNOT update
-/// </summary>
+
+
 public interface iActionStrat
 {
     bool canPerform { get; }
@@ -93,6 +92,72 @@ public interface iActionStrat
 /// <summary>
 /// should be removed
 /// </summary>
+
+
+
+
+public class chooseBuildableecoStrat : iActionStrat
+{
+
+    
+    baseColonyAI theAi;
+
+    public bool canPerform => !complete;
+    bool hasDecided = false;
+    public bool complete => hasDecided;
+    public chooseBuildableecoStrat(baseColonyAI leAI)
+    {
+        theAi = leAI;
+        
+    }
+    public void Start()
+    {
+        buildableGameObject[] allOfACategory = theAi.getTypeOfBuildableObject(buildableScript.AIBuildableInfo.buildablePurposes.economy);
+        buildableGameObject candidate = new();
+        float candidateGoodness = 0;
+        foreach(buildableGameObject buildableEco in allOfACategory)
+        {
+           // BuildingStruct buildeficit = theAi.thisColonyScript.resourcesOwned.subtract(buildableEco.buildCost.multiply(5));
+           // if(BuildingStruct.comapareCosts(buildeficit))
+            //{
+                //continue;
+                
+            //}
+            buildableScript buildable = buildableEco.buildableObject.GetComponent<buildableScript>();
+            BuildingStruct builableincome = buildable.upkeepCosts;
+            BuildingStruct income = theAi.thisColonyScript.totalIncome();
+            BuildingStruct incomeChange = income.subtract(builableincome);
+            BuildingStruct changePercent = incomeChange.divide(income);
+            float goodness = changePercent.moneyExpenses + changePercent.resourceExpenses + changePercent.populationExpenses;
+            if(goodness >= candidateGoodness)
+            {
+                candidate = buildableEco;
+                candidateGoodness = goodness;
+            }
+            
+        }
+        if(candidate == null)
+        {
+            theAi.desiredBuildable =null;
+            theAi.hasFreshDesiredbuildabe = false;
+            hasDecided = true;
+            return;
+        }
+        
+        theAi.desiredBuildable =candidate;
+        theAi.hasFreshDesiredbuildabe = true;
+        hasDecided = true;
+        
+    }
+
+
+
+
+}
+
+
+
+
 
 
 
@@ -125,7 +190,53 @@ public class waitTickStrat : iActionStrat
 
 
 }
+public class decideTimeTowait : iActionStrat
+{
 
+    int? ticksRemaining;
+    baseColonyAI theAI;
+
+    public bool canPerform => !complete;
+    public bool complete => ticksRemaining <= 0;
+    public decideTimeTowait(baseColonyAI THEAI)
+    {
+        theAI = THEAI;
+        
+    }
+    void tick()
+    {
+        ticksRemaining--;
+
+    }
+    public void Start()
+    {
+        theAI.hasntWaited = false;
+        for(int i=0; i< 10;i++)
+        {
+            bool canAfford = BuildingStruct.comapareCosts(theAI.thisColonyScript.resourcesOwned.addition(theAI.thisColonyScript.totalIncome().multiply(i)), theAI.desiredBuildable.buildCost);
+            if(canAfford == true)
+            {
+                ticksRemaining = i +1;
+                break;
+            }
+        }
+        if(ticksRemaining==null)
+        {
+            ticksRemaining = 0;
+
+            /// add belief can wait for eco buildalbe to set to false
+        }
+      
+
+
+
+       gameManagerScript.GameTick += this.tick; 
+    }
+
+
+
+
+}
 
 public class buildStrat : iActionStrat
 {
@@ -136,7 +247,7 @@ public class buildStrat : iActionStrat
     GameObject deathObject;
     buildableScript thrbuildableScript;
 
-    public bool canPerform => callingColony != null && BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
+    public bool canPerform => complete!;
     public bool complete => finished;
     GameObject targetPos;
     int amountTobuild;
@@ -157,7 +268,10 @@ public class buildStrat : iActionStrat
 
     }
     public void Start()
-    { thrbuildableScript =myAI.desiredBuildable.buildableObject.GetComponent<buildableScript>();
+    { 
+        myAI.hasntWaited = true;
+        
+        thrbuildableScript =myAI.desiredBuildable.buildableObject.GetComponent<buildableScript>();
         deathObject = myAI.desiredBuildable.buildableObject;
         purchciceCost = myAI.desiredBuildable.buildCost;
         GameObject[] ownedTiles = callingColony.allTilesOwned.ToArray();
@@ -180,7 +294,7 @@ public class buildStrat : iActionStrat
         {
 
 
-            if (BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost) == true)
+            if (BuildingStruct.comapareCosts(callingColony.resourcesOwned.addition(callingColony.totalIncome().multiply(5)), purchciceCost) == true)
             {
                 tileInfo tileScript = tileKVP.Key.GetComponent<tileInfo>();
                 buildableGameObject buildable = new buildableGameObject
@@ -235,8 +349,11 @@ public class buildStrat : iActionStrat
         void finsied()
         {
             
-           
-            trackingBuildable.doneCreatingSelf -= finsied;
+           if(trackingBuildable != null)
+            {
+                trackingBuildable.doneCreatingSelf -= finsied;
+            }
+            
             
             myAI.hasFreshDesiredbuildabe = false;
            
@@ -514,18 +631,18 @@ public class chooseBuildableStrat : iActionStrat
                
                 buildableScript currebuildablescript = allOfACategory[k].buildableObject.GetComponent<buildableScript>();
                 BuildingStruct upkeepcosts =  currebuildablescript.upkeepCosts;
-                 Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject);
+                 
                 if(isGoingMoneyBroke == true && upkeepcosts.moneyExpenses >0)
                 {
-                     Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed moneywidse");
+                   
                     continue;
                 }
                 if(isGoingResourcebroke == true && upkeepcosts.resourceExpenses >0)
-                {Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed resourcesWise");
+                {
                     continue;
                 }
                 if(isGoingPeopleBroke == true && upkeepcosts.populationExpenses >0)
-                {Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed peoplewise");
+                {
                     continue;
                 }
                 Debug.Log("IM SETTING FRESH BUILDABLE TO TRUE");
@@ -537,10 +654,12 @@ public class chooseBuildableStrat : iActionStrat
             }
 
         }
-        Debug.Log("LOOOOOOOOOOOOOOOOOOOOOOOOk" +" im bout to null"+" length wasss"+ valuesOrdered.Length);
+         colonyAI.hasFreshDesiredbuildabe = false;
+   
                 
         return null;
     }
+    
 
    
 

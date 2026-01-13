@@ -60,7 +60,7 @@ public class uiManagerScript : MonoBehaviour
         
 
         BuildingStruct change = currentValues.subtract(previousIncome);
-        Debug.Log(currentValues.moneyExpenses + " " + previousIncome.moneyExpenses + " " + change.moneyExpenses);
+        
         incomeMoneyText.text = numericUtils.numberShortener(change.moneyExpenses);
         incomeResourceText.text = numericUtils.numberShortener(change.resourceExpenses);
         incomePopulationText.text = numericUtils.numberShortener(change.populationExpenses);
