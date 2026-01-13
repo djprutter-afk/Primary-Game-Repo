@@ -23,7 +23,7 @@ public class sensor : MonoBehaviour
     void Start()
     {
         myAI = GetComponent<baseColonyAI>();
-        myAI.AITick += sensorUpdate;
+        //myAI.AITick += sensorUpdate;
     }
     void sensorUpdate()
     {

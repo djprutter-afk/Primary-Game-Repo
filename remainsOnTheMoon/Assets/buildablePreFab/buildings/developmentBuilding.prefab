@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7456391225198054269}
   - component: {fileID: 7811488923873645452}
-  - component: {fileID: 5640494293122521958}
+  - component: {fileID: 4282932697002007775}
   m_Layer: 0
   m_Name: developmentBuilding
   m_TagString: Untagged
@@ -65,7 +65,7 @@ MonoBehaviour:
   purposes:
   - purpose: 3
     strength: 0.75
---- !u!114 &5640494293122521958
+--- !u!114 &4282932697002007775
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,6 +74,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7158736758787451057}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3ef1d6f50d791444ae669af737ce52c, type: 3}
+  m_Script: {fileID: 11500000, guid: 653c252be4548fb4dbeaa9428347ff0c, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::buildingScript

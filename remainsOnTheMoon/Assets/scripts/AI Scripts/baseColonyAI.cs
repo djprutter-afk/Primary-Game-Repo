@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using Unity.Jobs;
+using Unity.Collections;
 /// <summary>
 /// putting this here so i dont forget, money you should be able to go into debt but you cant go into debt for resource or population
 /// </summary>
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
+    int ticksToWait =2;
+
     int desiredSize;
     BuildingStruct desiredIncome;
 
@@ -63,6 +67,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         setupActions();
         setupGoals();
         
+        gameManagerScript.GameTick += colonyAiTick;
+        
     }
     /// <summary>
     /// assigns how much the ai will care about building this particular buildable, theses values should change as the game progress to reflect how important having that thing at that time is
@@ -99,12 +105,18 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
   
     void updateValues()
     {
+      
+
+
+
+
+
 
 
     }
     
   
-    
+    public bool hasntWaited = true;
     void setupBeliefs()
     {
         beliefs = new Dictionary<string, agentBelief>();
@@ -114,19 +126,30 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
        
         factory.addBeliefs("is feeling secure", () => 
-        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(10)),emptyStruct));
+        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct));
 
-       
+        factory.addBeliefs("is feeling insecure", () => 
+        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct) == false);
+
+       factory.addBeliefs("has good economy", () => false);
+       factory.addBeliefs("can afford ecoBuildable", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost));
+       factory.addBeliefs("cant afford ecoBuildable", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost) == false);
+
+       factory.addBeliefs("can wait to afford ecoBuildalbe", () => false);
    
        factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
         factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
+
+        factory.addBeliefs("hasnt waited already", () => hasntWaited);// ai can never be satiated
+        
         
 
         factory.addBeliefs("can afford new tile", () => BuildingStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
          factory.addBeliefs("has decided on buildable", () => hasFreshDesiredbuildabe);
         factory.addBeliefs("has space to build", hasSpaceToBuild);
+        factory.addBeliefs("has decided on buildable ECO", ()=>hasFreshDesiredbuildabe);
 
         bool hasSpaceToBuild()
         {
@@ -156,7 +179,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         actions = new HashSet<agentAction>();
 
 
-
+        
         
         
         
@@ -177,6 +200,11 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
        
+        actions.Add(new agentAction.Builder("do nothing")
+        .WithStrat(new waitTickStrat(2))
+        .AddEffect(beliefs["Nothing"])
+        .Build());
+       
 
         actions.Add(new agentAction.Builder("buildBuildable")
         .WithStrat(new buildStrat(gameObject,this))
@@ -184,12 +212,31 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["satisfied with buildables"])
         .Build());
-         
+        
+        actions.Add(new agentAction.Builder("decide Buildable ECO")
+        .WithStrat(new chooseBuildableecoStrat(this))
+        .addPreCondition(beliefs["is feeling insecure"])
+        .AddEffect(beliefs["has decided on buildable ECO"])
+        .Build());
+
+        actions.Add(new agentAction.Builder("buildBuildableECO")
+        .WithStrat(new buildStrat(gameObject,this))
+        .addPreCondition(beliefs["has decided on buildable ECO"])
+        .addPreCondition(beliefs["has space to build"])
+        .addPreCondition(beliefs["can afford ecoBuildable"])
+        .AddEffect(beliefs["has good economy"])
+        .Build());
+         actions.Add(new agentAction.Builder("wait to afford eco buildable")
+        .WithStrat(new decideTimeTowait(this))
+        .addPreCondition(beliefs["hasnt waited already"])
+        .addPreCondition(beliefs["has decided on buildable ECO"])
+        .addPreCondition(beliefs["cant afford ecoBuildable"])
+        .AddEffect(beliefs["can afford ecoBuildable"])
+        .Build());
 
        actions.Add(new agentAction.Builder("settle new land")
         .WithStrat(new massUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction))
         .AddEffect(beliefs["satisfied with size"])
-        .addPreCondition(beliefs["can afford new tile"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());
         
@@ -218,11 +265,16 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withPriority(0.25f)
         .withdesiredEffects(beliefs["satisfied with buildables"])
         .Build());
+
+        goals.Add(new AgentGoal.Builder("improve economy")
+        .withPriority(0.25f)
+        .withdesiredEffects(beliefs["has good economy"])
+        .Build());
        
 
 
         goals.Add(new AgentGoal.Builder("settle land")
-        .withPriority(0.70f)
+        .withPriority(0.20f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
         
@@ -242,18 +294,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     {
         
         
-
-
-        AITick?.Invoke();
-        float randomInterval = UnityEngine.Random.Range(0.1f, 0.1f);// 100 to 200 milisecond delay
-        Invoke(nameof(colonyAiTick), 3f + randomInterval);
-
-
-    }
-    void Update()
-    {
         
-        //statsTimer.tick(Time.deltaTime);
+            //statsTimer.tick(Time.deltaTime);
         if (currentAction == null)
         {
             Debug.Log("calculating any potential new plan");
@@ -276,7 +318,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
                     currentGoal = null;
                 }
             }
-        }
+
+         }
         
         if (actionplan != null && currentAction != null)
         {
@@ -299,8 +342,17 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
     }
+ 
+  
+
+    
+    
+   
     void calculatePlan()
     {
+       
+        
+
         var priortyLevel = currentGoal?.priority ?? 0;
         HashSet<AgentGoal> goalsToCheck = goals;
 
@@ -309,13 +361,17 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
             Debug.Log("current goal exists, chekcing goal with higher priority");
             goalsToCheck = new HashSet<AgentGoal>(goals.Where(g => g.priority > priortyLevel));
         }
+        
+    
 
         var potentialPlan = goapPlanner.Plan(this, goalsToCheck, lastGoal);
         if (potentialPlan != null)
         {
+            
             actionplan = potentialPlan;
         }
     }
+
     public buildableScript[] getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes dog, float strengthRequired = 0)
     {
         List<buildableScript> allBuildables = new List<buildableScript>();
@@ -404,7 +460,7 @@ public class CountDownTimer
 
     public void tick(float timeElapsed)
     {
-        Debug.LogWarning("time tick" + timeElapsed + " time left: " + timeLeft);
+        
 
         if (isCounting == false)
         {
