@@ -10,7 +10,8 @@ using Unity.Collections;
 /// </summary>
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
-  
+    int ticksToWait =2;
+
     int desiredSize;
     BuildingStruct desiredIncome;
 
@@ -19,7 +20,9 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
     
 
-        public GameObject theGameManager;
+    
+    public event Action AITick;
+    public GameObject theGameManager;
    
     public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float> valueOfBuildables = new Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float>();//how much the ai will priorities the buildable
 
@@ -132,18 +135,18 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
        factory.addBeliefs("can afford ecoBuildable", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost));
        factory.addBeliefs("cant afford ecoBuildable", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost) == false);
 
-       factory.addBeliefs("can wait to afford ecoBuildalbe", () => false);
+       
    
        factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
         factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
 
-        factory.addBeliefs("hasnt waited already", () => hasntWaited);
+        factory.addBeliefs("hasnt waited already", () => hasntWaited);// ai can never be satiated
         
         
 
-        factory.addBeliefs("income fully positive", () => BuildingStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
+        factory.addBeliefs("can afford new tile", () => BuildingStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
          factory.addBeliefs("has decided on buildable", () => hasFreshDesiredbuildabe);
         factory.addBeliefs("has space to build", hasSpaceToBuild);
         factory.addBeliefs("has decided on buildable ECO", ()=>hasFreshDesiredbuildabe);
@@ -228,7 +231,6 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .addPreCondition(beliefs["hasnt waited already"])
         .addPreCondition(beliefs["has decided on buildable ECO"])
         .addPreCondition(beliefs["cant afford ecoBuildable"])
-        .addPreCondition(beliefs["income fully positive"])
         .AddEffect(beliefs["can afford ecoBuildable"])
         .Build());
 
@@ -265,14 +267,14 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .Build());
 
         goals.Add(new AgentGoal.Builder("improve economy")
-        .withPriority(0.25f)
+        .withPriority(0.30f)
         .withdesiredEffects(beliefs["has good economy"])
         .Build());
        
 
 
         goals.Add(new AgentGoal.Builder("settle land")
-        .withPriority(0.20f)
+        .withPriority(1.0f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
         
@@ -317,7 +319,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
                 }
             }
 
-         }
+        }
         
         if (actionplan != null && currentAction != null)
         {
@@ -340,7 +342,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
     }
- 
+
+
   
 
     

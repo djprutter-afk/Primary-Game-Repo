@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7811488923873645452}
   - component: {fileID: 4282932697002007775}
   m_Layer: 0
-  m_Name: developmentBuilding
+  m_Name: nursery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,8 +57,8 @@ MonoBehaviour:
   movePath: []
   upkeepCosts:
     moneyExpenses: 10
-    resourceExpenses: 30
-    populationExpenses: 0
+    resourceExpenses: 5
+    populationExpenses: -30
     buildingName: development
   possibleActions: 
   isBuilding: 1

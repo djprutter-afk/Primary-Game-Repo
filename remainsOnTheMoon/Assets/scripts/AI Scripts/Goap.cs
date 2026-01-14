@@ -114,7 +114,9 @@ public class chooseBuildableecoStrat : iActionStrat
     {
         buildableGameObject[] allOfACategory = theAi.getTypeOfBuildableObject(buildableScript.AIBuildableInfo.buildablePurposes.economy);
         buildableGameObject candidate = new();
-        float candidateGoodness = 0;
+        float candidateGoodness = -9999999999999;
+       BuildingStruct income = theAi.thisColonyScript.totalIncome();
+       
         foreach(buildableGameObject buildableEco in allOfACategory)
         {
            // BuildingStruct buildeficit = theAi.thisColonyScript.resourcesOwned.subtract(buildableEco.buildCost.multiply(5));
@@ -125,10 +127,11 @@ public class chooseBuildableecoStrat : iActionStrat
             //}
             buildableScript buildable = buildableEco.buildableObject.GetComponent<buildableScript>();
             BuildingStruct builableincome = buildable.upkeepCosts;
-            BuildingStruct income = theAi.thisColonyScript.totalIncome();
+            
             BuildingStruct incomeChange = income.subtract(builableincome);
             BuildingStruct changePercent = incomeChange.divide(income);
             float goodness = changePercent.moneyExpenses + changePercent.resourceExpenses + changePercent.populationExpenses;
+            Debug.Log("the goodness of buildabe is: " + goodness + " and buildable name is: " +buildable.name);
             if(goodness >= candidateGoodness)
             {
                 candidate = buildableEco;
@@ -195,23 +198,34 @@ public class decideTimeTowait : iActionStrat
 
     int? ticksRemaining;
     baseColonyAI theAI;
-
+    bool isFin = false;
     public bool canPerform => !complete;
-    public bool complete => ticksRemaining <= 0;
+    public bool complete => isFin;
     public decideTimeTowait(baseColonyAI THEAI)
     {
         theAI = THEAI;
+         
         
     }
     void tick()
     {
         ticksRemaining--;
+        if(ticksRemaining<=0)
+        {
+            finishedTicking();
+        }
 
+    }
+    void finishedTicking()
+    {
+        theAI.hasntWaited = false;
+        gameManagerScript.GameTick -= this.tick; 
+        isFin=true;
     }
     public void Start()
     {
         theAI.hasntWaited = false;
-        for(int i=0; i< 10;i++)
+        for(int i=0; i< 15;i++)
         {
             bool canAfford = BuildingStruct.comapareCosts(theAI.thisColonyScript.resourcesOwned.addition(theAI.thisColonyScript.totalIncome().multiply(i)), theAI.desiredBuildable.buildCost);
             if(canAfford == true)
@@ -219,12 +233,12 @@ public class decideTimeTowait : iActionStrat
                 ticksRemaining = i +1;
                 break;
             }
+            //Debug.Log(i+" " + theAI.thisColonyScript.resourcesOwned.addition(theAI.thisColonyScript.totalIncome().multiply(i)));
         }
         if(ticksRemaining==null)
         {
             ticksRemaining = 0;
 
-            /// add belief can wait for eco buildalbe to set to false
         }
       
 
@@ -324,8 +338,17 @@ public class buildStrat : iActionStrat
                 }
                 else
                 {
-                    Debug.Log("I FAILED <FMDSKFN");
-                    finsied();
+                     GameObject objectToCheck =  tileScript.buildNewBuildable(buildable, callingColony);
+                    amountBuilded += 1;
+
+                    if(amountBuilded == amountTobuild)// waits until the last buildable is ready
+                    {
+                        buildableScript zogglisihs = objectToCheck.GetComponent<buildableScript>();
+                        
+                        trackingBuildable = zogglisihs;
+                        zogglisihs.doneCreatingSelf += finsied;
+                        
+                    }
                 }
                 if (amountBuilded >= amountTobuild)
                 {
