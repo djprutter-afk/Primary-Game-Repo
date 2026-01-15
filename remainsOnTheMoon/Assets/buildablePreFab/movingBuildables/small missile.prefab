@@ -137,7 +137,7 @@ MonoBehaviour:
   timeToWait: 8
   movePath: []
   upkeepCosts:
-    moneyExpenses: 3
+    moneyExpenses: 7
     resourceExpenses: 5
     populationExpenses: 0
     buildingName: mr skibid
@@ -169,7 +169,7 @@ MonoBehaviour:
   missileHeight: 0.3
   explosionObject: {fileID: 714982634637159252, guid: f1767d374f01ef446bef3e06293410ff, type: 3}
   power: 0.26
-  timeToFinsishInSeconds: 2.5
+  timeToFinsishInSeconds: 3.5
   endDiameter: 0.15
 --- !u!64 &3338517462602955331
 MeshCollider:

@@ -42,7 +42,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _fadeout: 1
-    - _intensity: 100
+    - _intensity: 1
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

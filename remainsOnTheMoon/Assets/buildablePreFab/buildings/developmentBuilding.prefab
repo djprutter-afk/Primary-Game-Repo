@@ -57,7 +57,7 @@ MonoBehaviour:
   movePath: []
   upkeepCosts:
     moneyExpenses: 10
-    resourceExpenses: 30
+    resourceExpenses: 25
     populationExpenses: 0
     buildingName: development
   possibleActions: 

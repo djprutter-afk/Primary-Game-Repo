@@ -130,7 +130,7 @@ public class chooseBuildableecoStrat : iActionStrat
             
             BuildingStruct incomeChange = income.subtract(builableincome);
             BuildingStruct changePercent = incomeChange.divide(income);
-            float goodness = changePercent.moneyExpenses + changePercent.resourceExpenses + changePercent.populationExpenses;
+            float goodness = (1- changePercent.moneyExpenses) + (1-changePercent.resourceExpenses) + (1-changePercent.populationExpenses);
             Debug.Log("the goodness of buildabe is: " + goodness + " and buildable name is: " +buildable.name);
             if(goodness >= candidateGoodness)
             {

@@ -57,7 +57,7 @@ MonoBehaviour:
   movePath: []
   upkeepCosts:
     moneyExpenses: 30
-    resourceExpenses: -60
+    resourceExpenses: -45
     populationExpenses: 0
     buildingName: Big Drill
   possibleActions: 

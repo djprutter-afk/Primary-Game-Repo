@@ -5869,7 +5869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coloniesObject: {fileID: 1666743407}
-  gameTicketLength: 5
+  gameTicketLength: 1
   uiBuildablePrefab: {fileID: 6254413538128113405, guid: 22c9ec71fbd282a44b169b737ba4237c, type: 3}
   uiBuildableItemCatagoryPrefab: {fileID: 2743317042680154952, guid: 92a1fe48f01ed1d4fa6dcb681f2ac9e2, type: 3}
   uiBuildableItemPrefab: {fileID: 8421940951654802819, guid: 8bb5b259185ef25409dfc7973cc7ed5e, type: 3}
@@ -5925,6 +5925,13 @@ MonoBehaviour:
         buildingName: Tax Office
       buildableObject: {fileID: 7158736758787451057, guid: af744a84eebc64247a06b08f28894c3f, type: 3}
       nameOfBuildable: Tax Office
+    - buildCost:
+        moneyExpenses: 1200
+        resourceExpenses: 600
+        populationExpenses: 100
+        buildingName: Tax Office
+      buildableObject: {fileID: 7158736758787451057, guid: 619fbb11dca7e094d8bf74cb3b1e4aef, type: 3}
+      nameOfBuildable: Clone Vats
   colonies: {fileID: 1666743407}
   DevelopmentGameObject: {fileID: 7158736758787451057, guid: bc1cedb700b2cea459a9335c55a0f355, type: 3}
   ticksSinceStart: 0
@@ -11420,7 +11427,7 @@ MonoBehaviour:
   playerAmount: 1
   minDistance: 0.7
   theMoon: {fileID: 1507515933}
-  colonyAmount: 2
+  colonyAmount: 1
   gameManager: {fileID: 713989425}
   playerMouseInteractionsObject: {fileID: 309602033}
   colonyTypes:
@@ -12003,6 +12010,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &3885853153122878521
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3189080833771895004, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_Name
+      value: Audio Source
+      objectReference: {fileID: 0}
+    - target: {fileID: 4722075128925717178, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: Loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.13209
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.38197
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.29436
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8060888746998521621, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: be3f40a5701f5dc4d994ae04e4a7177d, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -12022,3 +12090,4 @@ SceneRoots:
   - {fileID: 2040768881}
   - {fileID: 1809013963}
   - {fileID: 941307771}
+  - {fileID: 3885853153122878521}

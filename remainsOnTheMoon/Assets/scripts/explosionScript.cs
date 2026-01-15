@@ -26,14 +26,15 @@ public class expansionScript : MonoBehaviour
 
     Material explosionMaterial;
 
+Light lightComp;
 
-
-
+float imsinae;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Light lightComp = explosionLight.GetComponent<Light>();
-        lightComp.intensity = Power;
+        lightComp = explosionLight.GetComponent<Light>();
+        imsinae =1+ Power/2;
+        lightComp.intensity =imsinae;
         localGenericMaterial = Instantiate(genericMaterial);
 
 
@@ -74,10 +75,13 @@ public class expansionScript : MonoBehaviour
 
         
         float expansionDiameter = math.sqrt(time /timeToFinishSeconds) * endDiameter;
-      
+        
         float completenes = 1 - expansionDiameter / endDiameter;
+        float completenessSqrt=(math.sqrt(completenes))*(imsinae);
+lightComp.intensity =completenessSqrt;
 
-
+thisMesh.material.SetFloat("_fadeout",completenes) ;
+thisMesh.material.SetFloat("_intensity",completenes * 10);
         transform.localScale = new Vector3(expansionDiameter, expansionDiameter, expansionDiameter);
 
 
