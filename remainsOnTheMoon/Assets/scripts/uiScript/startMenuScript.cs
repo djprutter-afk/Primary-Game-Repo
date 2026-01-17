@@ -1,19 +1,25 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
+using System.Collections;
 public class startMenuScript : MonoBehaviour
 {
+    [SerializeField] Scene mainGame;
     
     [SerializeField] GameObject startButton;
     [SerializeField] GameObject CreditButton;
     [SerializeField] GameObject SettingButton;
-    void Start()
+   public void startPress()
+    {
+        
+    }
+     public void SettingsPress()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+ public void exitPress()
     {
-        
+        Application.Quit();
     }
 }
+

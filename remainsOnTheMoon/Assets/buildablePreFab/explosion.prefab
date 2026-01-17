@@ -110,6 +110,7 @@ MonoBehaviour:
   timeToFinishSeconds: 3
   endDiameter: 0.1
   tilePosition: {fileID: 0}
+  fire: {fileID: 7821126757945947452, guid: c0c87dadadafb9541924c3291c547b67, type: 3}
   explosionLight: {fileID: 1139368801233306067}
   genericMaterial: {fileID: 2100000, guid: b24a0748d35e3e04a8be251da63f8283, type: 2}
 --- !u!135 &3511463869510283448
