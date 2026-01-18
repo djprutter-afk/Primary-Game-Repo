@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 public class popUpUIScript : MonoBehaviour// this script is for the tile popups
 {
-    Dictionary<BuildingStruct, int> tilesBuildingsDic = new Dictionary<BuildingStruct, int>();
+    Dictionary<TriValueStruct, int> tilesBuildingsDic = new Dictionary<TriValueStruct, int>();
     public GameObject[] tileselected;// this is the tile or tiles we getting info about
     [SerializeField] GameObject buildingList;
     [SerializeField] GameObject buidablesUI;
@@ -66,7 +66,7 @@ public class popUpUIScript : MonoBehaviour// this script is for the tile popups
             resourceText.text = "0";
             popText.text = "0";
 
-            foreach (KeyValuePair<BuildingStruct, int> tileDicKvp in tilesBuildingsDic.ToList())// set every value to zero becuase the total amount of every item is going to added
+            foreach (KeyValuePair<TriValueStruct, int> tileDicKvp in tilesBuildingsDic.ToList())// set every value to zero becuase the total amount of every item is going to added
             {
 
 
@@ -80,7 +80,7 @@ public class popUpUIScript : MonoBehaviour// this script is for the tile popups
         }
         if (buildingList.activeSelf == true)
         {
-            foreach (KeyValuePair<BuildingStruct, int> tileDicKvp in tilesBuildingsDic.ToList())// set every value to zero becuase the total amount of every item is going to added
+            foreach (KeyValuePair<TriValueStruct, int> tileDicKvp in tilesBuildingsDic.ToList())// set every value to zero becuase the total amount of every item is going to added
             {
 
                 tilesBuildingsDic[tileDicKvp.Key] = 0;
@@ -114,18 +114,18 @@ public class popUpUIScript : MonoBehaviour// this script is for the tile popups
 
             }
 
-            BuildingStruct tileTotal = currentTileInfo.TotalIncome();
+            TriValueStruct tileTotal = currentTileInfo.TotalIncome();
             totalDevelopment += currentTileInfo.development;
 
-            totalIncome += tileTotal.moneyExpenses;
+            totalIncome += tileTotal.moneyValue;
 
-            totalResources += tileTotal.resourceExpenses;
+            totalResources += tileTotal.resourceValue;
 
             totalpopulation += currentTileInfo.population;
 
             if (buildingList.activeSelf == true)// all this code nested needs a check over
             {
-                foreach (BuildingStruct building in currentTileInfo.buildingsOnTile)
+                foreach (TriValueStruct building in currentTileInfo.buildingsOnTile)
                 {
                     if (tilesBuildingsDic.ContainsKey(building) == false)
                     {
@@ -145,7 +145,7 @@ public class popUpUIScript : MonoBehaviour// this script is for the tile popups
 
 
 
-        foreach (KeyValuePair<BuildingStruct, int> tileDicKvp in tilesBuildingsDic)// iterates over every building that should be on 
+        foreach (KeyValuePair<TriValueStruct, int> tileDicKvp in tilesBuildingsDic)// iterates over every building that should be on 
         {
             if (tilesBuildingsDic[tileDicKvp.Key] <= 0)
             {

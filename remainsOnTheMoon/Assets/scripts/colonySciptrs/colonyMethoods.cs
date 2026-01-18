@@ -409,10 +409,10 @@ public static class colonyMethoods
     }
 
 
-    public static bool purchasableAction(GameObject colony, BuildingStruct cost, GameObject tileOn, bool alsoBuy = false)
+    public static bool purchasableAction(GameObject colony, TriValueStruct cost, GameObject tileOn, bool alsoBuy = false)
     {
         tileInfo tileOnInfo = tileOn.GetComponent<tileInfo>();
-        Debug.Log(cost.moneyExpenses + " " + colony.gameObject.name + " " + tileOn.transform.parent);
+        Debug.Log(cost.moneyValue + " " + colony.gameObject.name + " " + tileOn.transform.parent);
         colonyScript thiscolonyScript = colony.GetComponent<colonyScript>();
 
         if (colony != tileOn.transform.parent.gameObject)
@@ -426,9 +426,9 @@ public static class colonyMethoods
             Debug.LogWarning("there was no colony script on the colony????");
             return false;
         }
-        bool enoughResources = thiscolonyScript.resourcesOwned.resourceExpenses >= cost.resourceExpenses;
-        bool enoughMOney = thiscolonyScript.resourcesOwned.moneyExpenses >= cost.moneyExpenses;
-        bool enoughPeople = tileOnInfo.population >= cost.populationExpenses;
+        bool enoughResources = thiscolonyScript.resourcesOwned.resourceValue >= cost.resourceValue;
+        bool enoughMOney = thiscolonyScript.resourcesOwned.moneyValue >= cost.moneyValue;
+        bool enoughPeople = tileOnInfo.population >= cost.populationValue;
 
         bool allGood = enoughResources && enoughMOney && enoughPeople;
 
@@ -442,9 +442,9 @@ public static class colonyMethoods
             }
 
 
-            thiscolonyScript.resourcesOwned.resourceExpenses -= cost.resourceExpenses;
-            thiscolonyScript.resourcesOwned.moneyExpenses -= cost.moneyExpenses;
-            tileOnInfo.population -= cost.populationExpenses;
+            thiscolonyScript.resourcesOwned.resourceValue -= cost.resourceValue;
+            thiscolonyScript.resourcesOwned.moneyValue -= cost.moneyValue;
+            tileOnInfo.population -= cost.populationValue;
             return true;
 
         }

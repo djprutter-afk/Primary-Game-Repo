@@ -63,7 +63,7 @@ public class buildableScript : MonoBehaviour
     int movePathPosition;
     GameObject endTargetTile;
 
-    public BuildingStruct upkeepCosts;
+    public TriValueStruct upkeepCosts;
     public buildableActions[] possibleActions; // actions that this buildable can perform, assinged in editor
 
     public bool isBuilding;
@@ -304,9 +304,9 @@ public class buildableScript : MonoBehaviour
         {
             return;
         }
-        ownerColonyScript.resourcesOwned.moneyExpenses -= upkeepCosts.moneyExpenses;
-        ownerColonyScript.resourcesOwned.resourceExpenses -= upkeepCosts.resourceExpenses;
-        ownerColonyScript.subtractPopulation(upkeepCosts.populationExpenses);// has to be done differently because the population must from the tiles, the colonyscript "population" is just the sum of all tile's population and changing it does nothing
+        ownerColonyScript.resourcesOwned.moneyValue -= upkeepCosts.moneyValue;
+        ownerColonyScript.resourcesOwned.resourceValue -= upkeepCosts.resourceValue;
+        ownerColonyScript.subtractPopulation(upkeepCosts.populationValue);// has to be done differently because the population must from the tiles, the colonyscript "population" is just the sum of all tile's population and changing it does nothing
 
 
 

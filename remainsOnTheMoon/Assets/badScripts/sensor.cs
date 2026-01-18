@@ -4,8 +4,8 @@ public class sensor : MonoBehaviour
 {
     baseColonyAI myAI;
     colonyScript myColonyScript;
-    public BuildingStruct resourcesOwned;
-    public BuildingStruct resourceChange;
+    public TriValueStruct resourcesOwned;
+    public TriValueStruct resourceChange;
     
     public GameObject[] OwnedTiles;
     public GameObject[] OwnedBuildables;

@@ -29,7 +29,7 @@ public class buildableUiBasicInfo : MonoBehaviour
 
 
 
-    public void updateActionsUI(int quantity, string nameOfBuildable,BuildingStruct Upkeep)
+    public void updateActionsUI(int quantity, string nameOfBuildable,TriValueStruct Upkeep)
     {
         
        
@@ -45,9 +45,9 @@ public class buildableUiBasicInfo : MonoBehaviour
 
         quantityText.text = quantity + "x";
         nameText.text = nameOfBuildable;
-        peopleText.text = numericUtils.numberShortener(Upkeep.populationExpenses * quantity);
-        resourceText.text = numericUtils.numberShortener(Upkeep.resourceExpenses * quantity);
-        moneyText.text = numericUtils.numberShortener(Upkeep.moneyExpenses * quantity);
+        peopleText.text = numericUtils.numberShortener(Upkeep.populationValue * quantity);
+        resourceText.text = numericUtils.numberShortener(Upkeep.resourceValue * quantity);
+        moneyText.text = numericUtils.numberShortener(Upkeep.moneyValue * quantity);
 
     }
 }

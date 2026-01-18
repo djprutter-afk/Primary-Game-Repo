@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class buildableGameObject//building
 {
 
-    public BuildingStruct buildCost;
+    public TriValueStruct buildCost;
 
     // thses expenses above are only buying the buildable NOT THE UPKEEP, UPKEEP IS STORED WITHIN THE BUILDABLESCRIPT ITSELF
     public GameObject buildableObject; // be sure to assign position
@@ -82,7 +82,7 @@ public class buildingCatagory//thing that contains buildings
 public class gameManagerScript : MonoBehaviour
 {
     public static event Action GameTick;
-    public static event System.Action<BuildingStruct> onUpdate;
+    public static event System.Action<TriValueStruct> onUpdate;
     [SerializeField] GameObject coloniesObject;
     gameSetup1 gamesetuper;
     [SerializeField] float gameTicketLength;
@@ -121,9 +121,9 @@ public class gameManagerScript : MonoBehaviour
 
        
         developmentGameObject = new buildableGameObject();
-        developmentGameObject.buildCost.moneyExpenses = 500;
-        developmentGameObject.buildCost.resourceExpenses = 250;
-        developmentGameObject.buildCost.populationExpenses = 50;
+        developmentGameObject.buildCost.moneyValue = 500;
+        developmentGameObject.buildCost.resourceValue = 250;
+        developmentGameObject.buildCost.populationValue = 50;
         developmentGameObject.buildableObject = DevelopmentGameObject;
         developmentGameObject.nameOfBuildable = "Development";
 
@@ -184,9 +184,9 @@ public class gameManagerScript : MonoBehaviour
                 GameObject buildingButton = Instantiate(uiBuildableItemPrefab, currentCatagoryhere.transform);
                 buildableButtonScript currentBuildableScript = buildingButton.GetComponent<buildableButtonScript>();
                 currentBuildableScript.thisBuildable.buildableObject = currentBuildable.buildableObject;
-                currentBuildableScript.thisBuildable.buildCost.moneyExpenses = currentBuildable.buildCost.moneyExpenses;
-                currentBuildableScript.thisBuildable.buildCost.populationExpenses = currentBuildable.buildCost.populationExpenses;
-                currentBuildableScript.thisBuildable.buildCost.resourceExpenses = currentBuildable.buildCost.resourceExpenses;
+                currentBuildableScript.thisBuildable.buildCost.moneyValue = currentBuildable.buildCost.moneyValue;
+                currentBuildableScript.thisBuildable.buildCost.populationValue = currentBuildable.buildCost.populationValue;
+                currentBuildableScript.thisBuildable.buildCost.resourceValue = currentBuildable.buildCost.resourceValue;
                 //currentBuildableScript.thisBuildable.isBuilding = currentBuildable.isBuilding;
                 currentBuildableScript.nameOfBuildable = currentBuildable.nameOfBuildable;
                 currentBuildableScript.thisColony = playercolonysscript;
@@ -225,12 +225,12 @@ public class gameManagerScript : MonoBehaviour
 
             if (currentColony == playercolonysscript.gameObject)
             {
-                BuildingStruct buildingStructArg = new BuildingStruct
+                TriValueStruct buildingStructArg = new TriValueStruct
                 {
                     buildingName = playercolonysscript.gameObject.name,
-                    moneyExpenses = playercolonysscript.resourcesOwned.moneyExpenses,
-                    resourceExpenses = playercolonysscript.resourcesOwned.resourceExpenses,
-                    populationExpenses = playercolonysscript.resourcesOwned.populationExpenses
+                    moneyValue = playercolonysscript.resourcesOwned.moneyValue,
+                    resourceValue = playercolonysscript.resourcesOwned.resourceValue,
+                    populationValue = playercolonysscript.resourcesOwned.populationValue
 
 
 

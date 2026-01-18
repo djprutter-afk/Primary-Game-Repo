@@ -62,12 +62,12 @@ public class buildStrat : iActionStrat
 {
     buildableScript trackingBuildable; 
     bool finished = false;
-    BuildingStruct purchciceCost;
+    TriValueStruct purchciceCost;
     colonyScript callingColony;
     GameObject deathObject;
     buildableScript thrbuildableScript;
 
-    public bool canPerform => callingColony != null && BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
+    public bool canPerform => callingColony != null && TriValueStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost);
     public bool complete => finished;
     GameObject targetPos;
     int amountTobuild;
@@ -111,7 +111,7 @@ public class buildStrat : iActionStrat
         {
 
 
-            if (BuildingStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost) == true)
+            if (TriValueStruct.comapareCosts(callingColony.resourcesOwned, purchciceCost) == true)
             {
                 tileInfo tileScript = tileKVP.Key.GetComponent<tileInfo>();
                 buildableGameObject buildable = new buildableGameObject
@@ -409,9 +409,9 @@ public class chooseBuildableStrat : iActionStrat
 
     buildableGameObject bestBuildableToBuild()
     {
-        bool isGoingMoneyBroke = colonyAI.thisColonyScript.resourcesOwned.moneyExpenses + colonyAI.thisColonyScript.totalIncome().moneyExpenses * 5 < 0;
-        bool isGoingResourcebroke = colonyAI.thisColonyScript.resourcesOwned.resourceExpenses + colonyAI.thisColonyScript.totalIncome().resourceExpenses * 5 < 0;
-        bool isGoingPeopleBroke = colonyAI.thisColonyScript.resourcesOwned.populationExpenses + colonyAI.thisColonyScript.totalIncome().populationExpenses * 5 < 0;
+        bool isGoingMoneyBroke = colonyAI.thisColonyScript.resourcesOwned.moneyValue + colonyAI.thisColonyScript.totalIncome().moneyValue * 5 < 0;
+        bool isGoingResourcebroke = colonyAI.thisColonyScript.resourcesOwned.resourceValue + colonyAI.thisColonyScript.totalIncome().resourceValue * 5 < 0;
+        bool isGoingPeopleBroke = colonyAI.thisColonyScript.resourcesOwned.populationValue + colonyAI.thisColonyScript.totalIncome().populationValue * 5 < 0;
         
             
         
@@ -425,18 +425,18 @@ public class chooseBuildableStrat : iActionStrat
             {
                
                 buildableScript currebuildablescript = allOfACategory[k].buildableObject.GetComponent<buildableScript>();
-                BuildingStruct upkeepcosts =  currebuildablescript.upkeepCosts;
+                TriValueStruct upkeepcosts =  currebuildablescript.upkeepCosts;
                  Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject);
-                if(isGoingMoneyBroke == true && upkeepcosts.moneyExpenses >0)
+                if(isGoingMoneyBroke == true && upkeepcosts.moneyValue >0)
                 {
                      Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed moneywidse");
                     continue;
                 }
-                if(isGoingResourcebroke == true && upkeepcosts.resourceExpenses >0)
+                if(isGoingResourcebroke == true && upkeepcosts.resourceValue >0)
                 {Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed resourcesWise");
                     continue;
                 }
-                if(isGoingPeopleBroke == true && upkeepcosts.populationExpenses >0)
+                if(isGoingPeopleBroke == true && upkeepcosts.populationValue >0)
                 {Debug.Log(valuesOrdered[i].Key +"LOOOOOOOOOOOOOOOOOOOOOOOOk" +" and the object is: "+ allOfACategory[k].buildableObject+" and it failed peoplewise");
                     continue;
                 }

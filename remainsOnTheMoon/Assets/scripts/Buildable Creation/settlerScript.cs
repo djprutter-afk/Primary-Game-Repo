@@ -45,12 +45,12 @@ public class settlerScript : MonoBehaviour
 
             thistileVisuals.setupTileVisuals(ownercolonyscript.LOCALColonyMaterial,0.5f);
             ownercolonyscript.allTilesOwned.Add(thisTIle);
-             BuildingStruct localadministration = new BuildingStruct
+             TriValueStruct localadministration = new TriValueStruct
         {
            buildingName = "local admin building",
-                moneyExpenses = 20,
-                resourceExpenses = 20,
-                populationExpenses = 0
+                moneyValue = 20,
+                resourceValue = 20,
+                populationValue = 0
 
 
         };

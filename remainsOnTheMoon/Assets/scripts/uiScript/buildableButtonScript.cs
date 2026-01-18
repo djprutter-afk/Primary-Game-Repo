@@ -21,7 +21,7 @@ public class buildableButtonScript : MonoBehaviour
     public buildableGameObject thisBuildable;
 
     public string nameOfBuildable;
-    BuildingStruct buildableCost;
+    TriValueStruct buildableCost;
     void Start()
     {
          uiScript = buildablescript.thisUIScript;
@@ -41,9 +41,9 @@ public class buildableButtonScript : MonoBehaviour
         TMP_Text moneyText = moneyExpenseText.GetComponent<TMP_Text>();
         TMP_Text popText = populationExpenseText.GetComponent<TMP_Text>();
         TMP_Text resourcetext = resourceExpenseText.GetComponent<TMP_Text>();
-        moneyText.text = numericUtils.numberShortener(thisBuildable.buildCost.moneyExpenses);
-        popText.text = numericUtils.numberShortener(thisBuildable.buildCost.populationExpenses);
-        resourcetext.text =numericUtils.numberShortener( thisBuildable.buildCost.resourceExpenses);
+        moneyText.text = numericUtils.numberShortener(thisBuildable.buildCost.moneyValue);
+        popText.text = numericUtils.numberShortener(thisBuildable.buildCost.populationValue);
+        resourcetext.text =numericUtils.numberShortener( thisBuildable.buildCost.resourceValue);
 
 
 
@@ -51,11 +51,11 @@ public class buildableButtonScript : MonoBehaviour
 
     public void buildBuilding()
     { 
-         buildableCost = new BuildingStruct
+         buildableCost = new TriValueStruct
         {
-            moneyExpenses = thisBuildable.buildCost.moneyExpenses,
-            populationExpenses = thisBuildable.buildCost.populationExpenses,
-            resourceExpenses = thisBuildable.buildCost.resourceExpenses
+            moneyValue = thisBuildable.buildCost.moneyValue,
+            populationValue = thisBuildable.buildCost.populationValue,
+            resourceValue = thisBuildable.buildCost.resourceValue
         };
         int tileSelectedAmt = uiScript.tileselected.Length;
         int[] randomOrder = randomAssortment(tileSelectedAmt);

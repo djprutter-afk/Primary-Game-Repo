@@ -47,23 +47,23 @@ public class uiManagerScript : MonoBehaviour
     {
         gameManagerScript.onUpdate -= updateText;
     }
-    BuildingStruct previousIncome = new BuildingStruct();
+    TriValueStruct previousIncome = new TriValueStruct();
 
 
 
 
-    void updateText(BuildingStruct currentValues)
+    void updateText(TriValueStruct currentValues)
     {
-        moneyText.text = numericUtils.numberShortener(currentValues.moneyExpenses);
-        resourceText.text = numericUtils.numberShortener(currentValues.resourceExpenses);
-        populationText.text = numericUtils.numberShortener(currentValues.populationExpenses);
+        moneyText.text = numericUtils.numberShortener(currentValues.moneyValue);
+        resourceText.text = numericUtils.numberShortener(currentValues.resourceValue);
+        populationText.text = numericUtils.numberShortener(currentValues.populationValue);
         
 
-        BuildingStruct change = currentValues.subtract(previousIncome);
+        TriValueStruct change = currentValues.subtract(previousIncome);
         
-        incomeMoneyText.text = numericUtils.numberShortener(change.moneyExpenses);
-        incomeResourceText.text = numericUtils.numberShortener(change.resourceExpenses);
-        incomePopulationText.text = numericUtils.numberShortener(change.populationExpenses);
+        incomeMoneyText.text = numericUtils.numberShortener(change.moneyValue);
+        incomeResourceText.text = numericUtils.numberShortener(change.resourceValue);
+        incomePopulationText.text = numericUtils.numberShortener(change.populationValue);
 
         previousIncome =currentValues;
 

@@ -30,7 +30,7 @@ public class colonyScript : MonoBehaviour
     public List<GameObject> ownedBuildables = new List<GameObject>();
     public Texture2D colonyFlag;
 
-    public BuildingStruct resourcesOwned;
+    public TriValueStruct resourcesOwned;
     public Material globalColonyMaterial;
     public Material LOCALColonyMaterial;
  
@@ -39,7 +39,7 @@ public class colonyScript : MonoBehaviour
        colonyStart thisColonyStart;
     int tileAmount;
     public GameObject colonyGameManager;
-    prices currentPrices;
+
 
     public float totalColonyPopGrowth = 1;
     public int tempGoapTestNumber = 0;
@@ -51,11 +51,11 @@ public class colonyScript : MonoBehaviour
     {
         LOCALColonyMaterial = Instantiate(globalColonyMaterial);
         LOCALColonyMaterial.SetTexture("_flag", colonyFlag);
-        currentPrices = colonyGameManager.GetComponent<prices>();
+       
         thisColonyStart = GetComponent<colonyStart>();
         tileAmount = transform.childCount;
-        resourcesOwned.resourceExpenses = 500;
-        resourcesOwned.moneyExpenses = 350;
+        resourcesOwned.resourceValue = 500;
+        resourcesOwned.moneyValue = 350;
         allTilesOwned.Add(thisColonyStart.colonyStartPosition);
 
 
@@ -77,7 +77,7 @@ public class colonyScript : MonoBehaviour
             tileInfo thisTileInfo = allTilesOwned[indexOfTiles].GetComponent<tileInfo>();
             totalPOP += thisTileInfo.population;
 
-            BuildingStruct tileincome = thisTileInfo.TotalIncome(true);
+            TriValueStruct tileincome = thisTileInfo.TotalIncome(true);
 
             float tileHousingPercentage = thisTileInfo.population / (thisTileInfo.development * 250 + 1);
 
@@ -95,11 +95,11 @@ public class colonyScript : MonoBehaviour
 
 
         }
-        resourcesOwned.populationExpenses = totalPOP;
+        resourcesOwned.populationValue = totalPOP;
     }
-    public BuildingStruct totalIncome()
+    public TriValueStruct totalIncome()
     {
-        BuildingStruct totalIncome = new BuildingStruct();
+        TriValueStruct totalIncome = new TriValueStruct();
         foreach (GameObject buildable in ownedBuildables)
         {
             buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
@@ -107,22 +107,22 @@ public class colonyScript : MonoBehaviour
             {
                 continue;
             }
-            totalIncome.moneyExpenses -= thisBuildableScript.upkeepCosts.moneyExpenses;
-            totalIncome.resourceExpenses -= thisBuildableScript.upkeepCosts.resourceExpenses;
-            totalIncome.populationExpenses -= thisBuildableScript.upkeepCosts.populationExpenses;
+            totalIncome.moneyValue -= thisBuildableScript.upkeepCosts.moneyValue;
+            totalIncome.resourceValue -= thisBuildableScript.upkeepCosts.resourceValue;
+            totalIncome.populationValue -= thisBuildableScript.upkeepCosts.populationValue;
 
         }
         foreach (GameObject tile in allTilesOwned)
         {
             tileInfo thisTileInfo = tile.GetComponent<tileInfo>();
             
-            BuildingStruct totalTileIncome = thisTileInfo.TotalIncome();
-            totalIncome.moneyExpenses += totalTileIncome.moneyExpenses;
-            totalIncome.resourceExpenses += totalTileIncome.resourceExpenses;
-            totalIncome.populationExpenses += totalTileIncome.populationExpenses;
+            TriValueStruct totalTileIncome = thisTileInfo.TotalIncome();
+            totalIncome.moneyValue += totalTileIncome.moneyValue;
+            totalIncome.resourceValue += totalTileIncome.resourceValue;
+            totalIncome.populationValue += totalTileIncome.populationValue;
 
         }
-        Debug.LogWarning("total income is "+totalIncome.moneyExpenses + " " + totalIncome.resourceExpenses+" " + totalIncome.populationExpenses);
+        Debug.LogWarning("total income is "+totalIncome.moneyValue + " " + totalIncome.resourceValue+" " + totalIncome.populationValue);
         return totalIncome;
     }
 /// <summary>

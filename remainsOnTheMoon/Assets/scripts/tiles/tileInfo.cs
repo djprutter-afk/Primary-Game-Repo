@@ -9,7 +9,7 @@ public class tileInfo : MonoBehaviour
     public bool occupid = false;
    
     public float populationGrowthPercent = 1.003f;
-    public List<BuildingStruct> buildingsOnTile = new List<BuildingStruct>();
+    public List<TriValueStruct> buildingsOnTile = new List<TriValueStruct>();
 
 
     public float resource;
@@ -34,7 +34,7 @@ public class tileInfo : MonoBehaviour
 
     }
 
-    public BuildingStruct TotalIncome(bool alsoAdd = false)// this is the formula for determining all products of the tile
+    public TriValueStruct TotalIncome(bool alsoAdd = false)// this is the formula for determining all products of the tile
     {
         ownerColony = transform.parent.gameObject;// update owner cause might change 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
@@ -50,11 +50,11 @@ public class tileInfo : MonoBehaviour
         }
 
 
-        foreach (BuildingStruct building in buildingsOnTile)
+        foreach (TriValueStruct building in buildingsOnTile)
         {
-            moneyGainDollars -= building.moneyExpenses;
-            resourceProduction -= building.resourceExpenses;
-            totalPopGrowth -= building.populationExpenses;
+            moneyGainDollars -= building.moneyValue;
+            resourceProduction -= building.resourceValue;
+            totalPopGrowth -= building.populationValue;
 
         }
 
@@ -66,19 +66,19 @@ public class tileInfo : MonoBehaviour
             {
                 deSettle();
             }
-            ownerColonyScript.resourcesOwned.moneyExpenses += moneyGainDollars;
-            ownerColonyScript.resourcesOwned.resourceExpenses += resourceProduction;
+            ownerColonyScript.resourcesOwned.moneyValue += moneyGainDollars;
+            ownerColonyScript.resourcesOwned.resourceValue += resourceProduction;
 
 
 
         }
         
 
-        BuildingStruct total = new BuildingStruct
+        TriValueStruct total = new TriValueStruct
         {
-            moneyExpenses = moneyGainDollars,
-            resourceExpenses = resourceProduction,
-            populationExpenses = totalPopGrowth
+            moneyValue = moneyGainDollars,
+            resourceValue = resourceProduction,
+            populationValue = totalPopGrowth
 
         };
 
@@ -146,66 +146,66 @@ public class tileInfo : MonoBehaviour
 
 
 [System.Serializable]
-public struct BuildingStruct// poorly named, variables are also poorly named but i dont wanna change it
+public struct TriValueStruct
 {
-    public float moneyExpenses;
-    public float resourceExpenses;
-    public float populationExpenses; // people sacrfice for the gods
+    public float moneyValue;
+    public float resourceValue;
+    public float populationValue; 
     public string buildingName;
-    public BuildingStruct multiply(float multiplier, bool apply = false)
+    public TriValueStruct multiply(float multiplier, bool apply = false)
     {
-         BuildingStruct buildingStruct = new BuildingStruct();
-        buildingStruct.moneyExpenses = moneyExpenses * multiplier;
-        buildingStruct.resourceExpenses = resourceExpenses * multiplier;
-        buildingStruct.populationExpenses = populationExpenses * multiplier;
+         TriValueStruct buildingStruct = new TriValueStruct();
+        buildingStruct.moneyValue = moneyValue * multiplier;
+        buildingStruct.resourceValue = resourceValue * multiplier;
+        buildingStruct.populationValue = populationValue * multiplier;
         if (apply == true)
         {
-            moneyExpenses *= multiplier;
-            resourceExpenses *= multiplier;
-            populationExpenses *= multiplier;
+            moneyValue *= multiplier;
+            resourceValue *= multiplier;
+            populationValue *= multiplier;
         }
         return buildingStruct;
     }
-    public BuildingStruct divide(BuildingStruct divisor, bool apply = false)
+    public TriValueStruct divide(TriValueStruct divisor, bool apply = false)
     {
-         BuildingStruct buildingStruct = new BuildingStruct();
-        buildingStruct.moneyExpenses = moneyExpenses / divisor.moneyExpenses;
-        buildingStruct.resourceExpenses = resourceExpenses / divisor.resourceExpenses;
-        buildingStruct.populationExpenses = populationExpenses / divisor.populationExpenses;
+         TriValueStruct buildingStruct = new TriValueStruct();
+        buildingStruct.moneyValue = moneyValue / divisor.moneyValue;
+        buildingStruct.resourceValue = resourceValue / divisor.resourceValue;
+        buildingStruct.populationValue = populationValue / divisor.populationValue;
         if (apply == true)
         {
-            moneyExpenses /= divisor.moneyExpenses;
-            resourceExpenses /= divisor.resourceExpenses;
-            populationExpenses /= divisor.populationExpenses;
+            moneyValue /= divisor.moneyValue;
+            resourceValue /= divisor.resourceValue;
+            populationValue /= divisor.populationValue;
         }
         return buildingStruct;
     }
-    public BuildingStruct subtract(BuildingStruct subrtract, bool apply = false)
+    public TriValueStruct subtract(TriValueStruct subrtract, bool apply = false)
     {
-        BuildingStruct buildingStruct = new BuildingStruct();
-        buildingStruct.moneyExpenses = moneyExpenses - subrtract.moneyExpenses;
-        buildingStruct.resourceExpenses = resourceExpenses - subrtract.resourceExpenses;
-        buildingStruct.populationExpenses = populationExpenses - subrtract.populationExpenses;
+        TriValueStruct buildingStruct = new TriValueStruct();
+        buildingStruct.moneyValue = moneyValue - subrtract.moneyValue;
+        buildingStruct.resourceValue = resourceValue - subrtract.resourceValue;
+        buildingStruct.populationValue = populationValue - subrtract.populationValue;
         if (apply == true)
         {
-            moneyExpenses -= subrtract.moneyExpenses;
-            resourceExpenses -= subrtract.resourceExpenses;
-            populationExpenses -= subrtract.populationExpenses;
+            moneyValue -= subrtract.moneyValue;
+            resourceValue -= subrtract.resourceValue;
+            populationValue -= subrtract.populationValue;
         }
         return buildingStruct;
         
     }
-    public BuildingStruct addition(BuildingStruct add, bool apply = false)
+    public TriValueStruct addition(TriValueStruct add, bool apply = false)
     {
-        BuildingStruct buildingStruct = new BuildingStruct();
-        buildingStruct.moneyExpenses = moneyExpenses + add.moneyExpenses;
-        buildingStruct.resourceExpenses = resourceExpenses + add.resourceExpenses;
-        buildingStruct.populationExpenses = populationExpenses + add.populationExpenses;
+        TriValueStruct buildingStruct = new TriValueStruct();
+        buildingStruct.moneyValue = moneyValue + add.moneyValue;
+        buildingStruct.resourceValue = resourceValue + add.resourceValue;
+        buildingStruct.populationValue = populationValue + add.populationValue;
         if (apply == true)
         {
-            moneyExpenses += add.moneyExpenses;
-            resourceExpenses += add.resourceExpenses;
-            populationExpenses += add.populationExpenses;
+            moneyValue += add.moneyValue;
+            resourceValue += add.resourceValue;
+            populationValue += add.populationValue;
         }
         return buildingStruct;
         
@@ -216,29 +216,29 @@ public struct BuildingStruct// poorly named, variables are also poorly named but
     /// <param name="firstCost"></param>
     /// <param name="secondCost"></param>
     /// <returns></returns>
-    public static bool comapareCosts(BuildingStruct firstCost,BuildingStruct secondCost = new BuildingStruct(),bool alsoSubtract = false)
+    public static bool comapareCosts(TriValueStruct firstCost,TriValueStruct secondCost = new TriValueStruct(),bool alsoSubtract = false)
     {
        
      
 
-        if (firstCost.moneyExpenses < secondCost.moneyExpenses)
+        if (firstCost.moneyValue < secondCost.moneyValue)
         {
             Debug.LogError("FAILED MONEYWiSe");
             return false;
         }
-         if (firstCost.resourceExpenses < secondCost.resourceExpenses) 
+         if (firstCost.resourceValue < secondCost.resourceValue) 
         {Debug.LogError("FAILED RESOURCEWISe");
             return false;
         }
-        if (firstCost.populationExpenses < secondCost.populationExpenses)
+        if (firstCost.populationValue < secondCost.populationValue)
         {Debug.LogError("FAILED POPWISE");
             return false;
         }
         if(alsoSubtract)
         {
-            firstCost.moneyExpenses -= secondCost.moneyExpenses;
-            firstCost.resourceExpenses -= secondCost.resourceExpenses;
-            firstCost.populationExpenses -= secondCost.populationExpenses;
+            firstCost.moneyValue -= secondCost.moneyValue;
+            firstCost.resourceValue -= secondCost.resourceValue;
+            firstCost.populationValue -= secondCost.populationValue;
             
         }
       

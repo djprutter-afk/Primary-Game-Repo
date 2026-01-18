@@ -28,7 +28,7 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
     int totalColoniesPlaced;
 
     List<colonyScript> allColonieScripts = new List<colonyScript>();
-    public static BuildingStruct avergeResourceAmt;
+    public static TriValueStruct avergeResourceAmt;
 
     
 
@@ -267,7 +267,7 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
     /// </summary>
     void globalAveragesUpdate()
     {
-        BuildingStruct averages = new BuildingStruct();
+        TriValueStruct averages = new TriValueStruct();
         List<GameObject> markForDeath = new List<GameObject>();
         int colonyAmt = allColonieScripts.Count;
         foreach (colonyScript currentColonyScript in allColonieScripts)
@@ -279,16 +279,16 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
 
             }
 
-            averages.moneyExpenses += currentColonyScript.resourcesOwned.moneyExpenses;
-            averages.resourceExpenses += currentColonyScript.resourcesOwned.resourceExpenses;
-            averages.populationExpenses += currentColonyScript.resourcesOwned.populationExpenses;
+            averages.moneyValue += currentColonyScript.resourcesOwned.moneyValue;
+            averages.resourceValue += currentColonyScript.resourcesOwned.resourceValue;
+            averages.populationValue += currentColonyScript.resourcesOwned.populationValue;
 
         }
 
 
-        averages.moneyExpenses /= colonyAmt;
-        averages.resourceExpenses /= colonyAmt;
-        averages.populationExpenses /= colonyAmt;
+        averages.moneyValue /= colonyAmt;
+        averages.resourceValue /= colonyAmt;
+        averages.populationValue /= colonyAmt;
         avergeResourceAmt = averages;
 
     }

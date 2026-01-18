@@ -13,7 +13,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     int ticksToWait =2;
 
     int desiredSize;
-    BuildingStruct desiredIncome;
+    TriValueStruct desiredIncome;
 
     public buildableGameObject desiredBuildable = new buildableGameObject();
     public bool hasFreshDesiredbuildabe = false;
@@ -46,7 +46,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     public HashSet<AgentGoal> goals;
     CountDownTimer statsTimer;
     IGoapPlanner goapPlanner;
-    BuildingStruct emptyStruct = new BuildingStruct();
+    TriValueStruct emptyStruct = new TriValueStruct();
   
 
     
@@ -126,14 +126,14 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
        
         factory.addBeliefs("is feeling secure", () => 
-        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct));
+        TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct));
 
         factory.addBeliefs("is feeling insecure", () => 
-        BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct) == false);
+        TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct) == false);
 
        factory.addBeliefs("has good economy", () => false);
-       factory.addBeliefs("can afford ecoBuildable", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost));
-       factory.addBeliefs("cant afford ecoBuildable", () => BuildingStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost) == false);
+       factory.addBeliefs("can afford ecoBuildable", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost));
+       factory.addBeliefs("cant afford ecoBuildable", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost) == false);
 
        
    
@@ -146,7 +146,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
         
 
-        factory.addBeliefs("can afford new tile", () => BuildingStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
+        factory.addBeliefs("can afford new tile", () => TriValueStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
          factory.addBeliefs("has decided on buildable", () => hasFreshDesiredbuildabe);
         factory.addBeliefs("has space to build", hasSpaceToBuild);
         factory.addBeliefs("has decided on buildable ECO", ()=>hasFreshDesiredbuildabe);

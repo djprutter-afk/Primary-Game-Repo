@@ -11,7 +11,7 @@ public class buildinglistItem : MonoBehaviour
     [SerializeField] GameObject quanitiyTextObject;
 
 
-    public void updateBuldingList(BuildingStruct building, int quanitiy)
+    public void updateBuldingList(TriValueStruct building, int quanitiy)
     {
         
 
@@ -26,9 +26,9 @@ public class buildinglistItem : MonoBehaviour
 
         quantText.text = "x" + quanitiy.ToString();
 
-        moneyText.text = "money " + numericUtils.numberShortener(building.moneyExpenses*quanitiy) + "$";
-        resourceText.text = "resource " + numericUtils.numberShortener(building.resourceExpenses*quanitiy);
-        popText.text = "pop " + numericUtils.numberShortener(building.populationExpenses*quanitiy);
+        moneyText.text = "money " + numericUtils.numberShortener(building.moneyValue*quanitiy) + "$";
+        resourceText.text = "resource " + numericUtils.numberShortener(building.resourceValue*quanitiy);
+        popText.text = "pop " + numericUtils.numberShortener(building.populationValue*quanitiy);
 
 
     }
