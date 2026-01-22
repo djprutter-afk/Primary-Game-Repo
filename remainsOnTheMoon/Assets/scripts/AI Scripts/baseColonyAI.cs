@@ -47,6 +47,31 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     CountDownTimer statsTimer;
     IGoapPlanner goapPlanner;
     TriValueStruct emptyStruct = new TriValueStruct();
+
+    struct otherColonyInfo
+    {
+        public float threatLevel;
+        public colonyScript colony {private get; set;}
+
+        void evaluateThreatLevel()
+        {
+            float totalMilitaryValue =0;
+           foreach(GameObject indivdualBuildable in colony.ownedBuildables)
+            {
+                buildableScript indivdualBuildableScript = indivdualBuildable.GetComponent<buildableScript>();
+                foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in indivdualBuildableScript.purposes)
+            {
+                if (infoStuct.purpose == buildableScript.AIBuildableInfo.buildablePurposes.offensive)
+                {
+                    totalMilitaryValue += infoStuct.strength;
+                   
+
+                }
+
+            }
+            }
+        }
+    }
   
 
     
@@ -66,6 +91,13 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         setupBeliefs();
         setupActions();
         setupGoals();
+
+        desiredIncome = new TriValueStruct
+        {
+            moneyValue = 30,
+            resourceValue = 20,
+            populationValue = 5
+        };
         
         gameManagerScript.GameTick += colonyAiTick;
         
@@ -105,6 +137,18 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
   
     void updateValues()
     {
+        desiredIncome.multiply(1.01f);
+        TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
+        float totalSatifcation = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
+
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] += 0.05f * (1 - totalSatifcation);
+        
+        
+
+        
+        
+
+    
       
 
 
@@ -141,6 +185,13 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         
         factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
         factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
+        
+      //  factory.addBeliefs("is feeling miltarily safe", () => isFeelingMiltarilySafe());
+
+       // bool isFeelingMiltarilySafe()
+        //{
+            
+        //}
 
         factory.addBeliefs("hasnt waited already", () => hasntWaited);// ai can never be satiated
         
@@ -270,6 +321,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withPriority(0.30f)
         .withdesiredEffects(beliefs["has good economy"])
         .Build());
+
+        
        
 
 
@@ -277,10 +330,6 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         .withPriority(1.0f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
-        
-
-       
-        
 
     }
     
