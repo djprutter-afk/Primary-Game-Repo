@@ -3,22 +3,28 @@ using System;
 
 public class startMenuCam : MonoBehaviour
 {
-    public float speed;
-    public float maxRotationSpeed;
-     float xRotation;
- float yRotation=0.5f;
- float zRotation;
-
+   
+    [SerializeField] float maxRotationSpeed = 10;
+    [SerializeField] float timeMultiplier = 0.01f;
     // Update is called once per frame
+    Vector3 rotationNormalized = new Vector3(1,0,0);
+    float timeSinceStart = 0;
     void Update()
     {
-       xRotation += UnityEngine.Random.Range(-1f,1f) * Time.deltaTime *speed;
-       yRotation += UnityEngine.Random.Range(-1f,1f) * Time.deltaTime * speed;
-       zRotation += UnityEngine.Random.Range(-1f,1f) * Time.deltaTime * speed;
+        timeSinceStart += Time.deltaTime;
+
+        float yChange =0.5f- Mathf.PerlinNoise1D(timeSinceStart *timeMultiplier)*0.1f;
+        float xChange = 0.5f-Mathf.PerlinNoise1D(timeSinceStart +500 *timeMultiplier)*0.1f;
+        rotationNormalized += new Vector3(0,xChange,yChange);
         
-        xRotation = System.Math.Clamp(xRotation,-maxRotationSpeed,maxRotationSpeed);
-        yRotation = System.Math.Clamp(yRotation,-maxRotationSpeed,maxRotationSpeed);
-        zRotation = System.Math.Clamp(zRotation,-maxRotationSpeed,maxRotationSpeed);
-        transform.Rotate(xRotation,yRotation,zRotation);
+        rotationNormalized.Normalize();
+        rotationNormalized.x = 1;
+        
+
+
+        transform.Rotate(rotationNormalized * maxRotationSpeed * Time.deltaTime);
+     
     }
+
+
 }

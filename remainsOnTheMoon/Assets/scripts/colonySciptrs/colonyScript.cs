@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using UnityEditor;
-using UnityEditor.Rendering.BuiltIn.ShaderGraph;
 using UnityEngine;
-using UnityEngine.Tilemaps;
+
 
 
 
@@ -84,11 +81,16 @@ public class colonyScript : MonoBehaviour
 
             if (tileHousingPercentage > 1)
             {
-                thisTileInfo.populationGrowthPercent -= 0.01f;//every update this decreases by 1 percent untill population is within margins
+                thisTileInfo.populationGrowthPercent -= 0.01f;
             }
             else if (tileHousingPercentage <= 1)
             {
                 thisTileInfo.populationGrowthPercent = 1.03f;
+
+            }
+            else if (tileHousingPercentage == 1)
+            {
+                thisTileInfo.populationGrowthPercent = 1;
 
             }
 

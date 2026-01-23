@@ -27,7 +27,7 @@ public class gameSetup1 : MonoBehaviour// poorly named should be colonysetup as 
 
     int totalColoniesPlaced;
 
-    List<colonyScript> allColonieScripts = new List<colonyScript>();
+    public List<colonyScript> allColonieScripts = new List<colonyScript>();
     public static TriValueStruct avergeResourceAmt;
 
     

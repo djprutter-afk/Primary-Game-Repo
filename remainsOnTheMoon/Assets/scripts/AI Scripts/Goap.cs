@@ -89,9 +89,7 @@ public interface iActionStrat
     void Stop(){}
     
 }
-/// <summary>
-/// should be removed
-/// </summary>
+
 
 
 

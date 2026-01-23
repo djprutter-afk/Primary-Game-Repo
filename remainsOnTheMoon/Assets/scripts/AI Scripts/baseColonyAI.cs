@@ -48,32 +48,54 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     IGoapPlanner goapPlanner;
     TriValueStruct emptyStruct = new TriValueStruct();
 
+         
     struct otherColonyInfo
     {
         public float threatLevel;
         public colonyScript colony {private get; set;}
 
-        void evaluateThreatLevel()
+        public void evaluateThreatLevel(colonyScript ownerColony,float selfMilitaryStrength)
         {
+           
+             Vector3 GetAveragePosition()
+            {
+                Vector3 averagePosition = Vector3.zero;
+                foreach(GameObject tile in ownerColony.allTilesOwned)
+                {
+                    averagePosition += tile.transform.position;
+                }
+                return averagePosition /= ownerColony.allTilesOwned.Count;
+            }   
+                
+        
+            Vector3 colonyCenter = GetAveragePosition();
             float totalMilitaryValue =0;
+
            foreach(GameObject indivdualBuildable in colony.ownedBuildables)
             {
                 buildableScript indivdualBuildableScript = indivdualBuildable.GetComponent<buildableScript>();
                 foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in indivdualBuildableScript.purposes)
-            {
-                if (infoStuct.purpose == buildableScript.AIBuildableInfo.buildablePurposes.offensive)
                 {
-                    totalMilitaryValue += infoStuct.strength;
-                   
+                   if (infoStuct.purpose == buildableScript.AIBuildableInfo.buildablePurposes.offensive)
+                   {
+                       float distanceToCenter = Vector3.Distance(colonyCenter,indivdualBuildable.transform.position);// entire moon is 2 units across
+                       
+                       totalMilitaryValue += infoStuct.strength * (2-distanceToCenter);
+                      
 
-                }
+                   }
 
+               }
             }
-            }
+            threatLevel = totalMilitaryValue;
+
+
         }
+
+      
     }
   
-
+List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     
 
 
@@ -86,11 +108,13 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     }
     void Start()
     {
+        
         setupBuildableAIValues();
         setupTimers();// useless
         setupBeliefs();
         setupActions();
         setupGoals();
+        setupJudgementSystem();
 
         desiredIncome = new TriValueStruct
         {
@@ -102,6 +126,15 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         gameManagerScript.GameTick += colonyAiTick;
         
     }
+    void setupJudgementSystem()
+    {
+        colonyScript[] allColonies = transform.parent.GetComponent<gameSetup1>().allColonieScripts.ToArray();
+        foreach(colonyScript otherColony in allColonies)
+        {
+            otherColonyInfos.Add(new otherColonyInfo{colony =otherColony});
+        }
+        
+    }
     /// <summary>
     /// assigns how much the ai will care about building this particular buildable, theses values should change as the game progress to reflect how important having that thing at that time is
     /// </summary>
@@ -110,16 +143,16 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
       
         foreach(buildableScript.AIBuildableInfo.buildablePurposes purposes in buildablesPurposesGrouped.buildablePurposeDictonary.Keys)  //assign all purposes the same value just in case
         {
-            valueOfBuildables.Add(purposes,0.1f);
+            valueOfBuildables.Add(purposes,0.01f);
         }
 
         // manually assign values here, they should still drift from theses inital values though
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.antiMissile] = 0.15f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.defensive] = 0.20f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] = 0.30f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion] = 0.60f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = 0.35f;
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = 0.30f;// missiles should be a prevelent threat of the game
+        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.antiMissile] = 0.15f;
+        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.defensive] = 0.20f;
+        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] = 0.30f;
+       // valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion] = 0.60f;
+        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = 0.35f;
+        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = 0.30f;// missiles should be a prevelent threat of the game
 
     }
 
@@ -137,25 +170,53 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
   
     void updateValues()
     {
-        desiredIncome.multiply(1.01f);
+        desiredIncome.multiply(1.003f);
         TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
-        float totalSatifcation = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
+        float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
 
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] += 0.05f * (1 - totalSatifcation);
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] += 0.05f * (1 - totalSatisfaction *2);
+   Vector3 GetAveragePosition()
+            {
+                Vector3 averagePosition = Vector3.zero;
+                foreach(GameObject tile in thisColonyScript.allTilesOwned)
+                {
+                    averagePosition += tile.transform.position;
+                }
+                return averagePosition /= thisColonyScript.allTilesOwned.Count;
+            }   
+
+        Vector3 colonyCenter = GetAveragePosition();
+         float totalMilitaryOfSelf = 0f;
+            foreach(GameObject indivdualBuildable in thisColonyScript.ownedBuildables)
+            {
+                 buildableScript indivdualBuildableScript = indivdualBuildable.GetComponent<buildableScript>();
+                foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in indivdualBuildableScript.purposes)
+                {
+                   if (infoStuct.purpose == buildableScript.AIBuildableInfo.buildablePurposes.offensive)
+                   {
+                       float distanceToCenter = Vector3.Distance(colonyCenter,indivdualBuildable.transform.position);// entire moon is 2 units across
+                       
+                       totalMilitaryOfSelf += infoStuct.strength * (2-distanceToCenter);
+                      
+
+                   }
+
+               }
+            }
+        float totalFear = 0f;
+        foreach(var colonyInfo in otherColonyInfos)
+        {
+            colonyInfo.evaluateThreatLevel(thisColonyScript,totalMilitaryOfSelf);
+            totalFear+= colonyInfo.threatLevel;
+        }
+        
+
+        
+        
         
         
 
         
-        
-
-    
-      
-
-
-
-
-
-
 
     }
     
@@ -175,7 +236,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
         factory.addBeliefs("is feeling insecure", () => 
         TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct) == false);
 
-       factory.addBeliefs("has good economy", () => false);
+       factory.addBeliefs("has good economy", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredIncome));
        factory.addBeliefs("can afford ecoBuildable", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost));
        factory.addBeliefs("cant afford ecoBuildable", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost) == false);
 
