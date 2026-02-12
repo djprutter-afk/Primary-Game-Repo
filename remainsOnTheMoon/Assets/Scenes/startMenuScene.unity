@@ -1134,7 +1134,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0000039963065, y: 0.0006542111}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &770058730
@@ -1166,8 +1166,8 @@ MonoBehaviour:
   m_Padding:
     m_Left: 50
     m_Right: 0
-    m_Top: 23
-    m_Bottom: -9
+    m_Top: 15
+    m_Bottom: 3
   m_ChildAlignment: 0
   m_Spacing: 286.2
   m_ChildForceExpandWidth: 1
@@ -1778,8 +1778,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1575136104}
   m_HandleRect: {fileID: 1575136103}
   m_Direction: 2
-  m_Value: 0.9999997
-  m_Size: 0.15533271
+  m_Value: 1
+  m_Size: 0.20759533
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7690,7 +7690,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 638.6, y: 1529.6}
+  m_SizeDelta: {x: 638.6, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1560034805
 MonoBehaviour:
@@ -7720,34 +7720,19 @@ MonoBehaviour:
     that shows information about this particular object. By shift clicking you select
     multiple objects, this may be required to do some actions, such as clicking on
     a buildable and then shift clicking on a tile then clicking on the Move action
-    in the top left will cause it to pathfind to that. \r\n\r\nTiles\r\n\r\nBy clicking
+    in the top left will cause it to pathfind to that. \r\n\r\nTiles\r\nTo start
+    you can move your camera by clicking anywhere on screen then dragging\r\nBy clicking
     on a tile using the left mouse button, opens an in space menu, this menu is divided
     into 3 regions. On the left contains a submenu that shows all buildings on this
     tile and their respective upkeep costs, the ones with negative values actually
     increase the tile's income. The middle menus show the total income of tile, this
     is how much the population of the tile makes on its own, minus the upkeep costs
     of all buildings. Finally the menu on the right shows what potential buildable
-    you can make. They are organised into categories such as economy or basics.\r\n\r\nRetrospective:\r\nThis
-    overbloated mess of a project is possibly the most beautiful thing I will ever
-    make. Though I  will admit the AI sucks, while it's able to improve its economy
-    it does little other than that. It's unable to do literally anything else. And
-    even then, when it's doing a small, stupid, little, thinking it gets an error
-    and completely fails and does nothing. Though the entire system is impressive
-    it is dramatically overcomplicated for what I needed. In reality instead of a
-    crazy complex and intricate goap AI system I needed a simple boolean check like:
-    if the economy is bad then don't build or expand, etc. Most other problems I
-    faced with this project are completely miniscule compared to the AI system, I
-    think I spent nearly 60% percent of my time JUST working on it and attempting
-    to make it \"functional\". All the time that I could have spent working on other
-    systems or making the game actually fun was funneled into AI. Despite all that
-    I'm still immensely proud of what I achieved. When I started this project the
-    day after I finished grade 11 I had NO hope of even dreaming about accomplishing
-    what I had done here and yet here we are! I even tried to use as minimal help
-    from large language model Ai's as I could, though forbidden fruit takes the sweetest
-    and I took a couple nibbles, I won't lie.\r\n\r\nI honestly might keep trying
-    to completely finish this game in the future, though I want to take a bit of
-    a break on this project because I started getting bored making it and that's
-    no fun. If you wanna see any progress on this project the github repo is:\r\nhttps://github.com/djprutter-afk/Primary-Game-Repo\r\n(click
+    you can make. They are organised into categories such as economy or basics.\r\n\r\n\r\nI
+    honestly might keep trying to completely finish this game in the future, though
+    I want to take a bit of a break on this project because I started getting bored
+    making it and that's no fun. If you wanna see any progress on this project the
+    github repo is:\r\nhttps://github.com/djprutter-afk/Primary-Game-Repo\r\n(click
     the button below to copy to clipboard)\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

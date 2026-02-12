@@ -62,7 +62,7 @@ public class tileInfo : MonoBehaviour
         {
             
             population += totalPopGrowth;
-            if(population <= 0 || population == null)// a state cannot cannot express it's authority without people
+            if(population < 1 || population == null)// a state cannot cannot express it's authority without people
             {
                 deSettle();
             }
@@ -93,6 +93,7 @@ public class tileInfo : MonoBehaviour
  
     void deSettle()
     {
+        population = 0;
         tileVisuals TileVisual = gameObject.GetComponent<tileVisuals>();
         TileVisual.setupTileVisuals(theMoon.moonMaterial);
         transform.SetParent(theMoon.transform);

@@ -94,7 +94,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
       
     }
-  
+
 List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     
 
@@ -115,6 +115,9 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         setupActions();
         setupGoals();
         setupJudgementSystem();
+        updateValues();
+   
+    
 
         desiredIncome = new TriValueStruct
         {
@@ -167,6 +170,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         statsTimer.Start();
 
     }
+    
   
     void updateValues()
     {
@@ -175,15 +179,15 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
 
         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] += 0.05f * (1 - totalSatisfaction *2);
-   Vector3 GetAveragePosition()
+        Vector3 GetAveragePosition()
+        {
+            Vector3 averagePosition = Vector3.zero;
+            foreach(GameObject tile in thisColonyScript.allTilesOwned)
             {
-                Vector3 averagePosition = Vector3.zero;
-                foreach(GameObject tile in thisColonyScript.allTilesOwned)
-                {
-                    averagePosition += tile.transform.position;
-                }
-                return averagePosition /= thisColonyScript.allTilesOwned.Count;
-            }   
+                averagePosition += tile.transform.position;
+            }
+            return averagePosition /= thisColonyScript.allTilesOwned.Count;
+        }   
 
         Vector3 colonyCenter = GetAveragePosition();
          float totalMilitaryOfSelf = 0f;
@@ -209,16 +213,13 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
             colonyInfo.evaluateThreatLevel(thisColonyScript,totalMilitaryOfSelf);
             totalFear+= colonyInfo.threatLevel;
         }
-        
+        totalFear /= otherColonyInfos.Count;
 
-        
-        
-        
-        
-
-        
-
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
+      valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion]  = 3- thisColonyScript.allTilesOwned.Count/5f;
+ 
     }
+    
     
   
     public bool hasntWaited = true;
