@@ -635,50 +635,51 @@ public class chooseBuildableStrat : iActionStrat
 
     buildableGameObject bestBuildableToBuild()
     {
-        bool isGoingMoneyBroke = colonyAI.thisColonyScript.resourcesOwned.moneyValue + colonyAI.thisColonyScript.totalIncome().moneyValue * 5 < 0;
-        bool isGoingResourcebroke = colonyAI.thisColonyScript.resourcesOwned.resourceValue + colonyAI.thisColonyScript.totalIncome().resourceValue * 5 < 0;
-        bool isGoingPeopleBroke = colonyAI.thisColonyScript.resourcesOwned.populationValue + colonyAI.thisColonyScript.totalIncome().populationValue * 5 < 0;
+        colonyScript colonyScript = colonyAI.thisColonyScript;
+        KeyValuePair<buildableGameObject,float>[] buildablesRanked =new KeyValuePair<buildableGameObject,float>[gameManagerScript.allBuildables.Count];
+        TriValueStruct colonyIncome = colonyScript.totalIncome();
+
+        foreach(buildableGameObject buildableGameObject in gameManagerScript.allBuildables)
+        {
+
+            buildableScript buildableScript = buildableGameObject.buildableObject.GetComponent<buildableScript>();
+
+
+            
+            
+        }
+        return null;/// FIX DIS PLS PLS PLS
         
             
-        
-       var valuesOrdered =  colonyAI.valueOfBuildables.OrderByDescending(x=> x.Value).ToArray();
-
-        for(int i = 0; i < valuesOrdered.Length;i++)// for every value
-        {
-           
-            buildableGameObject[] allOfACategory = colonyAI.getTypeOfBuildableObject(valuesOrdered[i].Key);
-            for(int k = 0; k < allOfACategory.Length;k++)
-            {
-               
-                buildableScript currebuildablescript = allOfACategory[k].buildableObject.GetComponent<buildableScript>();
-                TriValueStruct upkeepcosts =  currebuildablescript.upkeepCosts;
-                 
-                if(isGoingMoneyBroke == true && upkeepcosts.moneyValue >0)
-                {
-                   
-                    continue;
-                }
-                if(isGoingResourcebroke == true && upkeepcosts.resourceValue >0)
-                {
-                    continue;
-                }
-                if(isGoingPeopleBroke == true && upkeepcosts.populationValue >0)
-                {
-                    continue;
-                }
-                Debug.Log("IM SETTING FRESH BUILDABLE TO TRUE");
-                
-                colonyAI.hasFreshDesiredbuildabe = true;
-
-
-                return allOfACategory[k];
-            }
-
-        }
-         colonyAI.hasFreshDesiredbuildabe = false;
-   
-                
-        return null;
+       
+     
+    }
+  
+    float totalEvaluationOfBuildable(buildableGameObject buildableGameObject,TriValueStruct colonyIncome)
+    {
+       
+        buildableScript buildable = buildableGameObject.buildableObject.GetComponent<buildableScript>();
+        TriValueStruct buildableUpkeep = buildable.upkeepCosts;
+        float totalBurden = costEvaluation(buildableUpkeep,colonyIncome) + costEvaluation(buildableGameObject.buildCost,colonyIncome)/2; // buildableupkeep should be weighted more cause ai will have to live with it longer
+        return totalBurden;
+    }
+    
+    float costEvaluation(TriValueStruct changeAmount,TriValueStruct initalValue)
+    {
+       
+       
+       
+       float doubleNegativeBurden = -2;
+       float dNBMoney = 1;
+       if(changeAmount.moneyValue<0 && initalValue.moneyValue<0){dNBMoney = doubleNegativeBurden;}
+       float dNBResource = 1;
+       if(changeAmount.resourceValue<0 && initalValue.resourceValue<0){dNBResource = doubleNegativeBurden;}
+       float dNBPopulation =1;
+       if(changeAmount.populationValue<0 && initalValue.populationValue<0){dNBPopulation = doubleNegativeBurden;}
+       TriValueStruct incomeChange = initalValue.subtract(changeAmount);
+       TriValueStruct changePercent = incomeChange.divide(initalValue);
+       return (1- changePercent.moneyValue) *dNBMoney + (1-changePercent.resourceValue)*dNBResource + (1-changePercent.populationValue)*dNBPopulation;
+      
     }
     
 

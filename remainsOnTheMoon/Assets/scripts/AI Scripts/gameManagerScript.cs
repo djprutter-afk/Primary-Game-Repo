@@ -130,10 +130,18 @@ public class gameManagerScript : MonoBehaviour
       
     }
 
-
+    public static List<buildableGameObject> allBuildables = new List<buildableGameObject>();
     void Start()
     {
         allCats = allCatagories;
+        foreach(buildingCatagory buildingCatagory in allCatagories)
+        {
+            foreach(buildableGameObject buildableGameObject in buildingCatagory.arrayOfBuildings)
+            {
+                allBuildables.Add(buildableGameObject);
+                
+            }
+        }
         buildablesPurposesGrouped newbuildablesPurposesGrouped = new buildablesPurposesGrouped();
         newbuildablesPurposesGrouped.skbidid();
         Debug.LogWarning(newbuildablesPurposesGrouped.purposesDictonary.Count + "see this please");

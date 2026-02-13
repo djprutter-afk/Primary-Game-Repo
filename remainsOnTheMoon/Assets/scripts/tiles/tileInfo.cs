@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -207,6 +209,50 @@ public struct TriValueStruct
             populationValue += add.populationValue;
         }
         return buildingStruct;
+        
+    }
+    public TriValueStruct normalize()
+    {
+        float[] valuesOfStruct = new float[3]{moneyValue,resourceValue,populationValue};
+        
+        float minValue = float.MaxValue;
+        float maxValue = float.MinValue;
+        foreach(float value in valuesOfStruct)
+        {
+            if(value > maxValue)
+            {
+                maxValue = value;
+                
+            }
+            if(value < minValue)
+            {
+                minValue = value;
+                
+            }
+            
+            
+        }
+
+        if(minValue == maxValue)
+        {
+            return this;
+        }
+         
+        TriValueStruct normalizedTriValue = new TriValueStruct();
+        
+        float normalValue (float value) 
+        {
+           return (value - minValue)/(maxValue - minValue);
+
+        }
+        normalizedTriValue.moneyValue =normalValue(moneyValue);
+        normalizedTriValue.resourceValue = normalValue(resourceValue);
+        normalizedTriValue.populationValue = normalValue(populationValue);
+            
+        
+        
+     
+        return normalizedTriValue;
         
     }
     /// <summary>
