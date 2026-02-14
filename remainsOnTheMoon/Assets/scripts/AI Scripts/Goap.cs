@@ -7,6 +7,9 @@ using NUnit.Framework;
 using System.ComponentModel;
 using UnityEngine.Tilemaps;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.Mathematics;
+using Mono.Cecil;
 //this is all made with tutorial: https://www.youtube.com/watch?v=T_sBYgP7_2k&t=613s 
 public class beliefFactory
 {
@@ -636,31 +639,52 @@ public class chooseBuildableStrat : iActionStrat
     buildableGameObject bestBuildableToBuild()
     {
         colonyScript colonyScript = colonyAI.thisColonyScript;
-        KeyValuePair<buildableGameObject,float>[] buildablesRanked =new KeyValuePair<buildableGameObject,float>[gameManagerScript.allBuildables.Count];
+       List<KeyValuePair<buildableGameObject,float>> potentialBuildables =new List<KeyValuePair<buildableGameObject,float>>();
         TriValueStruct colonyIncome = colonyScript.totalIncome();
 
         foreach(buildableGameObject buildableGameObject in gameManagerScript.allBuildables)
         {
 
             buildableScript buildableScript = buildableGameObject.buildableObject.GetComponent<buildableScript>();
+            float totalValue = 0;
+            for(int i = 0; i < buildableScript.purposes.Length;i++)
+            {
+                totalValue += evaluatePurposeToColony(buildableScript.purposes[i],colonyAI);
+                
+            }
+            totalValue-= totalBurdenOfBuildable(buildableGameObject,colonyIncome);
+            KeyValuePair<buildableGameObject,float> kvp = new  KeyValuePair<buildableGameObject,float>(buildableGameObject,totalValue);
+            
+            potentialBuildables.Add(kvp);
 
+           
+
+           return null; //FINSIH THIS LATER, PICK FROM PONTENTIALBUILDALBES BUT ADD VARIABLITIY;
 
             
             
-        }
-        return null;/// FIX DIS PLS PLS PLS
+        } 
+        KeyValuePair<buildableGameObject,float>[] rankedPotentialBuildables = new KeyValuePair<buildableGameObject,float>[potentialBuildables.Count];
+        rankedPotentialBuildables = potentialBuildables.OrderByDescending(x => x.Value).ToArray();
+       
+        float randomReal = UnityEngine.Random.Range(0,1);
+
+        
         
             
        
      
     }
-  
-    float totalEvaluationOfBuildable(buildableGameObject buildableGameObject,TriValueStruct colonyIncome)
+    float evaluatePurposeToColony(buildableScript.AIBuildableInfo.biInfoStuct purpose, baseColonyAI colonyAI)
+    {
+        return colonyAI.valueOfBuildables[purpose.purpose] * purpose.strength;
+    }  
+    float totalBurdenOfBuildable(buildableGameObject buildableGameObject,TriValueStruct colonyIncome)
     {
        
         buildableScript buildable = buildableGameObject.buildableObject.GetComponent<buildableScript>();
         TriValueStruct buildableUpkeep = buildable.upkeepCosts;
-        float totalBurden = costEvaluation(buildableUpkeep,colonyIncome) + costEvaluation(buildableGameObject.buildCost,colonyIncome)/2; // buildableupkeep should be weighted more cause ai will have to live with it longer
+        float totalBurden = costEvaluation(buildableUpkeep,colonyIncome) + costEvaluation(buildableGameObject.buildCost,colonyIncome)/2.5f; // buildableupkeep should be weighted more cause ai will have to live with it longer
         return totalBurden;
     }
     
