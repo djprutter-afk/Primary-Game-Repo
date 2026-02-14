@@ -656,18 +656,13 @@ public class chooseBuildableStrat : iActionStrat
             KeyValuePair<buildableGameObject,float> kvp = new  KeyValuePair<buildableGameObject,float>(buildableGameObject,totalValue);
             
             potentialBuildables.Add(kvp);
-
-           
-
-           return null; //FINSIH THIS LATER, PICK FROM PONTENTIALBUILDALBES BUT ADD VARIABLITIY;
-
-            
-            
         } 
         KeyValuePair<buildableGameObject,float>[] rankedPotentialBuildables = new KeyValuePair<buildableGameObject,float>[potentialBuildables.Count];
         rankedPotentialBuildables = potentialBuildables.OrderByDescending(x => x.Value).ToArray();
        
         float randomReal = UnityEngine.Random.Range(0,1);
+
+        return null;
 
         
         
