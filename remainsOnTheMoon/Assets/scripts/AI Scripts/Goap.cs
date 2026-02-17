@@ -653,14 +653,37 @@ public class chooseBuildableStrat : iActionStrat
                 
             }
             totalValue-= totalBurdenOfBuildable(buildableGameObject,colonyIncome);
+
+            totalValue = Mathf.Max(0.01f,totalValue);
             KeyValuePair<buildableGameObject,float> kvp = new  KeyValuePair<buildableGameObject,float>(buildableGameObject,totalValue);
             
             potentialBuildables.Add(kvp);
         } 
-        KeyValuePair<buildableGameObject,float>[] rankedPotentialBuildables = new KeyValuePair<buildableGameObject,float>[potentialBuildables.Count];
-        rankedPotentialBuildables = potentialBuildables.OrderByDescending(x => x.Value).ToArray();
+        float total = 0f;
+        foreach (var kvp in potentialBuildables)
+        {
+              total += kvp.Value;
+
+        }
+          
+        float roll = UnityEngine.Random.Range(0f, total);
+
+        float cumulative = 0f;
+        foreach (var kvp in potentialBuildables)
+        {
+            cumulative += kvp.Value;
+            if (roll <= cumulative)
+            {
+                 return kvp.Key;
+            }
+               
+        }
+
+    
+      
        
-        float randomReal = UnityEngine.Random.Range(0,1);
+        
+
 
         return null;
 
@@ -696,7 +719,9 @@ public class chooseBuildableStrat : iActionStrat
        float dNBPopulation =1;
        if(changeAmount.populationValue<0 && initalValue.populationValue<0){dNBPopulation = doubleNegativeBurden;}
        TriValueStruct incomeChange = initalValue.subtract(changeAmount);
-       TriValueStruct changePercent = incomeChange.divide(initalValue);
+       TriValueStruct safeInitial = initalValue.addition(TriValueStruct.one.multiply(0.01f));
+
+       TriValueStruct changePercent = incomeChange.divide(safeInitial);
        return (1- changePercent.moneyValue) *dNBMoney + (1-changePercent.resourceValue)*dNBResource + (1-changePercent.populationValue)*dNBPopulation;
       
     }

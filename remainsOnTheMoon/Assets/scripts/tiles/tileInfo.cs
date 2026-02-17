@@ -255,6 +255,22 @@ public struct TriValueStruct
         return normalizedTriValue;
         
     }
+    public static TriValueStruct one = new TriValueStruct
+    {
+        moneyValue = 1,
+        resourceValue = 1,
+        populationValue = 1
+        
+    };
+     public static TriValueStruct zero = new TriValueStruct
+    {
+        moneyValue = 0,
+        resourceValue = 0,
+        populationValue = 0
+        
+    };
+    
+    
     /// <summary>
     /// if firstcost is greater in every way than secondcost then true, elsewise false :()
     /// </summary>
