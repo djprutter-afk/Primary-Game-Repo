@@ -119,12 +119,6 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
    
     
 
-        desiredIncome = new TriValueStruct
-        {
-            moneyValue = 30,
-            resourceValue = 20,
-            populationValue = 5
-        };
         
         gameManagerScript.GameTick += colonyAiTick;
         
@@ -174,7 +168,14 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
   
     void updateValues()
     {
-        desiredIncome.multiply(1.003f);
+        updateBuildingDesires();
+    
+ 
+    }
+
+    void updateBuildingDesires()
+    {
+            desiredIncome.multiply(1.003f);
         TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
         float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
 
@@ -217,7 +218,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
       valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion]  = 3- thisColonyScript.allTilesOwned.Count/5f;
- 
+
     }
     
     
