@@ -10,9 +10,7 @@ using Unity.Collections;
 /// </summary>
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
-    int ticksToWait =2;
-
-    int desiredSize;
+   public buildableScript.AIBuildableInfo.buildablePurposes[] desiredPurposesOfBuildable;
     TriValueStruct desiredIncome;
 
     public buildableGameObject desiredBuildable = new buildableGameObject();
@@ -268,8 +266,8 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
 
         
-        
-        
+        //globally used beliefs
+        ///////////////////////////////////////////////////////////////////
         
 
         actions.Add(new agentAction.Builder("make space")
@@ -294,7 +292,12 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["satisfied with buildables"])
         .Build());
+
+        ////////////////////////////////////////////////////////////////////////
       
+
+        //purpose specific actions
+        ////////////////////////////////////////////////////////////////////////
 
        actions.Add(new agentAction.Builder("settle new land")
         .WithStrat(new massUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction))
@@ -320,12 +323,12 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
 
         
-        goals.Add(new AgentGoal.Builder("make more buildables")
+        goals.Add(new AgentGoal.Builder("military pressure")
         .withPriority(0.25f)
         .withdesiredEffects(beliefs["satisfied with buildables"])
         .Build());
 
-        goals.Add(new AgentGoal.Builder("improve economy")
+        goals.Add(new AgentGoal.Builder("economic pressure")
         .withPriority(0.30f)
         .withdesiredEffects(beliefs["has good economy"])
         .Build());
@@ -334,7 +337,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
        
 
 
-        goals.Add(new AgentGoal.Builder("expand")
+        goals.Add(new AgentGoal.Builder("expandsion pressure")
         .withPriority(1.0f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());

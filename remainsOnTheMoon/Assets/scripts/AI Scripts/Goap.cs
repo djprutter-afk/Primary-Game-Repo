@@ -578,6 +578,8 @@ public class chooseBuildableStrat : iActionStrat
 
     buildableGameObject bestBuildableToBuild()
     {
+        buildableScript.AIBuildableInfo.buildablePurposes[] purposeWanted = colonyAI.desiredPurposesOfBuildable;
+
         colonyScript colonyScript = colonyAI.thisColonyScript;
        List<KeyValuePair<buildableGameObject,float>> potentialBuildables =new List<KeyValuePair<buildableGameObject,float>>();
         TriValueStruct colonyIncome = colonyScript.totalIncome();
@@ -587,17 +589,25 @@ public class chooseBuildableStrat : iActionStrat
 
             buildableScript buildableScript = buildableGameObject.buildableObject.GetComponent<buildableScript>();
             float totalValue = 0;
+            bool containsDesiredPurpose = false;
             for(int i = 0; i < buildableScript.purposes.Length;i++)
             {
                 totalValue += evaluatePurposeToColony(buildableScript.purposes[i],colonyAI);
+                if(purposeWanted.Contains(buildableScript.purposes[i].purpose)==true)
+                {
+                    containsDesiredPurpose = true;
+                }
                 
             }
             totalValue-= totalBurdenOfBuildable(buildableGameObject,colonyIncome);
 
             totalValue = Mathf.Max(0.01f,totalValue);
             KeyValuePair<buildableGameObject,float> kvp = new  KeyValuePair<buildableGameObject,float>(buildableGameObject,totalValue);
+            if(containsDesiredPurpose == true || purposeWanted.Length <=0)
+            {
+                potentialBuildables.Add(kvp);
+            }
             
-            potentialBuildables.Add(kvp);
         } 
         float total = 0f;
         foreach (var kvp in potentialBuildables)
@@ -648,14 +658,14 @@ public class chooseBuildableStrat : iActionStrat
     
     float costEvaluation(TriValueStruct changeAmount,TriValueStruct initalValue)
     {
-       
-       
-       
        float doubleNegativeBurden = -2;
+       
        float dNBMoney = 1;
        if(changeAmount.moneyValue<0 && initalValue.moneyValue<0){dNBMoney = doubleNegativeBurden;}
+
        float dNBResource = 1;
        if(changeAmount.resourceValue<0 && initalValue.resourceValue<0){dNBResource = doubleNegativeBurden;}
+
        float dNBPopulation =1;
        if(changeAmount.populationValue<0 && initalValue.populationValue<0){dNBPopulation = doubleNegativeBurden;}
        TriValueStruct incomeChange = initalValue.subtract(changeAmount);
