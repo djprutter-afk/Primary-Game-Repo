@@ -179,7 +179,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
         float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
 
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] += 0.05f * (1 - totalSatisfaction *2);
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] +=  (1 - totalSatisfaction *2);
         Vector3 GetAveragePosition()
         {
             Vector3 averagePosition = Vector3.zero;
@@ -215,6 +215,8 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
             totalFear+= colonyInfo.threatLevel;
         }
         totalFear /= otherColonyInfos.Count;
+
+         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
 
         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
       valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion]  = 3- thisColonyScript.allTilesOwned.Count/5f;
