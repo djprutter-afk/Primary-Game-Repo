@@ -97,67 +97,7 @@ public interface iActionStrat
 
 
 
-public class chooseBuildableecoStrat : iActionStrat
-{
 
-    
-    baseColonyAI theAi;
-
-    public bool canPerform => !complete;
-    bool hasDecided = false;
-    public bool complete => hasDecided;
-    public chooseBuildableecoStrat(baseColonyAI leAI)
-    {
-        theAi = leAI;
-        
-    }
-    public void Start()
-    {
-        buildableGameObject[] allOfACategory = theAi.getTypeOfBuildableObject(buildableScript.AIBuildableInfo.buildablePurposes.economy);
-        buildableGameObject candidate = new();
-        float candidateGoodness = -9999999999999;
-       TriValueStruct income = theAi.thisColonyScript.totalIncome();
-       
-        foreach(buildableGameObject buildableEco in allOfACategory)
-        {
-           // BuildingStruct buildeficit = theAi.thisColonyScript.resourcesOwned.subtract(buildableEco.buildCost.multiply(5));
-           // if(BuildingStruct.comapareCosts(buildeficit))
-            //{
-                //continue;
-                
-            //}
-            buildableScript buildable = buildableEco.buildableObject.GetComponent<buildableScript>();
-            TriValueStruct builableincome = buildable.upkeepCosts;
-            
-            TriValueStruct incomeChange = income.subtract(builableincome);
-            TriValueStruct changePercent = incomeChange.divide(income);
-            float goodness = (1- changePercent.moneyValue) + (1-changePercent.resourceValue) + (1-changePercent.populationValue);
-            Debug.Log("the goodness of buildabe is: " + goodness + " and buildable name is: " +buildable.name);
-            if(goodness >= candidateGoodness)
-            {
-                candidate = buildableEco;
-                candidateGoodness = goodness;
-            }
-            
-        }
-        if(candidate == null)
-        {
-            theAi.desiredBuildable =null;
-            theAi.hasFreshDesiredbuildabe = false;
-            hasDecided = true;
-            return;
-        }
-        
-        theAi.desiredBuildable =candidate;
-        theAi.hasFreshDesiredbuildabe = true;
-        hasDecided = true;
-        
-    }
-
-
-
-
-}
 
 
 

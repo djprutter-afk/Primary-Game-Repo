@@ -231,39 +231,11 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
         factory.addBeliefs("Nothing", () => false);
 
-       
-        factory.addBeliefs("is feeling secure", () => 
-        TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct));
-
-        factory.addBeliefs("is feeling insecure", () => 
-        TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned.addition(thisColonyScript.totalIncome().multiply(15)),emptyStruct) == false);
-
-       factory.addBeliefs("has good economy", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredIncome));
-       factory.addBeliefs("can afford ecoBuildable", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost));
-       factory.addBeliefs("cant afford ecoBuildable", () => TriValueStruct.comapareCosts(thisColonyScript.resourcesOwned,desiredBuildable.buildCost) == false);
-
-       
+  
    
-       factory.addBeliefs("has Settlers", () => getTypeOfBuildableOwned(buildableScript.AIBuildableInfo.buildablePurposes.expansion).Length > 0);
-        
-        factory.addBeliefs("satisfied with buildables", () => false); // ai can never be satiated
-        factory.addBeliefs("satisfied with size", () => false);// ai can never be satiated
-        
-      //  factory.addBeliefs("is feeling miltarily safe", () => isFeelingMiltarilySafe());
-
-       // bool isFeelingMiltarilySafe()
-        //{
-            
-        //}
-
-        factory.addBeliefs("hasnt waited already", () => hasntWaited);// ai can never be satiated
-        
-        
-
-        factory.addBeliefs("can afford new tile", () => TriValueStruct.comapareCosts(thisColonyScript.totalIncome(),emptyStruct));
-         factory.addBeliefs("has decided on buildable", () => hasFreshDesiredbuildabe);
+       
         factory.addBeliefs("has space to build", hasSpaceToBuild);
-        factory.addBeliefs("has decided on buildable ECO", ()=>hasFreshDesiredbuildabe);
+     
 
         bool hasSpaceToBuild()
         {
@@ -314,39 +286,13 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         .AddEffect(beliefs["has decided on buildable"])
         .Build());
        
-        actions.Add(new agentAction.Builder("do nothing")
-        .WithStrat(new waitTickStrat(2))
-        .AddEffect(beliefs["Nothing"])
-        .Build());
-       
-
         actions.Add(new agentAction.Builder("buildBuildable")
         .WithStrat(new buildStrat(gameObject,this))
         .addPreCondition(beliefs["has decided on buildable"])
         .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["satisfied with buildables"])
         .Build());
-        
-        actions.Add(new agentAction.Builder("decide Buildable ECO")
-        .WithStrat(new chooseBuildableecoStrat(this))
-        .addPreCondition(beliefs["is feeling insecure"])
-        .AddEffect(beliefs["has decided on buildable ECO"])
-        .Build());
-
-        actions.Add(new agentAction.Builder("buildBuildableECO")
-        .WithStrat(new buildStrat(gameObject,this))
-        .addPreCondition(beliefs["has decided on buildable ECO"])
-        .addPreCondition(beliefs["has space to build"])
-        .addPreCondition(beliefs["can afford ecoBuildable"])
-        .AddEffect(beliefs["has good economy"])
-        .Build());
-         actions.Add(new agentAction.Builder("wait to afford eco buildable")
-        .WithStrat(new decideTimeTowait(this))
-        .addPreCondition(beliefs["hasnt waited already"])
-        .addPreCondition(beliefs["has decided on buildable ECO"])
-        .addPreCondition(beliefs["cant afford ecoBuildable"])
-        .AddEffect(beliefs["can afford ecoBuildable"])
-        .Build());
+      
 
        actions.Add(new agentAction.Builder("settle new land")
         .WithStrat(new massUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction))
@@ -370,10 +316,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         goals = new HashSet<AgentGoal>();
         
 
-        goals.Add(new AgentGoal.Builder("do nothing")
-        .withPriority(0.1f)
-        .withdesiredEffects(beliefs["Nothing"])
-        .Build());
+
         
         goals.Add(new AgentGoal.Builder("make more buildables")
         .withPriority(0.25f)
@@ -389,7 +332,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
        
 
 
-        goals.Add(new AgentGoal.Builder("settle land")
+        goals.Add(new AgentGoal.Builder("expand")
         .withPriority(1.0f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());
