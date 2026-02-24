@@ -349,12 +349,12 @@ buildableScript.buildableActions actionToUse;
     public void Start()
     {
         float dedicationAmount = 0.1f; // the percentage of buildables of the purpose defined above of that the ai dedicates to this action. 0 means none, 1 means all
-        float deciationStrengthCalc () => colonyAI.valueOfBuildables[buildablePurposeNeeded] * dedicationAmount;
+        void  deciationStrengthCalc () => dedicationAmount = colonyAI.valueOfBuildables[buildablePurposeNeeded] * dedicationAmount;
         switch (buildablePurposeNeeded)
         {
             case buildableScript.AIBuildableInfo.buildablePurposes.expansion:
-      
-
+                 
+                
             break;
 
             case buildableScript.AIBuildableInfo.buildablePurposes.offensive:
