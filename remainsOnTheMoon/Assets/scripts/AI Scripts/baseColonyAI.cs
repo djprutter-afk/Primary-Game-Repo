@@ -300,7 +300,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         ////////////////////////////////////////////////////////////////////////
 
        actions.Add(new agentAction.Builder("settle new land")
-        .WithStrat(new massUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction))
+        .WithStrat(new buildableUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction))
         .AddEffect(beliefs["satisfied with size"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());

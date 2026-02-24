@@ -10,6 +10,7 @@ using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using Mono.Cecil;
+using UnityEngine.EventSystems;
 //this is all made with tutorial: https://www.youtube.com/watch?v=T_sBYgP7_2k&t=613s 
 public class beliefFactory
 {
@@ -326,91 +327,57 @@ public class buildStrat : iActionStrat
         
     }
 }
-public class massUseStrat : iActionStrat
+
+
+
+public class buildableUseStrat : iActionStrat// this suck but i dont think this will work in anyway, theses strats are initalized when COLONY start so there will never be a good way to feed info into it
 {
     bool finishedAction = false;
     public bool canPerform => !complete;
     public bool complete => finishedAction;
-    buildableScript.AIBuildableInfo.buildablePurposes performingType;
-     buildableScript.buildableActions action;
-     baseColonyAI colonyScript;
-    
-buildableScript.buildableActions actionToPerform;
+    baseColonyAI colonyAI;
+buildableScript.AIBuildableInfo.buildablePurposes buildablePurposeNeeded;
+buildableScript.buildableActions actionToUse;
 
-    public massUseStrat(baseColonyAI thisColonyScript,buildableScript.AIBuildableInfo.buildablePurposes buildableType, buildableScript.buildableActions actionToPerform)
+
+    public buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse)
     {
-       performingType = buildableType;
-       action = actionToPerform;
-       colonyScript = thisColonyScript;
-    
-       
-
-
-
+        colonyAI = ColonyAI;
+        buildablePurposeNeeded = BuildablePurposeNeeded;
+        this.actionToUse = actionToUse;
     }
     public void Start()
     {
-        buildableScript[] theOnesToDance = colonyScript.getTypeOfBuildableOwned(performingType);
-        int amtPeforming = theOnesToDance.Length;
-         int[] order = playerMouseInteractions.randomAssortment(amtPeforming);
-         GameObject[] targets = colonyMethoods.bestTilesurrouning(colonyScript.gameObject,amtPeforming);
-       
-        for(int i = 0; i < amtPeforming; i++)
+        float dedicationAmount = 0.1f; // the percentage of buildables of the purpose defined above of that the ai dedicates to this action. 0 means none, 1 means all
+        float deciationStrengthCalc () => colonyAI.valueOfBuildables[buildablePurposeNeeded] * dedicationAmount;
+        switch (buildablePurposeNeeded)
         {
-            theOnesToDance[i].buildableAction(action, targets[order[i]]);
-            theOnesToDance[i].finishedAction += hasFinishedAction;
-            if (i >= targets.Length) 
-            {
-                i = 0;
-            }
-        }
+            case buildableScript.AIBuildableInfo.buildablePurposes.expansion:
+      
 
-    }
+            break;
 
-    void hasFinishedAction()
-    {
-        finishedAction = true;
+            case buildableScript.AIBuildableInfo.buildablePurposes.offensive:
 
-    }
-    
-}
+            break;
 
+            case buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive:
 
-/// <summary>
-/// ironically; mostly useless
-/// </summary>
-public class useStrat : iActionStrat// this suck but i dont think this will work in anyway, theses strats are initalized when COLONY start so there will never be a good way to feed info into it
-{
-    bool finishedAction = false;
-    public bool canPerform => !complete;
-    public bool complete => finishedAction;
-    buildableScript[] performingBuildable;
-     buildableScript.buildableActions action;
-      GameObject[] targets;
+            break;
 
+            case buildableScript.AIBuildableInfo.buildablePurposes.defensive:
+            
+            break;
 
-    public useStrat(buildableScript[] buildables, buildableScript.buildableActions actionToPerform, GameObject[] targetsToActOn)
-    {
-       performingBuildable = buildables;
-       action = actionToPerform;
-       targets = targetsToActOn;
-       Debug.LogWarning("loook here shisr: " + action+" le actions i thou "+ targetsToActOn.Length);
+            case buildableScript.AIBuildableInfo.buildablePurposes.antiMissile:
 
+            break;
 
-
-    }
-    public void Start()
-    {
-         int[] order = playerMouseInteractions.randomAssortment(targets.Length);
-         Debug.Log("length of action list targets is: " + targets.Length+ " and the objects it's applying to is: " + performingBuildable.Length);
-        for(int i = 0; i < performingBuildable.Length; i++)
-        {
-            performingBuildable[i].buildableAction(action, targets[order[i]]);
-            performingBuildable[i].finishedAction += hasFinishedAction;
-            if (i >= targets.Length) 
-            {
-                i = 0;
-            }
+            default:
+            Debug.LogError("no purpose found for buildable use strat, this should never happen");
+            break;
+            
+            
         }
 
     }
