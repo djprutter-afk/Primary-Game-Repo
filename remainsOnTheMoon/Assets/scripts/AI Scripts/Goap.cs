@@ -348,38 +348,68 @@ buildableScript.buildableActions actionToUse;
     }
     public void Start()
     {
+        Dictionary<string,float> aIPressures = new Dictionary<string, float>();
+        foreach(AgentGoal goal in colonyAI.goals)
+        {
+            aIPressures.Add(goal.Name,goal.priority);
+        }
         float dedicationAmount = 0.1f; // the percentage of buildables of the purpose defined above of that the ai dedicates to this action. 0 means none, 1 means all
-        void  deciationStrengthCalc () => dedicationAmount = colonyAI.valueOfBuildables[buildablePurposeNeeded] * dedicationAmount;
+        void  deciationStrengthCalc(string agentGoal)
+        {
+            float currentValue = aIPressures[agentGoal];
+            if(currentValue >= dedicationAmount)
+            {
+                currentValue = dedicationAmount;
+            }
+        }
+
         switch (buildablePurposeNeeded)
         {
             case buildableScript.AIBuildableInfo.buildablePurposes.expansion:
-                 
+                 deciationStrengthCalc("expansionPressure");
                 
             break;
 
             case buildableScript.AIBuildableInfo.buildablePurposes.offensive:
-
+                deciationStrengthCalc("militaryPressure");
             break;
 
             case buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive:
-
+                deciationStrengthCalc("militaryPressure");
             break;
 
             case buildableScript.AIBuildableInfo.buildablePurposes.defensive:
-            
+                deciationStrengthCalc("militaryPressure");
             break;
 
             case buildableScript.AIBuildableInfo.buildablePurposes.antiMissile:
-
+                deciationStrengthCalc("militaryPressure");
+            break;
+             case buildableScript.AIBuildableInfo.buildablePurposes.economy:
+                 deciationStrengthCalc("economyPressure");
             break;
 
             default:
-            Debug.LogError("no purpose found for buildable use strat, this should never happen");
+            Debug.LogError("no goal  is related with purpose, CHECK CODE");
             break;
             
             
         }
-
+        List<buildableScript> buildablesOfPurpose = new List<buildableScript>();
+        buildablesOfPurpose = colonyAI.thisColonyScript.ownedBuildables.Select(b => b.GetComponent<buildableScript>()).Where(buildable => buildable.purposes.Any(purpose => purpose.purpose == buildablePurposeNeeded)).ToList();
+        float totalValueOfPurpose = 0;
+        foreach(var builable in buildablesOfPurpose)
+        {
+            foreach(var purpsoe in builable.purposes)
+            {
+                if(purpsoe.purpose == buildablePurposeNeeded)
+                {
+                    totalValueOfPurpose = purpsoe.strength;
+                    
+                }
+            }
+        }
+        // UNFINSHED PLS FINSH
     }
 
     void hasFinishedAction()
