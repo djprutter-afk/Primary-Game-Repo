@@ -359,7 +359,7 @@ buildableScript.buildableActions actionToUse;
             float currentValue = aIPressures[agentGoal];
             if(currentValue >= dedicationAmount)
             {
-                currentValue = dedicationAmount;
+                dedicationAmount = currentValue;
             }
         }
 
@@ -404,12 +404,15 @@ buildableScript.buildableActions actionToUse;
             {
                 if(purpsoe.purpose == buildablePurposeNeeded)
                 {
-                    totalValueOfPurpose = purpsoe.strength;
+                    totalValueOfPurpose += purpsoe.strength;
+                    break;
                     
                 }
             }
         }
-        // UNFINSHED PLS FINSH
+        dedicationAmount = Mathf.Clamp(dedicationAmount,0,1);
+        float valueNeed = totalValueOfPurpose * dedicationAmount;
+       
     }
 
     void hasFinishedAction()
