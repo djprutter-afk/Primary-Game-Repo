@@ -338,13 +338,15 @@ public class buildableUseStrat : iActionStrat// this suck but i dont think this 
     baseColonyAI colonyAI;
 buildableScript.AIBuildableInfo.buildablePurposes buildablePurposeNeeded;
 buildableScript.buildableActions actionToUse;
+Func<Vector3[]> postionDecider;
 
 
-    public buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse)
+    public buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse, Func<Vector3[]> PositionDecider)
     {
         colonyAI = ColonyAI;
         buildablePurposeNeeded = BuildablePurposeNeeded;
         this.actionToUse = actionToUse;
+        postionDecider = PositionDecider;
     }
     public void Start()
     {
@@ -395,15 +397,18 @@ buildableScript.buildableActions actionToUse;
             
             
         }
-        List<buildableScript> buildablesOfPurpose = new List<buildableScript>();
-        buildablesOfPurpose = colonyAI.thisColonyScript.ownedBuildables.Select(b => b.GetComponent<buildableScript>()).Where(buildable => buildable.purposes.Any(purpose => purpose.purpose == buildablePurposeNeeded)).ToList();
+        
+        
+        buildableScript[] buildablesOfPurpose = colonyAI.thisColonyScript.ownedBuildables.Select(b => b.GetComponent<buildableScript>()).Where(buildable => buildable.purposes.Any(purpose => purpose.purpose == buildablePurposeNeeded)).ToArray();
         float totalValueOfPurpose = 0;
+        Dictionary<buildableScript,float> valueOfBuildable = new Dictionary<buildableScript, float>();
         foreach(var builable in buildablesOfPurpose)
         {
             foreach(var purpsoe in builable.purposes)
             {
                 if(purpsoe.purpose == buildablePurposeNeeded)
                 {
+                    valueOfBuildable.Add(builable,purpsoe.strength);
                     totalValueOfPurpose += purpsoe.strength;
                     break;
                     
@@ -412,8 +417,56 @@ buildableScript.buildableActions actionToUse;
         }
         dedicationAmount = Mathf.Clamp(dedicationAmount,0,1);
         float valueNeed = totalValueOfPurpose * dedicationAmount;
+        float currentValueUsed =0f;
+       
+        Vector3[] positionsToUse = postionDecider();
+
+        int amountOfBuildables = valueOfBuildable.Count();
+
+
+        for(int i = 0; i < amountOfBuildables;i++)
+        {
+            foreach(Vector3 position in positionsToUse)
+            {
+                KeyValuePair<buildableScript,float>  bestBuildable = buildableDecider(position,valueOfBuildable);
+                if(currentValueUsed + bestBuildable.Value >valueNeed)
+                {
+                    // finsish this
+                }
+                valueOfBuildable.Remove(bestBuildable.Key);
+            }
+        }
+       
+
+
+
+      
        
     }
+
+    KeyValuePair<buildableScript,float> buildableDecider(Vector3 positionToCheck,Dictionary<buildableScript,float> buildableScriptKVP)
+    {
+        KeyValuePair<buildableScript,float> currentBest = new KeyValuePair<buildableScript, float>();
+        foreach(var buildable in buildableScriptKVP)
+        {
+
+            float distance = Vector3.Distance(buildable.Key.transform.position,positionToCheck);
+            float currentValue = buildable.Value * (2- distance);// the moon's diameter is 2 units across
+            
+
+            if(currentValue >= currentBest.Value)
+            {
+                currentBest = buildable;
+            }
+            
+            
+        }
+        
+        
+        return currentBest;
+    }
+    int expectedAmountToFinish;
+    int totalFinished;
 
     void hasFinishedAction()
     {

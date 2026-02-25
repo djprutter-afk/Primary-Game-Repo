@@ -44,7 +44,8 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     public HashSet<AgentGoal> goals;
     CountDownTimer statsTimer;
     IGoapPlanner goapPlanner;
-    TriValueStruct emptyStruct = new TriValueStruct();
+
+    
 
          
     struct otherColonyInfo
@@ -298,12 +299,13 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
         //purpose specific actions
         ////////////////////////////////////////////////////////////////////////
-
+        /*
        actions.Add(new agentAction.Builder("settle new land")
         .WithStrat(new buildableUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction))
         .AddEffect(beliefs["satisfied with size"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());
+        */
         
         
         
