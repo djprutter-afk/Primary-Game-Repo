@@ -44,8 +44,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     public HashSet<AgentGoal> goals;
     CountDownTimer statsTimer;
     IGoapPlanner goapPlanner;
-
-    
+    TriValueStruct emptyStruct = new TriValueStruct();
 
          
     struct otherColonyInfo
@@ -317,6 +316,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
     }
 
+   
     void setupGoals()
     {
 
@@ -325,21 +325,17 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
 
         
-        goals.Add(new AgentGoal.Builder("military pressure")
+        goals.Add(new AgentGoal.Builder("militaryPressure")
         .withPriority(0.25f)
         .withdesiredEffects(beliefs["satisfied with buildables"])
         .Build());
 
-        goals.Add(new AgentGoal.Builder("economic pressure")
+        goals.Add(new AgentGoal.Builder("economicPressure")
         .withPriority(0.30f)
         .withdesiredEffects(beliefs["has good economy"])
         .Build());
 
-        
-       
-
-
-        goals.Add(new AgentGoal.Builder("expandsion pressure")
+        goals.Add(new AgentGoal.Builder("expansionPressure")
         .withPriority(1.0f)
         .withdesiredEffects(beliefs["satisfied with size"])
         .Build());

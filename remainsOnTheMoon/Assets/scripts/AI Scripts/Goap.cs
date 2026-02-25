@@ -11,6 +11,7 @@ using Unity.Collections.LowLevel.Unsafe;
 using Unity.Mathematics;
 using Mono.Cecil;
 using UnityEngine.EventSystems;
+using System.Numerics;
 //this is all made with tutorial: https://www.youtube.com/watch?v=T_sBYgP7_2k&t=613s 
 public class beliefFactory
 {
@@ -32,7 +33,7 @@ public class beliefFactory
   
     
 
-    public void addLocationBelief(string key, float distance, Vector3 locationCOndition)
+    public void addLocationBelief(string key, float distance, UnityEngine.Vector3 locationCOndition)
     {
         beliefs.Add(key, new agentBelief.Builder(key)
         .withCondition(() => InRangeOf(locationCOndition, distance))
@@ -40,15 +41,15 @@ public class beliefFactory
         .Build());
         
     }
-    bool InRangeOf(Vector3 pos, float range) => Vector3.Distance(agent.transform.position, pos) < range;
+    bool InRangeOf(UnityEngine.Vector3 pos, float range) => UnityEngine.Vector3.Distance(agent.transform.position, pos) < range;
 }
 public class agentBelief
 {
     public string Name { get; }
     Func<bool> condition = () => false;
-    Func<Vector3> observedLocation = () => Vector3.zero;
+    Func<UnityEngine.Vector3> observedLocation = () => UnityEngine.Vector3.zero;
 
-    public Vector3 Location => observedLocation();
+    public UnityEngine.Vector3 Location => observedLocation();
     agentBelief(string name)
     {
         Name = name;
@@ -67,7 +68,7 @@ public class agentBelief
             belief.condition = condition;
             return this;
         }
-        public Builder withLocation(Func<Vector3> observedLocations)
+        public Builder withLocation(Func<UnityEngine.Vector3> observedLocations)
         {
             belief.observedLocation = observedLocations;
             return this;
@@ -240,7 +241,7 @@ public class buildStrat : iActionStrat
             {
                 continue;
             }
-            float distance = Vector3.Distance(targetPos.transform.position, currentTile.transform.position);
+            float distance = UnityEngine.Vector3.Distance(targetPos.transform.position, currentTile.transform.position);
             tileDic.Add(currentTile, distance);
         }
 
@@ -338,10 +339,10 @@ public class buildableUseStrat : iActionStrat// this suck but i dont think this 
     baseColonyAI colonyAI;
 buildableScript.AIBuildableInfo.buildablePurposes buildablePurposeNeeded;
 buildableScript.buildableActions actionToUse;
-Func<Vector3[]> postionDecider;
+Func<UnityEngine.Vector3[]> postionDecider;
 
 
-    public buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse, Func<Vector3[]> PositionDecider)
+    public buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse, Func<UnityEngine.Vector3[]> PositionDecider)
     {
         colonyAI = ColonyAI;
         buildablePurposeNeeded = BuildablePurposeNeeded;
@@ -419,22 +420,40 @@ Func<Vector3[]> postionDecider;
         float valueNeed = totalValueOfPurpose * dedicationAmount;
         float currentValueUsed =0f;
        
-        Vector3[] positionsToUse = postionDecider();
+        UnityEngine.Vector3[] positionsToUse = postionDecider();
 
         int amountOfBuildables = valueOfBuildable.Count();
 
-
-        for(int i = 0; i < amountOfBuildables;i++)
+        int targetsPerPosition = (int)(Math.Ceiling((double)(amountOfBuildables / positionsToUse.Length)) +1f); // plus 1 just to be safe, it doesnt effect anything if all goes well
+        
+        Dictionary<UnityEngine.Vector3,GameObject[]> tileClosestToPosition;  
+        foreach(UnityEngine.Vector3 position in positionsToUse)
         {
-            foreach(Vector3 position in positionsToUse)
+            for(int i = 0; i <10; i++)
             {
-                KeyValuePair<buildableScript,float>  bestBuildable = buildableDecider(position,valueOfBuildable);
-                if(currentValueUsed + bestBuildable.Value >valueNeed)
+                Collider[] hitColliders = Physics.OverlapSphere(position, i * 0.2f);// will attempt 10 times to find enough tiles, it will go up untill searching are is daiamter of the moon
+                GameObject[] tiles = hitColliders.Select(x=>x.gameObject).Where(x=>x.TryGetComponent(out tileInfo Tile) ).ToArray();
+
+                if(tiles.Length >targetsPerPosition)
                 {
-                    // finsish this
+                    
+                }
+            }
+            
+            
+           
+        }
+  
+        for(int i = 0; i < positionsToUse.Length;i++)
+        {
+           
+                KeyValuePair<buildableScript,float>  bestBuildable = buildableDecider(positionsToUse[i],valueOfBuildable);
+                if(currentValueUsed + bestBuildable.Value < valueNeed)
+                {
+                    
                 }
                 valueOfBuildable.Remove(bestBuildable.Key);
-            }
+            
         }
        
 
@@ -444,13 +463,14 @@ Func<Vector3[]> postionDecider;
        
     }
 
-    KeyValuePair<buildableScript,float> buildableDecider(Vector3 positionToCheck,Dictionary<buildableScript,float> buildableScriptKVP)
+    KeyValuePair<buildableScript,float> buildableDecider(UnityEngine.Vector3 positionToCheck,Dictionary<buildableScript,float> buildableScriptKVP)
     {
+        
         KeyValuePair<buildableScript,float> currentBest = new KeyValuePair<buildableScript, float>();
         foreach(var buildable in buildableScriptKVP)
         {
 
-            float distance = Vector3.Distance(buildable.Key.transform.position,positionToCheck);
+            float distance = UnityEngine.Vector3.Distance(buildable.Key.transform.position,positionToCheck);
             float currentValue = buildable.Value * (2- distance);// the moon's diameter is 2 units across
             
 
@@ -461,9 +481,10 @@ Func<Vector3[]> postionDecider;
             
             
         }
+
+      
         
-        
-        return currentBest;
+        return buildableScriptKVP[currentBest.Key];
     }
     int expectedAmountToFinish;
     int totalFinished;
