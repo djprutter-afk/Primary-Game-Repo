@@ -331,7 +331,7 @@ public class buildStrat : iActionStrat
 
 
 
-public class buildableUseStrat : iActionStrat// this suck but i dont think this will work in anyway, theses strats are initalized when COLONY start so there will never be a good way to feed info into it
+public class buildableUseStrat : iActionStrat
 {
     bool finishedAction = false;
     public bool canPerform => !complete;
@@ -421,21 +421,29 @@ Func<UnityEngine.Vector3[]> postionDecider;
         float currentValueUsed =0f;
        
         UnityEngine.Vector3[] positionsToUse = postionDecider();
+        if(positionsToUse.Length == 0)
+        {
+             finishedAction = true;
+    return;
+        }
 
         int amountOfBuildables = valueOfBuildable.Count();
 
-        int targetsPerPosition = (int)(Math.Ceiling((double)(amountOfBuildables / positionsToUse.Length)) +1f); // plus 1 just to be safe, it doesnt effect anything if all goes well
+        int targetsPerPosition = Mathf.CeilToInt((float)amountOfBuildables / positionsToUse.Length) + 1;; // plus 1 just to be safe, it doesnt effect anything if all goes well
         
-        Dictionary<UnityEngine.Vector3,GameObject[]> tileClosestToPosition;  
+        Dictionary<UnityEngine.Vector3,GameObject[]> tileClosestToPosition = new Dictionary<UnityEngine.Vector3, GameObject[]>();  
         foreach(UnityEngine.Vector3 position in positionsToUse)
         {
             for(int i = 0; i <10; i++)
             {
-                Collider[] hitColliders = Physics.OverlapSphere(position, i * 0.2f);// will attempt 10 times to find enough tiles, it will go up untill searching are is daiamter of the moon
+                Collider[] hitColliders = Physics.OverlapSphere(position, i * 0.2f);// will attempt 10 times to find enough tiles, it will go up until searching are is daiamter of the moon
                 GameObject[] tiles = hitColliders.Select(x=>x.gameObject).Where(x=>x.TryGetComponent(out tileInfo Tile) ).ToArray();
 
                 if(tiles.Length >targetsPerPosition)
                 {
+
+                    tileClosestToPosition.Add(position,tiles.Take(targetsPerPosition).ToArray());
+                    break;
                     
                 }
             }
@@ -443,18 +451,40 @@ Func<UnityEngine.Vector3[]> postionDecider;
             
            
         }
-  
-        for(int i = 0; i < positionsToUse.Length;i++)
+     
+       for(int i=0; i <targetsPerPosition;i++)
         {
-           
-                KeyValuePair<buildableScript,float>  bestBuildable = buildableDecider(positionsToUse[i],valueOfBuildable);
+            
+             foreach(var position in tileClosestToPosition)
+            {
+            
+                KeyValuePair<buildableScript,float>  bestBuildable = buildableDecider(position.Key,valueOfBuildable);
+                if(bestBuildable.Value == 0)
+                {
+                    break;
+                }
                 if(currentValueUsed + bestBuildable.Value < valueNeed)
                 {
-                    
+                    bestBuildable.Key.buildableAction(actionToUse,position.Value[i]);
+                    currentValueUsed += bestBuildable.Value;
+                    bestBuildable.Key.finishedAction += hasFinishedAction;
+
+                    expectedAmountToFinish++;
+
+
                 }
                 valueOfBuildable.Remove(bestBuildable.Key);
-            
+
+
+
+            }
+
         }
+        
+       
+              
+            
+        
        
 
 
@@ -462,7 +492,6 @@ Func<UnityEngine.Vector3[]> postionDecider;
       
        
     }
-
     KeyValuePair<buildableScript,float> buildableDecider(UnityEngine.Vector3 positionToCheck,Dictionary<buildableScript,float> buildableScriptKVP)
     {
         
@@ -471,7 +500,7 @@ Func<UnityEngine.Vector3[]> postionDecider;
         {
 
             float distance = UnityEngine.Vector3.Distance(buildable.Key.transform.position,positionToCheck);
-            float currentValue = buildable.Value * (2- distance);// the moon's diameter is 2 units across
+            float currentValue = Mathf.Clamp(buildable.Value * (2- distance),0,2);// the moon's diameter is 2 units across
             
 
             if(currentValue >= currentBest.Value)
@@ -484,14 +513,19 @@ Func<UnityEngine.Vector3[]> postionDecider;
 
       
         
-        return buildableScriptKVP[currentBest.Key];
+        return currentBest;
     }
     int expectedAmountToFinish;
     int totalFinished;
 
     void hasFinishedAction()
     {
-        finishedAction = true;
+        totalFinished++;
+        if(totalFinished >= expectedAmountToFinish)
+        {
+             finishedAction = true;
+        }
+       
 
     }
     
