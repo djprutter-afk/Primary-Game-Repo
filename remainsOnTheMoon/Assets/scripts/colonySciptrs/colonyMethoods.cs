@@ -313,7 +313,7 @@ public static class colonyMethoods
     */
 
 
-    public static GameObject[] bestTilesurrouning(GameObject colony,int Length)
+    public static Vector3[] bestTilesurrouning(GameObject colony,int Length)
     {
         Debug.Log("ok im going to find:" +Length + " of tiles");
          GameObject[] sortedGameObjects = new GameObject[Length];// end result
@@ -383,7 +383,7 @@ public static class colonyMethoods
           
 
         
-         return sortedGameObjects;
+         return sortedGameObjects.Select(x=>x.transform.position).ToArray();
 
 
     }
