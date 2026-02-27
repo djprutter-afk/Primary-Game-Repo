@@ -106,7 +106,7 @@ public class buildableScript : MonoBehaviour
         
         if (Vector3.Distance(target.transform.position, transform.position) > possibleRangeDiameter / 2)
         {
-            Debug.LogError("FAILED FAILED, target was: " + target +" le object was also: " + gameObject);
+            Debug.LogWarning("FAILED FAILED, TOO FAR target was: " + target +" le object was also: " + gameObject);
             return false;
         }
       

@@ -339,15 +339,17 @@ public class buildableUseStrat : iActionStrat
     baseColonyAI colonyAI;
 buildableScript.AIBuildableInfo.buildablePurposes buildablePurposeNeeded;
 buildableScript.buildableActions actionToUse;
-Func<UnityEngine.Vector3[]> postionDecider;
+Func<GameObject,int,UnityEngine.Vector3[]> postionDecider;
+int positionsToFind;
 
 
-    public buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse, Func<UnityEngine.Vector3[]> PositionDecider)
+    public buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse, Func<GameObject,int,UnityEngine.Vector3[]> PositionDecider,int PositionsTofind =1)
     {
         colonyAI = ColonyAI;
         buildablePurposeNeeded = BuildablePurposeNeeded;
         this.actionToUse = actionToUse;
         postionDecider = PositionDecider;
+        positionsToFind = PositionsTofind;
     }
     public void Start()
     {
@@ -420,7 +422,7 @@ Func<UnityEngine.Vector3[]> postionDecider;
         float valueNeed = totalValueOfPurpose * dedicationAmount;
         float currentValueUsed =0f;
        
-        UnityEngine.Vector3[] positionsToUse = postionDecider();
+        UnityEngine.Vector3[] positionsToUse = postionDecider(colonyAI.gameObject,positionsToFind);
         if(positionsToUse.Length == 0)
         {
              finishedAction = true;
@@ -437,7 +439,7 @@ Func<UnityEngine.Vector3[]> postionDecider;
             for(int i = 0; i <10; i++)
             {
                 Collider[] hitColliders = Physics.OverlapSphere(position, i * 0.2f);// will attempt 10 times to find enough tiles, it will go up until searching are is daiamter of the moon
-                GameObject[] tiles = hitColliders.Select(x=>x.gameObject).Where(x=>x.TryGetComponent(out tileInfo Tile) ).ToArray();
+                GameObject[] tiles = hitColliders.Select(x=>x.gameObject).Where(x=>x.TryGetComponent(out tileInfo Tile) ==true).ToArray();
 
                 if(tiles.Length >targetsPerPosition)
                 {
@@ -451,7 +453,7 @@ Func<UnityEngine.Vector3[]> postionDecider;
             
            
         }
-     
+        bool atLeastOneUsed = false;// although an action my not be worth sending literally anything out, it should still happen cause the ai expects something to happeb
        for(int i=0; i <targetsPerPosition;i++)
         {
             
@@ -465,6 +467,7 @@ Func<UnityEngine.Vector3[]> postionDecider;
                 }
                 if(currentValueUsed + bestBuildable.Value < valueNeed)
                 {
+                   
                     bestBuildable.Key.buildableAction(actionToUse,position.Value[i]);
                     currentValueUsed += bestBuildable.Value;
                     bestBuildable.Key.finishedAction += hasFinishedAction;
@@ -500,10 +503,13 @@ Func<UnityEngine.Vector3[]> postionDecider;
         {
 
             float distance = UnityEngine.Vector3.Distance(buildable.Key.transform.position,positionToCheck);
+            
+            
+            
             float currentValue = Mathf.Clamp(buildable.Value * (2- distance),0,2);// the moon's diameter is 2 units across
             
 
-            if(currentValue >= currentBest.Value)
+            if(currentValue >= currentBest.Value &&distance <= buildable.Key.possibleRangeDiameter/2)
             {
                 currentBest = buildable;
             }
