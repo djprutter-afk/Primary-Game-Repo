@@ -219,6 +219,10 @@ buildableScript.buildableActions actionToUse;
 
 public class settlerUseStrat : buildableUseStrat
 {
-    settlerUseStrat() : base(ColonyAI)
-
+        public settlerUseStrat(baseColonyAI colonyAI, buildableScript.AIBuildableInfo.buildablePurposes purpose,buildableScript.buildableActions actionToUse,float expansionRadius,int positionsToFind)
+        : base(colonyAI, purpose, actionToUse)
+    {
+        this.expansionRadius = expansionRadius;
+        this.positionsToFind = positionsToFind;
+    }
 }
