@@ -298,13 +298,13 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
         //purpose specific actions
         ////////////////////////////////////////////////////////////////////////
-        /*
+        
        actions.Add(new agentAction.Builder("settle new land")
-        .WithStrat(new buildableUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction,colonyMethoods.bestTilesurrouning,5))
+        .WithStrat(new settlerUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction,5))
         .AddEffect(beliefs["satisfied with size"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());
-        */
+        
 
        
         

@@ -10,7 +10,7 @@ public abstract class buildableUseStrat : iActionStrat
     bool finishedAction = false;
     public bool canPerform => !complete;
     public bool complete => finishedAction;
-    baseColonyAI colonyAI;
+    public baseColonyAI colonyAI;
 buildableScript.AIBuildableInfo.buildablePurposes buildablePurposeNeeded;
 buildableScript.buildableActions actionToUse;
 
@@ -219,10 +219,153 @@ buildableScript.buildableActions actionToUse;
 
 public class settlerUseStrat : buildableUseStrat
 {
-        public settlerUseStrat(baseColonyAI colonyAI, buildableScript.AIBuildableInfo.buildablePurposes purpose,buildableScript.buildableActions actionToUse,float expansionRadius,int positionsToFind)
+
+    int positionsToFind;
+        public settlerUseStrat(baseColonyAI colonyAI, buildableScript.AIBuildableInfo.buildablePurposes purpose,buildableScript.buildableActions actionToUse,int PositionsToFind)
         : base(colonyAI, purpose, actionToUse)
     {
-        this.expansionRadius = expansionRadius;
-        this.positionsToFind = positionsToFind;
+        positionsToFind = PositionsToFind;
+       
+    }
+    public override Vector3[] postionDecider()
+    {
+       
+         GameObject[] sortedGameObjects = new GameObject[positionsToFind];// end result
+
+        colonyScript colonyScript = colonyAI.gameObject.GetComponent<colonyScript>();
+        GameObject[] outlineTiles = colonyMethoods.findOUterEdgeTiles(colonyAI.gameObject);
+        int numberOfOutlineTiles = outlineTiles.Length;
+
+        if(positionsToFind > outlineTiles.Length)
+        {
+            positionsToFind =  outlineTiles.Length;
+        }
+
+
+        if (numberOfOutlineTiles <= 0)
+        {
+            Debug.LogError("not enough tiless to evalute");
+            return null;
+        }
+        Dictionary<GameObject, float> dictonaryOfTiles = new Dictionary<GameObject, float>();
+
+
+
+        for (int indexOfOutlineTiles = 0; indexOfOutlineTiles < numberOfOutlineTiles; indexOfOutlineTiles++)
+        {
+            float tileValue = 0;
+            GameObject currentOutLineTile = outlineTiles[indexOfOutlineTiles];
+
+            tileInfo currentTileInfo = currentOutLineTile.GetComponent<tileInfo>();
+
+            tileValue += currentTileInfo.resource;
+
+            Collider[] tilesSurroundingCurrent = Physics.OverlapSphere(currentOutLineTile.transform.position, 0.05f);
+
+
+            for (int k = 0; k < tilesSurroundingCurrent.Length; k++)
+            {
+
+
+                if (tilesSurroundingCurrent[k].transform.parent.gameObject == colonyAI.transform.gameObject)
+                {
+
+                    tileValue += (1 - colonyAI.aggression) * 2;
+
+                }
+            }
+          
+            if (dictonaryOfTiles.ContainsKey(currentOutLineTile) == false && colonyScript.allTilesOwned.Contains(currentOutLineTile) == false)
+            {
+                dictonaryOfTiles.Add(currentOutLineTile, tileValue);
+
+            }
+        }
+
+            List<KeyValuePair<GameObject, float>> kvpOfTiles = dictonaryOfTiles.ToList();
+
+            var sortedKvpOfTiles = kvpOfTiles.OrderByDescending(pair => pair.Value).ToList();
+
+           
+
+            for(int i = 0; i < positionsToFind ;i++)
+            {
+                sortedGameObjects[i] = sortedKvpOfTiles[i].Key;
+            }
+
+          
+
+        
+         return sortedGameObjects.Select(x=>x.transform.position).ToArray();
+
+
+    }
+ 
+
+
+    public static GameObject[] allColonyTiles(GameObject colony)
+    {
+
+        int amtOfChildrend = colony.transform.childCount;
+        GameObject[] arrayTempTiles = new GameObject[amtOfChildrend];
+        if (amtOfChildrend <= 0)
+        {
+            Debug.LogError("colony: " + colony + " attempted to get the size of their empire even though they have none");
+            return null;
+        }
+        for (int p = 0; p < amtOfChildrend; p++)
+        {
+            arrayTempTiles[p] = colony.transform.GetChild(p).gameObject;
+
+
+        }
+        return arrayTempTiles;
+    }
+
+
+    public static bool purchasableAction(GameObject colony, TriValueStruct cost, GameObject tileOn, bool alsoBuy = false)
+    {
+        tileInfo tileOnInfo = tileOn.GetComponent<tileInfo>();
+        Debug.Log(cost.moneyValue + " " + colony.gameObject.name + " " + tileOn.transform.parent);
+        colonyScript thiscolonyScript = colony.GetComponent<colonyScript>();
+
+        if (colony != tileOn.transform.parent.gameObject)
+        {
+            return false;
+        }
+
+        if (thiscolonyScript == null)
+        {
+
+            Debug.LogWarning("there was no colony script on the colony????");
+            return false;
+        }
+        bool enoughResources = thiscolonyScript.resourcesOwned.resourceValue >= cost.resourceValue;
+        bool enoughMOney = thiscolonyScript.resourcesOwned.moneyValue >= cost.moneyValue;
+        bool enoughPeople = tileOnInfo.population >= cost.populationValue;
+
+        bool allGood = enoughResources && enoughMOney && enoughPeople;
+
+
+
+        if (allGood)
+        {
+            if (alsoBuy == false)
+            {
+                return true;
+            }
+
+
+            thiscolonyScript.resourcesOwned.resourceValue -= cost.resourceValue;
+            thiscolonyScript.resourcesOwned.moneyValue -= cost.moneyValue;
+            tileOnInfo.population -= cost.populationValue;
+            return true;
+
+        }
+        else
+        {
+            return false;
+            //BROKIE
+        }
     }
 }
