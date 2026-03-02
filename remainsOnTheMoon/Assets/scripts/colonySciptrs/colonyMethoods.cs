@@ -316,12 +316,73 @@ public static class colonyMethoods
 
     
 
- 
-    
+ public static bool purchasableAction(GameObject colony, TriValueStruct cost, GameObject tileOn, bool alsoBuy = false)
+    {
+        tileInfo tileOnInfo = tileOn.GetComponent<tileInfo>();
+        Debug.Log(cost.moneyValue + " " + colony.gameObject.name + " " + tileOn.transform.parent);
+        colonyScript thiscolonyScript = colony.GetComponent<colonyScript>();
+
+        if (colony != tileOn.transform.parent.gameObject)
+        {
+            return false;
+        }
+
+        if (thiscolonyScript == null)
+        {
+
+            Debug.LogWarning("there was no colony script on the colony????");
+            return false;
+        }
+        bool enoughResources = thiscolonyScript.resourcesOwned.resourceValue >= cost.resourceValue;
+        bool enoughMOney = thiscolonyScript.resourcesOwned.moneyValue >= cost.moneyValue;
+        bool enoughPeople = tileOnInfo.population >= cost.populationValue;
+
+        bool allGood = enoughResources && enoughMOney && enoughPeople;
+
+
+
+        if (allGood)
+        {
+            if (alsoBuy == false)
+            {
+                return true;
+            }
+
+
+            thiscolonyScript.resourcesOwned.resourceValue -= cost.resourceValue;
+            thiscolonyScript.resourcesOwned.moneyValue -= cost.moneyValue;
+            tileOnInfo.population -= cost.populationValue;
+            return true;
+
+        }
+        else
+        {
+            return false;
+            //BROKIE
+        }
+    }
     
 
 
     
+    public static GameObject[] allColonyTiles(GameObject colony)
+    {
+
+        int amtOfChildrend = colony.transform.childCount;
+        GameObject[] arrayTempTiles = new GameObject[amtOfChildrend];
+        if (amtOfChildrend <= 0)
+        {
+            Debug.LogError("colony: " + colony + " attempted to get the size of their empire even though they have none");
+            return null;
+        }
+        for (int p = 0; p < amtOfChildrend; p++)
+        {
+            arrayTempTiles[p] = colony.transform.GetChild(p).gameObject;
+
+
+        }
+        return arrayTempTiles;
+    }
 
     
     

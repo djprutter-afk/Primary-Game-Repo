@@ -3,8 +3,15 @@ using UnityEngine;
 using System.Collections.Generic;
 
 using System.Linq;
+using System;
+using Unity.Collections;
 
-
+public enum thingsToTargetEnum
+{
+    tiles,
+    buildables,
+    both
+}
 public abstract class buildableUseStrat : iActionStrat
 {
     bool finishedAction = false;
@@ -15,12 +22,13 @@ buildableScript.AIBuildableInfo.buildablePurposes buildablePurposeNeeded;
 buildableScript.buildableActions actionToUse;
 
 
-
-    public  buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse)
+    thingsToTargetEnum whatToTarget;
+    public  buildableUseStrat(baseColonyAI ColonyAI, buildableScript.AIBuildableInfo.buildablePurposes BuildablePurposeNeeded,buildableScript.buildableActions actionToUse,thingsToTargetEnum WhatToTarget)
     {
         colonyAI = ColonyAI;
         buildablePurposeNeeded = BuildablePurposeNeeded;
         this.actionToUse = actionToUse;
+        whatToTarget = WhatToTarget;
         
       
     }
@@ -119,12 +127,57 @@ buildableScript.buildableActions actionToUse;
             for(int i = 0; i <10; i++)
             {
                 Collider[] hitColliders = Physics.OverlapSphere(position, i * 0.2f);// will attempt 10 times to find enough tiles, it will go up until searching are is daiamter of the moon
-                GameObject[] tiles = hitColliders.Select(x=>x.gameObject).Where(x=>x.TryGetComponent(out tileInfo Tile) ==true).ToArray();
 
-                if(tiles.Length >targetsPerPosition)
+
+
+                  GameObject[]  objectToTarget = null;
+                GameObject[] targetTypes(Type[] types)
+                {
+                    List<GameObject> GameObjectsToFind = new List<GameObject>();
+                    foreach(Type type in types)
+                    {
+                         GameObjectsToFind.AddRange( hitColliders.Select(x=>x.gameObject).Where(x=>x.TryGetComponent(type, out Component Tile) ==true).ToArray());
+                    }
+                    return GameObjectsToFind.ToArray();
+
+                
+                
+                }
+                 GameObject[] targetType(Type type)
+                {
+                    List<GameObject> GameObjectsToFind = new List<GameObject>();
+                 
+                    GameObjectsToFind.AddRange( hitColliders.Select(x=>x.gameObject).Where(x=>x.TryGetComponent(type, out Component Tile) ==true).ToArray());
+                    
+                    return GameObjectsToFind.ToArray();
+
+                
+                
+                }
+              
+
+                switch (whatToTarget)
+                {
+                    case thingsToTargetEnum.tiles:
+                    objectToTarget = targetType(typeof(tileInfo));
+                    break;
+                    case thingsToTargetEnum.buildables:
+                    objectToTarget = targetType(typeof(buildableScript));
+                    break;
+                    case thingsToTargetEnum.both:
+                    objectToTarget = targetTypes(new Type[2]{typeof(tileInfo),typeof(buildableScript)});
+
+
+                    break;
+                }
+                
+                 
+               
+
+                if(objectToTarget.Length >targetsPerPosition)
                 {
 
-                    tileClosestToPosition.Add(position,tiles.Take(targetsPerPosition).ToArray());
+                    tileClosestToPosition.Add(position,objectToTarget.Take(targetsPerPosition).ToArray());
                     break;
                     
                 }
@@ -145,13 +198,15 @@ buildableScript.buildableActions actionToUse;
                 {
                     break;
                 }
-                if(currentValueUsed + bestBuildable.Value < valueNeed)
+                if(currentValueUsed + bestBuildable.Value < valueNeed || atLeastOneUsed == false)
                 {
+
                    
                     bestBuildable.Key.buildableAction(actionToUse,position.Value[i]);
                     currentValueUsed += bestBuildable.Value;
                     bestBuildable.Key.finishedAction += hasFinishedAction;
 
+                    atLeastOneUsed = true;
                     expectedAmountToFinish++;
 
 
@@ -217,12 +272,33 @@ buildableScript.buildableActions actionToUse;
     
 }
 
+/*
+template
+public class TEMPLATESTRAT : buildableUseStrat
+{
+   public TEMPLATESTRAT(baseColonyAI colonyAI, buildableScript.AIBuildableInfo.buildablePurposes purpose, buildableScript.buildableActions actionToUse) // add whatever params here
+    : base(colonyAI, purpose, actionToUse,true)
+    {
+        push args into variables
+    
+    }
+    public override Vector3[] postionDecider() // if this isnt there then anything is game
+    {
+        do work
+        return something
+    }
+
+
+}
+
+
+*/
 public class settlerUseStrat : buildableUseStrat
 {
 
     int positionsToFind;
-        public settlerUseStrat(baseColonyAI colonyAI, buildableScript.AIBuildableInfo.buildablePurposes purpose,buildableScript.buildableActions actionToUse,int PositionsToFind)
-        : base(colonyAI, purpose, actionToUse)
+        public settlerUseStrat(baseColonyAI colonyAI, buildableScript.AIBuildableInfo.buildablePurposes purpose,buildableScript.buildableActions actionToUse,int PositionsToFind,thingsToTargetEnum thingsToTarget)
+        : base(colonyAI, purpose, actionToUse,thingsToTarget)
     {
         positionsToFind = PositionsToFind;
        
@@ -303,69 +379,64 @@ public class settlerUseStrat : buildableUseStrat
  
 
 
-    public static GameObject[] allColonyTiles(GameObject colony)
+
+
+    
+}
+
+public class bombEnemiesStrat : buildableUseStrat
+{
+
+    float desireThreshold; 
+   public bombEnemiesStrat(baseColonyAI colonyAI, buildableScript.AIBuildableInfo.buildablePurposes purpose, buildableScript.buildableActions actionToUse,thingsToTargetEnum whatToTarget,float DesireThreshold) // add whatever params here
+    : base(colonyAI, purpose, actionToUse,whatToTarget)
     {
-
-        int amtOfChildrend = colony.transform.childCount;
-        GameObject[] arrayTempTiles = new GameObject[amtOfChildrend];
-        if (amtOfChildrend <= 0)
-        {
-            Debug.LogError("colony: " + colony + " attempted to get the size of their empire even though they have none");
-            return null;
-        }
-        for (int p = 0; p < amtOfChildrend; p++)
-        {
-            arrayTempTiles[p] = colony.transform.GetChild(p).gameObject;
-
-
-        }
-        return arrayTempTiles;
+        desireThreshold = DesireThreshold;
+    
     }
-
-
-    public static bool purchasableAction(GameObject colony, TriValueStruct cost, GameObject tileOn, bool alsoBuy = false)
+    public override Vector3[] postionDecider()
     {
-        tileInfo tileOnInfo = tileOn.GetComponent<tileInfo>();
-        Debug.Log(cost.moneyValue + " " + colony.gameObject.name + " " + tileOn.transform.parent);
-        colonyScript thiscolonyScript = colony.GetComponent<colonyScript>();
 
-        if (colony != tileOn.transform.parent.gameObject)
+        List<colonyScript> coloniesToAttack = new List<colonyScript>();
+        KeyValuePair<colonyScript,float> bestColony = new KeyValuePair<colonyScript, float>();
+        foreach(baseColonyAI.otherColonyInfo colonyInfo in colonyAI.otherColonyInfos)
         {
-            return false;
-        }
-
-        if (thiscolonyScript == null)
-        {
-
-            Debug.LogWarning("there was no colony script on the colony????");
-            return false;
-        }
-        bool enoughResources = thiscolonyScript.resourcesOwned.resourceValue >= cost.resourceValue;
-        bool enoughMOney = thiscolonyScript.resourcesOwned.moneyValue >= cost.moneyValue;
-        bool enoughPeople = tileOnInfo.population >= cost.populationValue;
-
-        bool allGood = enoughResources && enoughMOney && enoughPeople;
-
-
-
-        if (allGood)
-        {
-            if (alsoBuy == false)
+            float desireToAttack = (1-colonyInfo.friendliness) * colonyInfo.threatLevel;
+            if(bestColony.Value < desireToAttack)
             {
-                return true;
+                bestColony = new KeyValuePair<colonyScript, float>(colonyInfo.colony,desireToAttack);
+            }
+
+            if(desireToAttack>= desireThreshold)
+            {
+                coloniesToAttack.Add(colonyInfo.colony);
             }
 
 
-            thiscolonyScript.resourcesOwned.resourceValue -= cost.resourceValue;
-            thiscolonyScript.resourcesOwned.moneyValue -= cost.moneyValue;
-            tileOnInfo.population -= cost.populationValue;
-            return true;
-
         }
-        else
+        if(coloniesToAttack.Count == 0)
         {
-            return false;
-            //BROKIE
+            coloniesToAttack.Add(bestColony.Key); // again, even if it goes against the grain the ai willed it to happen, and thus something must happen
         }
+        List<Vector3> centerOfEnemies = new List<Vector3>();
+        foreach(var colony in coloniesToAttack)
+        {
+
+             Vector3 averagePosition = Vector3.zero;
+             foreach(GameObject tile in colony.allTilesOwned)
+             {
+                 averagePosition += tile.transform.position;
+             }
+            centerOfEnemies.Add(averagePosition /= colony.allTilesOwned.Count) ;
+
+           
+        }
+
+        return centerOfEnemies.ToArray();
+
+
+       
     }
+
+
 }

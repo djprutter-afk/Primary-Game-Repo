@@ -47,10 +47,11 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     
 
          
-    struct otherColonyInfo
+   public class otherColonyInfo
     {
         public float threatLevel;
-        public colonyScript colony {private get; set;}
+        public float friendliness = 0.5f;
+        public colonyScript colony;
 
         public void evaluateThreatLevel(colonyScript ownerColony,float selfMilitaryStrength)
         {
@@ -93,7 +94,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
       
     }
 
-List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
+public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     
 
 
@@ -230,8 +231,11 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         beliefFactory factory = new beliefFactory(this, beliefs);
 
         factory.addBeliefs("Nothing", () => false);
+        factory.addBeliefs("is feeling safe", () => false);// maybe make it an actual conditional at some point? 
+        factory.addBeliefs("has good economy", () => false);
+        factory.addBeliefs("Nothing", () => false);
 
-  
+        
    
        
         factory.addBeliefs("has space to build", hasSpaceToBuild);
@@ -300,7 +304,13 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         ////////////////////////////////////////////////////////////////////////
         
        actions.Add(new agentAction.Builder("settle new land")
-        .WithStrat(new settlerUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction,5))
+        .WithStrat(new settlerUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction,5,thingsToTargetEnum.tiles))
+        .AddEffect(beliefs["satisfied with size"])
+        .addPreCondition(beliefs["has Settlers"])
+        .Build());
+
+         actions.Add(new agentAction.Builder("bomb enemy to ashes")
+        .WithStrat(new bombEnemiesStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive,buildableScript.buildableActions.launch,thingsToTargetEnum.both,0.4f))
         .AddEffect(beliefs["satisfied with size"])
         .addPreCondition(beliefs["has Settlers"])
         .Build());
@@ -329,7 +339,7 @@ List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         
         goals.Add(new AgentGoal.Builder("militaryPressure")
         .withPriority(0.25f)
-        .withdesiredEffects(beliefs["satisfied with buildables"])
+        .withdesiredEffects(beliefs["is feeling safe"])
         .Build());
 
         goals.Add(new AgentGoal.Builder("economicPressure")
