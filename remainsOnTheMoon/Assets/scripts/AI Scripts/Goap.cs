@@ -195,141 +195,6 @@ public class decideTimeTowait : iActionStrat
 
 }
 
-public class buildStrat : iActionStrat
-{
-    buildableScript trackingBuildable; 
-    bool finished = false;
-    TriValueStruct purchciceCost;
-    colonyScript callingColony;
-    GameObject deathObject;
-    buildableScript thrbuildableScript;
-
-    public bool canPerform => complete!;
-    public bool complete => finished;
-    GameObject targetPos;
-    int amountTobuild;
-    baseColonyAI myAI;
-    public buildStrat(GameObject sdfsdf,  baseColonyAI fdg)
-    {
-        amountTobuild = 1;// make better later
-        targetPos = sdfsdf;
-        callingColony = fdg.thisColonyScript;
-        
-        
- 
-        myAI = fdg;
-
-
-
-
-
-    }
-    public void Start()
-    { 
-        myAI.hasntWaited = true;
-        
-        thrbuildableScript =myAI.desiredBuildable.buildableObject.GetComponent<buildableScript>();
-        deathObject = myAI.desiredBuildable.buildableObject;
-        purchciceCost = myAI.desiredBuildable.buildCost;
-        GameObject[] ownedTiles = callingColony.allTilesOwned.ToArray();
-        Dictionary<GameObject, float> tileDic = new Dictionary<GameObject, float>();
-        foreach (GameObject currentTile in ownedTiles)
-        {
-            tileInfo currentTileInfo = currentTile.GetComponent<tileInfo>();
-
-            if (currentTileInfo.occupid == true)
-            {
-                continue;
-            }
-            float distance = UnityEngine.Vector3.Distance(targetPos.transform.position, currentTile.transform.position);
-            tileDic.Add(currentTile, distance);
-        }
-
-        int amountBuilded = 0;
-
-        foreach (KeyValuePair<GameObject, float> tileKVP in tileDic.OrderBy(x => x.Value))
-        {
-
-
-            if (TriValueStruct.comapareCosts(callingColony.resourcesOwned.addition(callingColony.totalIncome().multiply(5)), purchciceCost) == true)
-            {
-                tileInfo tileScript = tileKVP.Key.GetComponent<tileInfo>();
-                buildableGameObject buildable = new buildableGameObject
-                {
-                    buildCost = purchciceCost,
-                    buildableObject = deathObject,
-                    nameOfBuildable = thrbuildableScript.nameOfBuildable
-
-
-                };
-
-                bool succes = colonyMethoods.purchasableAction(myAI.gameObject, purchciceCost, tileKVP.Key, true);
-                if (succes == true)
-                {
-                    GameObject objectToCheck =  tileScript.buildNewBuildable(buildable, callingColony);
-                    amountBuilded += 1;
-
-                    if(amountBuilded == amountTobuild)// waits until the last buildable is ready
-                    {
-                        buildableScript zogglisihs = objectToCheck.GetComponent<buildableScript>();
-                        
-                        trackingBuildable = zogglisihs;
-                        zogglisihs.doneCreatingSelf += finsied;
-                        
-                    }
-
-                }
-                else
-                {
-                     GameObject objectToCheck =  tileScript.buildNewBuildable(buildable, callingColony);
-                    amountBuilded += 1;
-
-                    if(amountBuilded == amountTobuild)// waits until the last buildable is ready
-                    {
-                        buildableScript zogglisihs = objectToCheck.GetComponent<buildableScript>();
-                        
-                        trackingBuildable = zogglisihs;
-                        zogglisihs.doneCreatingSelf += finsied;
-                        
-                    }
-                }
-                if (amountBuilded >= amountTobuild)
-                {
-                    break;
-                }
-              
-               
-                
-
-
-
-
-
-            }
-            else
-            {
-                finsied();
-            }
-           
-        }
-        void finsied()
-        {
-            
-           if(trackingBuildable != null)
-            {
-                trackingBuildable.doneCreatingSelf -= finsied;
-            }
-            
-            
-            myAI.hasFreshDesiredbuildabe = false;
-           
-            finished = true;
-        }
-        
-    }
-}
-
-
 
 
 /// <summary>
@@ -457,19 +322,27 @@ public class makeSpaceStrat : iActionStrat
 }
 
 
-public class chooseBuildableStrat : iActionStrat
+public class chooseAndBuildBuildableStrat : iActionStrat
 {
     bool builtTheThing;
     public bool canPerform => !complete;
     public bool complete => builtTheThing;
     baseColonyAI colonyAI;
-
-    public chooseBuildableStrat(baseColonyAI sgfa)
+    int amountToBuild;
+buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
+    public chooseAndBuildBuildableStrat(baseColonyAI sgfa, buildableScript.AIBuildableInfo.buildablePurposes[] SpecificPurposes  = null, int AmountToBuild = 1)
     {
       colonyAI =sgfa;
-
-            
-        
+    specificPurposes = SpecificPurposes;
+    amountToBuild = AmountToBuild;
+                 
+    }
+    public chooseAndBuildBuildableStrat(baseColonyAI sgfa, buildableScript.AIBuildableInfo.buildablePurposes SpecificPurposes, int AmountToBuild = 1)
+    {
+      colonyAI =sgfa;
+    specificPurposes =new buildableScript.AIBuildableInfo.buildablePurposes[]{ SpecificPurposes};
+    amountToBuild = AmountToBuild;
+                 
     }
     public void Start()
     {
@@ -478,8 +351,10 @@ public class chooseBuildableStrat : iActionStrat
        
         
         
-        colonyAI.desiredBuildable = bestBuildableToBuild();
+       buildableGameObject objectBuild = bestBuildableToBuild();
+       buildChosen(objectBuild,amountToBuild);
         builtTheThing = true;
+     
         
     
        
@@ -487,7 +362,17 @@ public class chooseBuildableStrat : iActionStrat
 
     buildableGameObject bestBuildableToBuild()
     {
-        buildableScript.AIBuildableInfo.buildablePurposes[] purposeWanted = colonyAI.desiredPurposesOfBuildable;
+         buildableScript.AIBuildableInfo.buildablePurposes[] purposeWanted = null;
+        if(specificPurposes == null)
+        { 
+            purposeWanted = colonyAI.desiredPurposesOfBuildable;
+            
+        }
+        else
+        {
+           purposeWanted = specificPurposes;
+        }
+       
 
         colonyScript colonyScript = colonyAI.thisColonyScript;
        List<KeyValuePair<buildableGameObject,float>> potentialBuildables =new List<KeyValuePair<buildableGameObject,float>>();
@@ -585,7 +470,59 @@ public class chooseBuildableStrat : iActionStrat
       
     }
     
+    void buildChosen(buildableGameObject buildableGameObject, int amountToBuildChosen)
+    {
+        List<tileInfo> tileCandidates = new List<tileInfo>();
+        foreach(tileInfo tile in colonyAI.thisColonyScript.allTilesOwned.Select(x=>x.GetComponent<tileInfo>()))
+        {
+            if(tile.occupid == false)
+            {
+                tileCandidates.Add(tile);
+            }
+        }
+        if(tileCandidates.Count() <= 0)// should never happen because having space is a precondition for this strat
+        {
+            return;
+        }
+        TriValueStruct wealthOwned = colonyAI.thisColonyScript.resourcesOwned;
 
+        int amountCanAfford = 1;
+        for(int i = 0; i <amountToBuild;i++)
+        {
+            bool canAfford = TriValueStruct.comapareCosts(wealthOwned,buildableGameObject.buildCost.multiply(amountToBuild - i));
+            if(canAfford == true)
+            {
+                amountCanAfford = amountToBuild - i;
+            }
+        
+        }
+        if(tileCandidates.Count() < amountCanAfford)
+        {
+            amountCanAfford = tileCandidates.Count() ;
+        }
+        for(int i=0; i < amountCanAfford; i++)
+        {
+            GameObject gameObjectBuild = tileCandidates[i].buildNewBuildable(buildableGameObject,colonyAI.thisColonyScript);
+            if(i == amountCanAfford)
+            {
+                buildableScript buildableScript = gameObjectBuild.GetComponent<buildableScript>();
+                buildableScript.doneCreatingSelf += finished;
+                
+
+            }
+
+        }
+
+   
+        
+    }
+
+
+    void finished()
+    {
+           builtTheThing = true;
+           
+    }
    
 
     

@@ -71,7 +71,7 @@ float imsinae;
 
         if (transform.localScale.x >= endDiameter)
         {
-            explosionEnd.Invoke();
+            explosionEnd?.Invoke();
             Destroy(gameObject);
         }
 
