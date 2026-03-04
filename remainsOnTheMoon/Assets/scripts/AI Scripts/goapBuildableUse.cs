@@ -202,7 +202,7 @@ buildableScript.buildableActions actionToUse;
                 {
 
                    
-                    bestBuildable.Key.buildableAction(actionToUse,position.Value[i]);
+                    bestBuildable.Key.buildableAction(actionToUse,position.Value[i],true);
                     currentValueUsed += bestBuildable.Value;
                     bestBuildable.Key.finishedAction += hasFinishedAction;
 
@@ -244,7 +244,7 @@ buildableScript.buildableActions actionToUse;
             float currentValue = Mathf.Clamp(buildable.Value * (2- distance),0,2);// the moon's diameter is 2 units across
             
 
-            if(currentValue >= currentBest.Value &&distance <= buildable.Key.possibleRangeDiameter/2)
+            if(currentValue >= currentBest.Value)
             {
                 currentBest = buildable;
             }

@@ -134,12 +134,13 @@ MonoBehaviour:
   tileOn: {fileID: 0}
   unitFloorDistance: 0.07
   isMoving: 0
-  timeToWait: 8
+  isPerformingActions: 0
+  timeToWait: 0.25
   movePath: []
   upkeepCosts:
-    moneyExpenses: 7
-    resourceExpenses: 5
-    populationExpenses: 0
+    moneyValue: 0
+    resourceValue: 0
+    populationValue: 0
     buildingName: mr skibid
   possibleActions: 0000000002000000
   isBuilding: 0

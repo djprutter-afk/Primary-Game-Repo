@@ -257,6 +257,10 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     {
             foreach(buildableScript buildable in thisColonyScript.ownedBuildables.Select(x=>x.GetComponent<buildableScript>()))
             {
+                if(buildable.isPerformingActions == true)
+                {
+                    continue;
+                }
                 return buildable.purposes.Select(x=> x.purpose).Contains(purposeWanted); 
             }
             return false;

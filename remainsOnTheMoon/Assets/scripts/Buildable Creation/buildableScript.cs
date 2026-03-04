@@ -55,7 +55,7 @@ public class buildableScript : MonoBehaviour
     GameObject indicator;
     [Header("movement Setup")]
     [SerializeField] bool isMoving = false;
-    bool isSliding;
+    public bool isPerformingActions = false;
     [SerializeField] float timeToWait = 1f;// time to spend on every tile when moving tile to tile to a target
     float currentTimeToNextMove; // when buildable moves it will wait this amount of time before moving again
 
@@ -100,15 +100,72 @@ public class buildableScript : MonoBehaviour
 
     }
     public AIBuildableInfo.biInfoStuct[] purposes;
-    public bool buildableAction(buildableActions action, GameObject target)
+
+    GameObject ClosetTileInRange(GameObject endTarget)
     {
+       List<GameObject>path= colonyMethoods.pathtingAlgorthim(tileOn, endTarget);
+       for(int i= 0;i<path.Count;i++)
+        {
+            if(Vector3.Distance(path[i].transform.position,transform.position) < possibleRangeDiameter /2)
+            {
+                return path[i];
+            }
+            
+            
+        }
+
+        return null;
+        
+    }
+    buildableActions? lateAction;
+     GameObject lateTarget;
+    void finishLateAction()
+    {
+        if(lateAction==null||lateTarget==null)
+        {
+
+            return;
+            
+        }
+        buildableAction(lateAction,lateTarget);
+        lateAction= null;
+        lateTarget = null;
+    }
+    
+    public bool buildableAction(buildableActions? action, GameObject target,bool moveIfOutOfRange = false)
+    {
+        if (action == null)
+
+        {
+             return false;
+        }
         Debug.Log(" attempting to work please please " + action);
         
         if (Vector3.Distance(target.transform.position, transform.position) > possibleRangeDiameter / 2)
         {
             Debug.LogWarning("FAILED FAILED, TOO FAR target was: " + target +" le object was also: " + gameObject);
+            if(moveIfOutOfRange == true)
+            {
+                GameObject tileToMove = ClosetTileInRange(target);
+                isPerformingActions = true;
+
+                lateAction = action;
+                lateTarget = target;
+
+                moveToTileSetup(tileToMove);
+
+                finishedAction += finishLateAction;
+
+
+            }
             return false;
         }
+        if(isPerformingActions == true)
+        {
+            Debug.LogWarning("Buildable is already performing action CANT  STOP IT");
+            return false;
+        }
+        isPerformingActions = true;
       
         switch (action)
         {
@@ -237,7 +294,7 @@ public class buildableScript : MonoBehaviour
             if (currentTimeToNextMove <= 0)
             {
                
-                if (movePathPosition >= movePath.Count())
+                if (movePathPosition >= movePath.Length)
                 {
 
                     doneMoving?.Invoke();
@@ -269,6 +326,7 @@ public class buildableScript : MonoBehaviour
         if (nextTileInfo.occupid == true)
         {
             moveToTileSetup(endTargetTile);
+            return;
 
             
         }
@@ -294,7 +352,7 @@ public class buildableScript : MonoBehaviour
     
     public void FinsihedAction()
     {
-
+        isPerformingActions = false;
         finishedAction?.Invoke();
     }
 
