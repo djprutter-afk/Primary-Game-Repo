@@ -171,8 +171,7 @@ public static class colonyMethoods
             }
           
 
-            Collider[] neighbouringTiles = Physics.OverlapSphere(currentTile.transform.position, 0.05f);// 6 is the "theMoon" layer
-         
+            Collider[] neighbouringTiles = Physics.OverlapSphere(currentTile.transform.position, 0.05f);
             foreach (Collider currentTileNeighbourCollider in neighbouringTiles)
             {
                 
@@ -203,13 +202,15 @@ public static class colonyMethoods
     {
 
         Dictionary<GameObject, GameObject> map = findPathingingMap(startTile, endTile);
-
+        Debug.Log("found the map!");
         if (map == null)
         {
             return null;
         }
+        Debug.Log(endTile ==null);
         List<GameObject> path = new List<GameObject>();
         GameObject currentTile = endTile;
+        Debug.Log("1");
         while (currentTile != startTile)
         {
             path.Add(currentTile);
@@ -217,8 +218,9 @@ public static class colonyMethoods
 
 
         }
+        Debug.Log("2");
         path.Reverse();
-
+        Debug.Log("3");
         return path;
 
     }

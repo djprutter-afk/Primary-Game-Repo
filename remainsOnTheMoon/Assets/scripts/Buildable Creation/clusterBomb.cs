@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class clusterBomb : misstileScript
@@ -16,14 +18,15 @@ public class clusterBomb : misstileScript
             randomSpot.y += UnityEngine.Random.Range(-maxDistanceRadius, maxDistanceRadius);
             randomSpot.z += UnityEngine.Random.Range(-maxDistanceRadius, maxDistanceRadius);
                  // FIX THIS, DOES NOT WORK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Vector3 directionVector =  randomSpot;
-        
-        Vector3 normalizedDirection = directionVector.normalized;
-            Ray ray = new Ray(randomSpot,normalizedDirection);
-            RaycastHit hitInfo = new RaycastHit();
-            Physics.Raycast(ray,out hitInfo);
-
-            GameObject explosion = Instantiate(explosionObject,hitInfo.point, transform.rotation);
+            List<Collider> colliders = Physics.OverlapSphere(randomSpot,1).ToList();
+            List<Vector3> tilePositionsHit = colliders.Where(x=>x.GetComponent<tileInfo>() != null).Select(x=>x.transform.position).ToList();
+            Vector3[] tilePositionsHitSorted = tilePositionsHit.OrderBy(x=>Vector3.Distance(x,randomSpot)).ToArray();
+            if(tilePositionsHitSorted.Length <= 0)
+            {
+                Debug.LogWarning("couldnt find any positions to explode!");
+                return;
+            }
+            GameObject explosion = Instantiate(explosionObject,tilePositionsHitSorted.First(), transform.rotation);
             expansionScript skbidi = explosion.GetComponent<expansionScript>();
             skbidi.Power = power * Random.Range(0.5f,1f);
             skbidi.timeToFinishSeconds = timeToFinsishInSeconds* Random.Range(0.7f,1.3f);

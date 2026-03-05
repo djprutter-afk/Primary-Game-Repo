@@ -10,8 +10,6 @@ public class misstileScript : MonoBehaviour
     public float explosionpower = 1;
 
 
-    public bool launchDebug;
-    public GameObject targetDebug;
     public buildableScript thisUnitScript;
     public float forceAmt;
 
@@ -59,12 +57,6 @@ public class misstileScript : MonoBehaviour
 
     void Update()
     {
-        if (launchDebug == true)
-        {
-
-            targetAndLaunch(targetDebug);
-
-        }
 
         if (launching)
         {
