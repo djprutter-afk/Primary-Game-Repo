@@ -212,6 +212,7 @@ public class buildableScript : MonoBehaviour
             selfDies?.Invoke();
 
         }
+        Destroy(gameObject);
 
     }
 

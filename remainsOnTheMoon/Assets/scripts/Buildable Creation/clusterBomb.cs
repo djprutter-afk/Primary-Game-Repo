@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class clusterBomb : misstileScript
@@ -10,11 +11,19 @@ public class clusterBomb : misstileScript
         {
              Vector3 randomSpot = transform.position;
              
-            
+      
             randomSpot.x += UnityEngine.Random.Range(-maxDistanceRadius, maxDistanceRadius);
             randomSpot.y += UnityEngine.Random.Range(-maxDistanceRadius, maxDistanceRadius);
             randomSpot.z += UnityEngine.Random.Range(-maxDistanceRadius, maxDistanceRadius);
-            GameObject explosion = Instantiate(explosionObject,randomSpot, transform.rotation);
+                 // FIX THIS, DOES NOT WORK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Vector3 directionVector =  randomSpot;
+        
+        Vector3 normalizedDirection = directionVector.normalized;
+            Ray ray = new Ray(randomSpot,normalizedDirection);
+            RaycastHit hitInfo = new RaycastHit();
+            Physics.Raycast(ray,out hitInfo);
+
+            GameObject explosion = Instantiate(explosionObject,hitInfo.point, transform.rotation);
             expansionScript skbidi = explosion.GetComponent<expansionScript>();
             skbidi.Power = power * Random.Range(0.5f,1f);
             skbidi.timeToFinishSeconds = timeToFinsishInSeconds* Random.Range(0.7f,1.3f);

@@ -226,7 +226,7 @@ public class cameraRotate : MonoBehaviour
     {
         movementSlope = 0.05f;
         screenIsShaking = true;
-        Debug.Log(Power + " " + totalTime);
+      
         maxMovment += Power;
         totalScreenShakeCurrentTIme = 0;
 

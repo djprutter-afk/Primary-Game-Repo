@@ -126,6 +126,10 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         colonyScript[] allColonies = transform.parent.GetComponent<gameSetup1>().allColonieScripts.ToArray();
         foreach(colonyScript otherColony in allColonies)
         {
+            if(otherColony == thisColonyScript)
+            {
+                continue;
+            }
             otherColonyInfos.Add(new otherColonyInfo{colony =otherColony});
         }
         
@@ -331,10 +335,12 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         .Build());
 
          actions.Add(new agentAction.Builder("bomb enemy to ashes")
-        .WithStrat(new bombEnemiesStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive,buildableScript.buildableActions.launch,thingsToTargetEnum.both,0f))
+        .WithStrat(new bombEnemiesStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive,buildableScript.buildableActions.launch,thingsToTargetEnum.both,0.45f))
         .AddEffect(beliefs["is feeling safe"])
         .addPreCondition(beliefs["has missiles"])
         .Build());
+
+        
         
         
 

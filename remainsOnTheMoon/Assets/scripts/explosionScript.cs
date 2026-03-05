@@ -112,6 +112,7 @@ thisMesh.material.SetFloat("_intensity",completenes * 10);
         
         tileInfo thisTileInfo = thiscollider.gameObject.GetComponent<tileInfo>();
         tileVisuals thistileVis = thiscollider.gameObject.GetComponent<tileVisuals>();
+        buildableScript enemyScript = thiscollider.gameObject.GetComponent<buildableScript>();
         if (thisTileInfo != null)
         {
             GameObject fireObject = Instantiate(fire);
@@ -139,6 +140,10 @@ thisMesh.material.SetFloat("_intensity",completenes * 10);
 
             thistileVis.setupTileVisuals(localGenericMaterial);
 
+        }
+        else if (enemyScript != null)
+        {
+            enemyScript.takeDamage(Power *500);
         }
         
     }

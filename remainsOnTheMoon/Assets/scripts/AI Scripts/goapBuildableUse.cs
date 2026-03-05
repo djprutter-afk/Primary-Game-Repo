@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Unity.Collections;
+using Unity.Mathematics;
 
 public enum thingsToTargetEnum
 {
@@ -415,12 +416,13 @@ public class bombEnemiesStrat : buildableUseStrat
     {
 
         List<colonyScript> coloniesToAttack = new List<colonyScript>();
-        KeyValuePair<colonyScript,float> bestColony = new KeyValuePair<colonyScript, float>();
+        KeyValuePair<colonyScript,float> bestColony = new KeyValuePair<colonyScript, float>(null,float.MinValue);
         foreach(baseColonyAI.otherColonyInfo colonyInfo in colonyAI.otherColonyInfos)
         {
             float desireToAttack = (1-colonyInfo.friendliness) * colonyInfo.threatLevel;
-            if(bestColony.Value < desireToAttack)
+            if(bestColony.Value <= desireToAttack)
             {
+                Debug.Log("found best buildable and it's: " + colonyInfo.colony.name);
                 bestColony = new KeyValuePair<colonyScript, float>(colonyInfo.colony,desireToAttack);
             }
 
@@ -435,6 +437,7 @@ public class bombEnemiesStrat : buildableUseStrat
         {
             coloniesToAttack.Add(bestColony.Key); // again, even if it goes against the grain the ai willed it to happen, and thus something must happen
         }
+        Debug.Log("IM GOING TO DESTROY " + coloniesToAttack.Count);
         List<Vector3> centerOfEnemies = new List<Vector3>();
         foreach(var colony in coloniesToAttack)
         {

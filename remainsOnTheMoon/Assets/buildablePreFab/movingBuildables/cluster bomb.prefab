@@ -256,7 +256,7 @@ MonoBehaviour:
   unitFloorDistance: 0.07
   isMoving: 0
   isPerformingActions: 0
-  timeToWait: 3
+  timeToWait: 2.5
   movePath: []
   upkeepCosts:
     moneyValue: 0
@@ -339,8 +339,8 @@ MonoBehaviour:
   forceAmt: 0.21
   missileHeight: 0.4
   explosionObject: {fileID: 714982634637159252, guid: f1767d374f01ef446bef3e06293410ff, type: 3}
-  power: 0.05
-  timeToFinsishInSeconds: 1
-  endDiameter: 0.1
+  power: 0.15
+  timeToFinsishInSeconds: 2.5
+  endDiameter: 0.15
   explosiveAmt: 5
   maxDistanceRadius: 0.2
