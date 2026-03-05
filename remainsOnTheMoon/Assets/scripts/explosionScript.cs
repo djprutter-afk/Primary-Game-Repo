@@ -118,8 +118,7 @@ thisMesh.material.SetFloat("_intensity",completenes * 10);
             fireScript theFireScript = fireObject.GetComponent<fireScript>();
             theFireScript.setToTile(thisTileInfo.gameObject,1f,this);
           
-            thisTileInfo.population /= (int)(Power) + 1;
-            thisTileInfo.development /= Power ;
+            thisTileInfo.damageTile(Power);
             //thiscollider.gameObject
 
             

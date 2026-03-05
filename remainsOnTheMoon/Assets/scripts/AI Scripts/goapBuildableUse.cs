@@ -41,6 +41,7 @@ buildableScript.buildableActions actionToUse;
     }
     public void Start()
     {
+        finishedAction = false;
         Dictionary<string,float> aIPressures = new Dictionary<string, float>();
         foreach(AgentGoal goal in colonyAI.goals)
         {
@@ -95,6 +96,10 @@ buildableScript.buildableActions actionToUse;
         Dictionary<buildableScript,float> valueOfBuildable = new Dictionary<buildableScript, float>();
         foreach(var builable in buildablesOfPurpose)
         {
+            if(builable.isPerformingActions == true)
+            {
+                continue;// its working already
+            }
             foreach(var purpsoe in builable.purposes)
             {
                 if(purpsoe.purpose == buildablePurposeNeeded)
@@ -105,6 +110,11 @@ buildableScript.buildableActions actionToUse;
                     
                 }
             }
+        }
+        if(valueOfBuildable.Count <= 0)
+        {
+            finishedAction= true;// means there are no buildables to do work
+
         }
         dedicationAmount = Mathf.Clamp(dedicationAmount,0,1);
         float valueNeed = totalValueOfPurpose * dedicationAmount;
@@ -174,10 +184,15 @@ buildableScript.buildableActions actionToUse;
                  
                
 
-                if(objectToTarget.Length >targetsPerPosition)
+                if(objectToTarget.Length >= targetsPerPosition)
                 {
+                    GameObject[] targetedObjects =
+    objectToTarget
+        .OrderBy(x => Vector3.Distance(x.transform.position, position))
+        .Take(targetsPerPosition)
+        .ToArray();
 
-                    tileClosestToPosition.Add(position,objectToTarget.Take(targetsPerPosition).ToArray());
+                    tileClosestToPosition.Add(position,targetedObjects);
                     break;
                     
                 }
@@ -187,6 +202,7 @@ buildableScript.buildableActions actionToUse;
            
         }
         bool atLeastOneUsed = false;// although an action my not be worth sending literally anything out, it should still happen cause the ai expects something to happeb
+      
        for(int i=0; i <targetsPerPosition;i++)
         {
             
@@ -264,6 +280,7 @@ buildableScript.buildableActions actionToUse;
         totalFinished++;
         if(totalFinished >= expectedAmountToFinish)
         {
+            totalFinished = 0;// just to be sure
              finishedAction = true;
         }
        
@@ -431,6 +448,8 @@ public class bombEnemiesStrat : buildableUseStrat
 
            
         }
+
+
 
         return centerOfEnemies.ToArray();
 

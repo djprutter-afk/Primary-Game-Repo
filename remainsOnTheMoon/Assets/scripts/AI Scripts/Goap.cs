@@ -136,64 +136,7 @@ public class waitTickStrat : iActionStrat
 
 
 }
-public class decideTimeTowait : iActionStrat
-{
 
-    int? ticksRemaining;
-    baseColonyAI theAI;
-    bool isFin = false;
-    public bool canPerform => !complete;
-    public bool complete => isFin;
-    public decideTimeTowait(baseColonyAI THEAI)
-    {
-        theAI = THEAI;
-         
-        
-    }
-    void tick()
-    {
-        ticksRemaining--;
-        if(ticksRemaining<=0)
-        {
-            finishedTicking();
-        }
-
-    }
-    void finishedTicking()
-    {
-        theAI.hasntWaited = false;
-        gameManagerScript.GameTick -= this.tick; 
-        isFin=true;
-    }
-    public void Start()
-    {
-        theAI.hasntWaited = false;
-        for(int i=0; i< 15;i++)
-        {
-            bool canAfford = TriValueStruct.comapareCosts(theAI.thisColonyScript.resourcesOwned.addition(theAI.thisColonyScript.totalIncome().multiply(i)), theAI.desiredBuildable.buildCost);
-            if(canAfford == true)
-            {
-                ticksRemaining = i +1;
-                break;
-            }
-            //Debug.Log(i+" " + theAI.thisColonyScript.resourcesOwned.addition(theAI.thisColonyScript.totalIncome().multiply(i)));
-        }
-        if(ticksRemaining==null)
-        {
-            ticksRemaining = 0;
-
-        }
-      
-
-
-
-       gameManagerScript.GameTick += this.tick; 
-    }
-
-
-
-
-}
 
 
 

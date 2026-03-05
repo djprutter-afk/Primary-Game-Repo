@@ -106,7 +106,7 @@ public class buildableScript : MonoBehaviour
        List<GameObject>path= colonyMethoods.pathtingAlgorthim(tileOn, endTarget);
        for(int i= 0;i<path.Count;i++)
         {
-            if(Vector3.Distance(path[i].transform.position,transform.position) < possibleRangeDiameter /2)
+            if(Vector3.Distance(path[i].transform.position,endTarget.transform.position) < possibleRangeDiameter /2)
             {
                 return path[i];
             }
@@ -134,19 +134,22 @@ public class buildableScript : MonoBehaviour
     
     public bool buildableAction(buildableActions? action, GameObject target,bool moveIfOutOfRange = false)
     {
-        if (action == null)
-
+        Debug.Log("target is: " + Vector3.Distance(target.transform.position, transform.position)+" away");
+        if (action == null || isPerformingActions == true)
         {
+
+            
              return false;
         }
         Debug.Log(" attempting to work please please " + action);
         
-        if (Vector3.Distance(target.transform.position, transform.position) > possibleRangeDiameter / 2)
+        if (Vector3.Distance(target.transform.position, transform.position) > possibleRangeDiameter / 2 && action != buildableActions.Move)
         {
             Debug.LogWarning("FAILED FAILED, TOO FAR target was: " + target +" le object was also: " + gameObject);
             if(moveIfOutOfRange == true)
             {
                 GameObject tileToMove = ClosetTileInRange(target);
+                Debug.Log("target is: " + Vector3.Distance(tileToMove.transform.position, transform.position)+" away and this is 2 point 0");
                 isPerformingActions = true;
 
                 lateAction = action;
@@ -352,6 +355,7 @@ public class buildableScript : MonoBehaviour
     
     public void FinsihedAction()
     {
+        Debug.Log("IM all finished!");
         isPerformingActions = false;
         finishedAction?.Invoke();
     }

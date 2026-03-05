@@ -135,7 +135,7 @@ MonoBehaviour:
   unitFloorDistance: 0.07
   isMoving: 0
   isPerformingActions: 0
-  timeToWait: 0.25
+  timeToWait: 1
   movePath: []
   upkeepCosts:
     moneyValue: 0

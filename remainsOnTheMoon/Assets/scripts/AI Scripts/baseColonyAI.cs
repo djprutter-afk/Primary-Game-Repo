@@ -13,8 +13,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
    public buildableScript.AIBuildableInfo.buildablePurposes[] desiredPurposesOfBuildable;
     TriValueStruct desiredIncome;
 
-    public buildableGameObject desiredBuildable = new buildableGameObject();
-    public bool hasFreshDesiredbuildabe = false;
+
 
     
 

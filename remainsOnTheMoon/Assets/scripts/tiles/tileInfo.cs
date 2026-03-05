@@ -22,6 +22,10 @@ public class tileInfo : MonoBehaviour
     public MoonScript theMoon;
     GameObject ownerColony;
     colonyScript ownerColonyScript;
+    
+    private float damageRecoveryTimer = 0f;
+    private float damageRecoveryDuration = 30f; // Seconds to recover
+    private float populationGrowthMultiplier = 0f; // Added/subtracted from growth during recovery
    
     void Start()
     {
@@ -46,8 +50,23 @@ public class tileInfo : MonoBehaviour
         float totalPopGrowth = 1;
         if (ownerColonyScript != null)
         {
-            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth *  ((1 -(population/(development*300 + 50)))/15);// redo sometime to be better
+            // Reduce growth significantly at lower populations using square root scaling
+            float populationScaling = Mathf.Sqrt(population / 50f); // Heavily penalizes low population
+            // Development acts as hard cap on population growth
+            float developmentCap = Mathf.Max(0, 1f - (population / (development * 50f))); // Much stricter development constraint
+            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth * developmentCap * populationScaling + populationGrowthMultiplier;// redo sometime to be better
             
+            // Recover from damage over time
+            if (damageRecoveryTimer > 0)
+            {
+                damageRecoveryTimer -= Time.deltaTime;
+                // Simple linear recovery: penalty decreases each frame
+                populationGrowthMultiplier = Mathf.Lerp(0f, populationGrowthMultiplier, damageRecoveryTimer / damageRecoveryDuration);
+            }
+            else
+            {
+                populationGrowthMultiplier = 0f;
+            }
 
         }
 
@@ -99,6 +118,46 @@ public class tileInfo : MonoBehaviour
         tileVisuals TileVisual = gameObject.GetComponent<tileVisuals>();
         TileVisual.setupTileVisuals(theMoon.moonMaterial);
         transform.SetParent(theMoon.transform);
+    }
+/// <summary>
+/// Damages the tile based on explosion power, reducing population, development, and destroying buildings, this function was entirely made by ai, im sorry i was tired
+/// </summary>
+/// <param name="power">should range with explosion power</param>
+    public void damageTile(float power)
+    {
+        // Reduce population based on explosion power (casualties) - MORE EXTREME
+        float populationLoss = population * (power / 30f); // Increased damage from 100 to 30
+        population = Mathf.Max(0, population - populationLoss);
+        
+        // Reduce development (infrastructure damage)
+        float developmentLoss = development * (power / 150f);
+        development = Mathf.Max(0, development - developmentLoss);
+        
+        // Reduce resources (resource destruction)
+        float resourceLoss = resource * (power / 200f);
+        resource = Mathf.Max(0, resource - resourceLoss);
+        
+        // Damage/destroy buildings on the tile
+        for (int i = buildingsOnTile.Count - 1; i >= 0; i--)
+        {
+            if (UnityEngine.Random.value < Mathf.Min(power / 100f, 1f)) // Higher power = higher chance to destroy building
+            {
+                buildingsOnTile.RemoveAt(i);
+            }
+        }
+        
+        // Temporarily reduce population growth during recovery
+        damageRecoveryTimer = damageRecoveryDuration;
+        // Negative growth penalty: higher development = faster recovery
+        // Development acts as cushion against negative growth
+        float developmentFactor = Mathf.Clamp01(development / 100f); // 0-1 scale
+        populationGrowthMultiplier = -(power / 20f) * (1f - developmentFactor * 0.7f); // Dev reduces penalty by up to 70%
+        
+        // If all population is dead, desettle the tile
+        if (population <= 0)
+        {
+            deSettle();
+        }
     }
 
 
