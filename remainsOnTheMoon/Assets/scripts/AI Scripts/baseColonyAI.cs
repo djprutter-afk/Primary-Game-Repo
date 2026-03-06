@@ -170,12 +170,13 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
   
     void updateValues()
     {
-        updateBuildingDesires();
+        updateFear();
+        
     
  
     }
 
-    void updateBuildingDesires()
+    void updateFear()
     {
             desiredIncome.multiply(1.003f);
         TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
@@ -220,11 +221,14 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
          valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
 
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
-      valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion]  = 3- thisColonyScript.allTilesOwned.Count/5f;
+        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = totalFear *0.40f;
+      
 
     }
-    
+    void updateGoalPressure()
+    {
+        
+    }
     
   
     public bool hasntWaited = true;
