@@ -51,7 +51,7 @@ public class tileInfo : MonoBehaviour
         if (ownerColonyScript != null)
         {
             // Reduce growth significantly at lower populations using square root scaling
-            float populationScaling = Mathf.Sqrt(population / 50f); // Heavily penalizes low population
+            float populationScaling = Mathf.Sqrt(population / 10f); // Heavily penalizes low population
             // Development acts as hard cap on population growth
             float developmentCap = Mathf.Max(0, 1f - (population / (development * 50f))); // Much stricter development constraint
             totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth * developmentCap * populationScaling + populationGrowthMultiplier;// redo sometime to be better
@@ -85,7 +85,9 @@ public class tileInfo : MonoBehaviour
             population += totalPopGrowth;
             if(population < 1 || population == null)// a state cannot cannot express it's authority without people
             {
+                ownerColonyScript.allTilesOwned.Remove(gameObject);
                 deSettle();
+                return new TriValueStruct();
             }
             ownerColonyScript.resourcesOwned.moneyValue += moneyGainDollars;
             ownerColonyScript.resourcesOwned.resourceValue += resourceProduction;

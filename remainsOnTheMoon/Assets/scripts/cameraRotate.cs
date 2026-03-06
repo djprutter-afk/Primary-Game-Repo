@@ -243,6 +243,7 @@ public class cameraRotate : MonoBehaviour
         movementSlope += UnityEngine.Random.Range(-movementSlope / 3, movementSlope / 3);
         CurrentScreenShakeTimeMax = movementSlope;
         CurrentScreenShakeTime = 0;
+        timeElapsed = movementSlope;
         
 
         float xPosition = UnityEngine.Random.Range(-MovementAmt, MovementAmt);

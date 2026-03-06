@@ -166,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2759605764108389184, guid: c0c87dadadafb9541924c3291c547b67, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.0727339
+      value: -4.058
       objectReference: {fileID: 0}
     - target: {fileID: 2759605764108389184, guid: c0c87dadadafb9541924c3291c547b67, type: 3}
       propertyPath: m_LocalRotation.w
@@ -11514,9 +11514,9 @@ MonoBehaviour:
   playerColonyPrefab: {fileID: 2021864630668587882, guid: 7a98fa308149ae1448f0e9d713045f2d, type: 3}
   playercolonies: []
   playerAmount: 1
-  minDistance: 0.7
+  minDistance: 0.1
   theMoon: {fileID: 1507515933}
-  colonyAmount: 2
+  colonyAmount: 20
   gameManager: {fileID: 713989425}
   playerMouseInteractionsObject: {fileID: 309602033}
   colonyTypes:

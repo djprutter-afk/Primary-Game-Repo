@@ -103,14 +103,14 @@ public class buildableScript : MonoBehaviour
 
     GameObject ClosetTileInRange(GameObject endTarget)
     {
-        Debug.Log("we bout to find closetest tile in range");
+        
         if(endTarget == null)
         {
             return null;
         }
-        Debug.Log("end target was NOt null, tile on and end target are respectibly: "+ tileOn.name);
+        
        List<GameObject>path= colonyMethoods.pathtingAlgorthim(tileOn, endTarget);
-       Debug.Log("the path is " + path.Count +" long");
+     
        for(int i= 0;i<path.Count;i++)
         {
             if(Vector3.Distance(path[i].transform.position,endTarget.transform.position) < possibleRangeDiameter /2)

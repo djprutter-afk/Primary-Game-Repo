@@ -181,7 +181,7 @@ public static class colonyMethoods
                 {
                     continue;
                 }
-                if (cameFrom.ContainsKey(currentTileNeighbour) || currentTileNeighbour == currentTile || currentTIleInfo.occupid == true)
+                if (cameFrom.ContainsKey(currentTileNeighbour) || currentTileNeighbour == currentTile || currentTIleInfo.occupid == true && currentTileNeighbour != endTile)
                     {
                         continue;
 

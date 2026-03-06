@@ -314,7 +314,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         //purpose specific actions
         ////////////////////////////////////////////////////////////////////////
         
-
+        /// expansion
         actions.Add(new agentAction.Builder("build settlers")
         .WithStrat(new chooseAndBuildBuildableStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion))
         .addPreCondition(beliefs["has space to build"])
@@ -328,6 +328,8 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         .addPreCondition(beliefs["has settlers"])
         .Build());
 
+
+        /// Missiles
          actions.Add(new agentAction.Builder("build missiles")
         .WithStrat(new chooseAndBuildBuildableStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive))
         .addPreCondition(beliefs["has space to build"])
@@ -339,6 +341,13 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         .AddEffect(beliefs["is feeling safe"])
         .addPreCondition(beliefs["has missiles"])
         .Build());
+
+        ///economy
+         actions.Add(new agentAction.Builder("build economy")
+         .WithStrat(new chooseAndBuildBuildableStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.economy))
+         .AddEffect(beliefs["has good economy"])
+         .Build());
+
 
         
         
