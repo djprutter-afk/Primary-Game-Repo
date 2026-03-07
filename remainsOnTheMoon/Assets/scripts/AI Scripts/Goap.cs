@@ -573,7 +573,7 @@ public class AgentGoal
 
 
     public string Name { get; }
-    public float priority { get; private set; }
+    public float priority { get;  set; }
 
     public HashSet<agentBelief> DesiredEffects { get; } = new();
     AgentGoal(string name)

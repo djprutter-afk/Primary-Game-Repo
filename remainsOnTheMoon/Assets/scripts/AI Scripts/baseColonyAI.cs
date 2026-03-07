@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Unity.Jobs;
 using Unity.Collections;
+using Unity.Mathematics;
 /// <summary>
 /// putting this here so i dont forget, money you should be able to go into debt but you cant go into debt for resource or population
 /// </summary>
@@ -89,7 +90,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
 
         }
-
+        
       
     }
 
@@ -171,7 +172,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     void updateValues()
     {
         updateFear();
-        
+        updateGoalPressure();
     
  
     }
@@ -219,6 +220,11 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         }
         totalFear /= otherColonyInfos.Count;
 
+
+        // expansion infos
+
+
+
          valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
 
         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = totalFear *0.40f;
@@ -227,7 +233,22 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     }
     void updateGoalPressure()
     {
-        
+        foreach(AgentGoal goal in goals)
+        {
+            switch (goal.Name)
+            {
+                case "militaryPressure":
+                    goal.priority = Mathf.Clamp01((otherColonyInfos.Sum(x=>x.threatLevel) * aggression)/ otherColonyInfos.Count);
+                    break;
+                case "economicPressure":
+                    goal.priority = valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy];
+                    break;
+                case "expansionPressure":
+                    goal.priority = valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion];
+                    break;
+            }
+        }
+       
     }
     
   
@@ -376,7 +397,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         goals = new HashSet<AgentGoal>();
         
 
-
+        // how to change goal pressure: you have to 
         
         goals.Add(new AgentGoal.Builder("militaryPressure")
         .withPriority(1f)

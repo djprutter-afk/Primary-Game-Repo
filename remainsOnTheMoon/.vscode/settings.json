@@ -66,5 +66,26 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "remainsOnTheMoon.slnx"
+    "dotnet.defaultSolution": "remainsOnTheMoon.slnx",
+    "cSpell.words": [
+        "actionplan",
+        "chekcing",
+        "Colonie",
+        "currentscript",
+        "Dictonary",
+        "dont",
+        "dsafjdbsnfn",
+        "hasnt",
+        "indivdual",
+        "inital",
+        "Mathf",
+        "nilly",
+        "occupid",
+        "prevelent",
+        "priorty",
+        "satifcation",
+        "Stuct",
+        "suicidie",
+        "withdesired"
+    ]
 }
