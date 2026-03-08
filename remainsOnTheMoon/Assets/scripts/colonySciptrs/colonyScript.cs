@@ -76,23 +76,8 @@ public class colonyScript : MonoBehaviour
 
             TriValueStruct tileincome = thisTileInfo.TotalIncome(true);
 
-            float tileHousingPercentage = thisTileInfo.population / (thisTileInfo.development * 250 + 1);
-
-
-            if (tileHousingPercentage > 1)
-            {
-                thisTileInfo.populationGrowthPercent -= 0.01f;
-            }
-            else if (tileHousingPercentage <= 1)
-            {
-                thisTileInfo.populationGrowthPercent = 1.03f;
-
-            }
-            else if (tileHousingPercentage == 1)
-            {
-                thisTileInfo.populationGrowthPercent = 1;
-
-            }
+           
+            
 
 
 
@@ -109,9 +94,8 @@ public class colonyScript : MonoBehaviour
             {
                 continue;
             }
-            totalIncome.moneyValue -= thisBuildableScript.upkeepCosts.moneyValue;
-            totalIncome.resourceValue -= thisBuildableScript.upkeepCosts.resourceValue;
-            totalIncome.populationValue -= thisBuildableScript.upkeepCosts.populationValue;
+            totalIncome.subtract(thisBuildableScript.upkeepCosts,true);
+      
 
         }
         foreach (GameObject tile in allTilesOwned)
@@ -119,14 +103,90 @@ public class colonyScript : MonoBehaviour
             tileInfo thisTileInfo = tile.GetComponent<tileInfo>();
             
             TriValueStruct totalTileIncome = thisTileInfo.TotalIncome();
-            totalIncome.moneyValue += totalTileIncome.moneyValue;
-            totalIncome.resourceValue += totalTileIncome.resourceValue;
-            totalIncome.populationValue += totalTileIncome.populationValue;
-
+           totalIncome.subtract(totalTileIncome,true);
         }
         Debug.LogWarning("total income is "+totalIncome.moneyValue + " " + totalIncome.resourceValue+" " + totalIncome.populationValue);
         return totalIncome;
     }
+     public TriValueStruct incomeToExpensesRatios()
+    {
+        TriValueStruct totalIncome = new TriValueStruct();      
+         TriValueStruct totalExpenses = new TriValueStruct();     
+        foreach (GameObject buildable in ownedBuildables)
+        {
+            buildableScript thisBuildableScript = buildable.GetComponent<buildableScript>();
+            if (thisBuildableScript.isBuilding)// if its building then it's already included in tiles
+            {
+                continue;
+            }
+
+            TriValueStruct buildableUpkeep = thisBuildableScript.upkeepCosts;
+            if(buildableUpkeep.moneyValue >=0)
+            {
+                totalExpenses.moneyValue += buildableUpkeep.moneyValue;
+            }
+            else
+            {
+                totalIncome.moneyValue += buildableUpkeep.moneyValue;
+            }
+            if (buildableUpkeep.resourceValue >= 0)
+            {
+                totalExpenses.resourceValue += buildableUpkeep.resourceValue;
+            }
+            else
+            {
+                totalIncome.resourceValue += buildableUpkeep.resourceValue;
+            }
+            if (buildableUpkeep.populationValue >= 0)
+            {
+                totalExpenses.populationValue += buildableUpkeep.populationValue;
+            }
+            else
+            {
+                totalIncome.populationValue += buildableUpkeep.populationValue;
+            }
+      
+
+        }
+        foreach (GameObject tile in allTilesOwned)
+        {
+            tileInfo thisTileInfo = tile.GetComponent<tileInfo>();
+            
+            TriValueStruct totalTileIncome = thisTileInfo.TotalIncome();
+            if(totalTileIncome.moneyValue >=0)
+            {
+                totalExpenses.moneyValue += totalTileIncome.moneyValue;
+            }
+            else
+            {
+                totalIncome.moneyValue += totalTileIncome.moneyValue;
+            }
+
+            if (totalTileIncome.resourceValue >= 0)
+            {
+                totalExpenses.resourceValue += totalTileIncome.resourceValue;
+            }
+            else
+            {
+                totalIncome.resourceValue += totalTileIncome.resourceValue;
+            }
+            if (totalTileIncome.populationValue >= 0)
+            {
+                totalExpenses.populationValue += totalTileIncome.populationValue;
+            }
+            else
+            {
+                totalIncome.populationValue += totalTileIncome.populationValue;
+            }
+
+        }
+
+        TriValueStruct incomeToExpenseRatios= totalIncome.divide(totalExpenses);
+        Debug.LogWarning("income to expense ratios is " + incomeToExpenseRatios.moneyValue + " " + incomeToExpenseRatios.resourceValue + " " + incomeToExpenseRatios.populationValue);
+        return incomeToExpenseRatios;
+
+    }
+      
 /// <summary>
 /// subtracts people from everytile evenly and randomly
 /// </summary>

@@ -183,7 +183,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
         float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
 
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] +=  (1 - totalSatisfaction *2);
+       
         Vector3 GetAveragePosition()
         {
             Vector3 averagePosition = Vector3.zero;
@@ -222,7 +222,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
 
         // expansion infos
-
+            valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion] = (1 - totalSatisfaction) *0.50f;
 
 
          valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
@@ -231,20 +231,32 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
       
 
     }
+    
+  public  float economicPressureCalc()
+    {
+        TriValueStruct incomeRatios = thisColonyScript.incomeToExpensesRatios();
+        float totalRatio = (incomeRatios.moneyValue + incomeRatios.resourceValue + incomeRatios.populationValue) / 3f;
+        return 1- totalRatio;
+      
+
+    }
     void updateGoalPressure()
     {
+        float economicPressure = economicPressureCalc();
+       
         foreach(AgentGoal goal in goals)
         {
+            
             switch (goal.Name)
             {
                 case "militaryPressure":
                     goal.priority = Mathf.Clamp01((otherColonyInfos.Sum(x=>x.threatLevel) * aggression)/ otherColonyInfos.Count);
                     break;
                 case "economicPressure":
-                    goal.priority = valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy];
+                    goal.priority = Mathf.Clamp01(economicPressure);
                     break;
                 case "expansionPressure":
-                    goal.priority = valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion];
+                    goal.priority = 0.5f * (1 - thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
                     break;
             }
         }
