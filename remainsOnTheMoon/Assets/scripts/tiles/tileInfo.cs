@@ -50,23 +50,10 @@ public class tileInfo : MonoBehaviour
         float totalPopGrowth = 1;
         if (ownerColonyScript != null)
         {
-            // Reduce growth significantly at lower populations using square root scaling
-            float populationScaling = Mathf.Sqrt(population / 10f); // Heavily penalizes low population
-            // Development acts as hard cap on population growth
-            float developmentCap = Mathf.Max(0, 1f - (population / (development * 50f))); // Much stricter development constraint
-            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth * developmentCap * populationScaling + populationGrowthMultiplier;// redo sometime to be better
+           
+            float developmentCap = Mathf.Max(0, 1f - (population / (development *250f))); 
+            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth * developmentCap * populationGrowthMultiplier;
             
-            // Recover from damage over time
-            if (damageRecoveryTimer > 0)
-            {
-                damageRecoveryTimer -= Time.deltaTime;
-                // Simple linear recovery: penalty decreases each frame
-                populationGrowthMultiplier = Mathf.Lerp(0f, populationGrowthMultiplier, damageRecoveryTimer / damageRecoveryDuration);
-            }
-            else
-            {
-                populationGrowthMultiplier = 0f;
-            }
 
         }
 
@@ -128,7 +115,7 @@ public class tileInfo : MonoBehaviour
     public void damageTile(float power)
     {
         // Reduce population based on explosion power (casualties) - MORE EXTREME
-        float populationLoss = population * (power / 30f); // Increased damage from 100 to 30
+        float populationLoss = population * (1- power ); // Increased damage from 100 to 30
         population = Mathf.Max(0, population - populationLoss);
         
         // Reduce development (infrastructure damage)

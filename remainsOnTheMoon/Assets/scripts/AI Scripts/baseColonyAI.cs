@@ -19,7 +19,6 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
     
 
     
-    public event Action AITick;
     public GameObject theGameManager;
    
     public Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float> valueOfBuildables = new Dictionary<buildableScript.AIBuildableInfo.buildablePurposes, float>();//how much the ai will priorities the buildable
@@ -180,7 +179,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     void updateFear()
     {
             desiredIncome.multiply(1.003f);
-        TriValueStruct satifcation = thisColonyScript.totalIncome().multiply(-1).divide(desiredIncome);
+        TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
         float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
 
        
@@ -237,7 +236,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         TriValueStruct incomeRatios = thisColonyScript.incomeToExpensesRatios();
         float totalRatio = (incomeRatios.moneyValue + incomeRatios.resourceValue + incomeRatios.populationValue) / 3f;
 
-        TriValueStruct ticksTillBankruptcy = thisColonyScript.resourcesOwned.divide(thisColonyScript.totalIncome().multiply(-1));
+        TriValueStruct ticksTillBankruptcy = thisColonyScript.resourcesOwned.divide(thisColonyScript.totalIncome());
         TriValueStruct scarcity = ticksTillBankruptcy.divide(TriValueStruct.one.multiply(30));
          float totalScarcity = scarcity.Average();
     
