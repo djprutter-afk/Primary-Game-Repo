@@ -20,6 +20,8 @@ public class expansionScript : MonoBehaviour
     public float endDiameter;
     [SerializeField] GameObject tilePosition;
     [SerializeField] GameObject fire;
+
+    [SerializeField] GameObject soundEffect;
     [SerializeField] GameObject explosionLight;
 
     MeshRenderer thisMesh;
@@ -34,6 +36,13 @@ float imsinae;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        soundEffect.SetActive(true);
+        GameObject soundEffectObject = Instantiate(soundEffect);
+        AudioSource audioSource = soundEffectObject.GetComponent<AudioSource>();
+        float currentAudioClipLength = audioSource.clip.length /2;
+        float durationRatio =  currentAudioClipLength/timeToFinishSeconds;
+        audioSource.pitch = durationRatio;
+        audioSource.Play();
         lightComp = explosionLight.GetComponent<Light>();
         imsinae =1+ Power/2;
         lightComp.intensity =imsinae;

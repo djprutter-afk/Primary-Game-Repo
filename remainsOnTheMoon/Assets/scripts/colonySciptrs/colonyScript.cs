@@ -103,7 +103,7 @@ public class colonyScript : MonoBehaviour
             tileInfo thisTileInfo = tile.GetComponent<tileInfo>();
             
             TriValueStruct totalTileIncome = thisTileInfo.TotalIncome();
-           totalIncome.subtract(totalTileIncome,true);
+           totalIncome.addition(totalTileIncome,true);// addition because it's the tiles entire income not just the upkeep
         }
         Debug.LogWarning("total income is "+totalIncome.moneyValue + " " + totalIncome.resourceValue+" " + totalIncome.populationValue);
         return totalIncome;

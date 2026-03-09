@@ -432,8 +432,8 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
         int amountCanAfford = 1;
         for(int i = 0; i <amountToBuild;i++)
         {
-            Debug.Log("checking if null: weathOwned is null? " + wealthOwned.buildingName);
-            Debug.Log("checking if null: buildCost is null? " + buildableGameObject.buildCost.buildingName);
+            Debug.Log("checking if null: weathOwned is null? " + wealthOwned.ToString());
+            Debug.Log("checking if null: buildCost is null? " + buildableGameObject.IsUnityNull());
             bool canAfford = TriValueStruct.comapareCosts(wealthOwned,buildableGameObject.buildCost.multiply(amountToBuild - i));
             if(canAfford == true)
             {
