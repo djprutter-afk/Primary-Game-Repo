@@ -180,7 +180,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     void updateFear()
     {
             desiredIncome.multiply(1.003f);
-        TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
+        TriValueStruct satifcation = thisColonyScript.totalIncome().multiply(-1).divide(desiredIncome);
         float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
 
        
@@ -236,13 +236,22 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     {
         TriValueStruct incomeRatios = thisColonyScript.incomeToExpensesRatios();
         float totalRatio = (incomeRatios.moneyValue + incomeRatios.resourceValue + incomeRatios.populationValue) / 3f;
-        return 1- totalRatio;
+
+        TriValueStruct ticksTillBankruptcy = thisColonyScript.resourcesOwned.divide(thisColonyScript.totalIncome().multiply(-1));
+        TriValueStruct scarcity = ticksTillBankruptcy.divide(TriValueStruct.one.multiply(30));
+         float totalScarcity = scarcity.Average();
+    
+        float pressure = 0.5f * (1 - totalRatio) + 0.5f * totalScarcity;
+        
+
+
+        return pressure;
       
 
     }
     void updateGoalPressure()
     {
-        float economicPressure = economicPressureCalc();
+      
        
         foreach(AgentGoal goal in goals)
         {
@@ -253,10 +262,11 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     goal.priority = Mathf.Clamp01((otherColonyInfos.Sum(x=>x.threatLevel) * aggression)/ otherColonyInfos.Count);
                     break;
                 case "economicPressure":
+                  float economicPressure = economicPressureCalc();
                     goal.priority = Mathf.Clamp01(economicPressure);
                     break;
                 case "expansionPressure":
-                    goal.priority = 0.5f * (1 - thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
+                    goal.priority = 0.5f * (1 - (thisColonyScript.totalIncome().populationValue * -1) / (thisColonyScript.allTilesOwned.Count * 10));
                     break;
             }
         }

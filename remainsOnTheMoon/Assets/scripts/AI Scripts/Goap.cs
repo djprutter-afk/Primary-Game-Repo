@@ -319,7 +319,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
 
         colonyScript colonyScript = colonyAI.thisColonyScript;
        List<KeyValuePair<buildableGameObject,float>> potentialBuildables =new List<KeyValuePair<buildableGameObject,float>>();
-        TriValueStruct colonyIncome = colonyScript.totalIncome();
+        TriValueStruct colonyIncome = colonyScript.totalIncome().multiply(-1);
 
         foreach(buildableGameObject buildableGameObject in gameManagerScript.allBuildables)
         {
@@ -370,7 +370,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
       
        
         
-
+    Debug.LogWarning("no buildable found");
 
         return null;
 

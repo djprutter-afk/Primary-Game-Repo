@@ -208,12 +208,25 @@ public class tileInfo : MonoBehaviour
 
 
 [System.Serializable]
-public struct TriValueStruct
+public struct TriValueStruct : IEnumerable<float>
 {
     public float moneyValue;
     public float resourceValue;
     public float populationValue; 
     public string buildingName;
+
+       public IEnumerator<float> GetEnumerator()
+    {
+        yield return moneyValue;
+        yield return resourceValue; 
+        yield return populationValue;
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
     public TriValueStruct multiply(float multiplier, bool apply = false)
     {
          TriValueStruct buildingStruct = new TriValueStruct();
@@ -316,7 +329,7 @@ public struct TriValueStruct
         return normalizedTriValue;
         
     }
-    public static TriValueStruct one = new TriValueStruct
+     public static  TriValueStruct one = new TriValueStruct
     {
         moneyValue = 1,
         resourceValue = 1,
