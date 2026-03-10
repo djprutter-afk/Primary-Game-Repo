@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class tileInfo : MonoBehaviour
 {
+    public int maxPopAddedPerDevelopment = 250;
    
     public bool occupid = false;
    
@@ -46,36 +47,37 @@ public class tileInfo : MonoBehaviour
         ownerColony = transform.parent.gameObject;// update owner cause might change 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
         float moneyGainDollars = (development * population) / 18 + 5;
-        float resourceProduction = resource * resourceModifyer * (population / 8);
+        float resourceProduction = resource  * (population / 8);
 
         float totalPopGrowth = 1;
         if (ownerColonyScript != null)
         {
-           
-          //  float developmentCap = Mathf.Max(0, 1f - (population / (development *250f))); 
-            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth  * populationGrowthMultiplier;
-            
-
+            // Carrying capacity based on development
+            float carryingCapacity = development * maxPopAddedPerDevelopment;
+            float growthRate = 0.02f; 
+            float growthModifier = 1f;
+            if (carryingCapacity > 0)
+            {
+                growthModifier = Mathf.Max(0f, 1f - (population / carryingCapacity));
+            }
+            totalPopGrowth = population * growthRate * growthModifier;
         }
         else
         {
             Debug.LogError("owner colony script is null for tile " + gameObject.name);
         }
 
-
         foreach (TriValueStruct building in buildingsOnTile)
         {
             moneyGainDollars -= building.moneyValue;
             resourceProduction -= building.resourceValue;
             totalPopGrowth -= building.populationValue;
-
         }
 
         if (alsoAdd == true)
         {
-            
             population += totalPopGrowth;
-            if(population < 1 || population == null)// a state cannot cannot express it's authority without people
+            if(population < 1)// a state cannot cannot express it's authority without people
             {
                 ownerColonyScript.allTilesOwned.Remove(gameObject);
                 deSettle();
@@ -83,27 +85,16 @@ public class tileInfo : MonoBehaviour
             }
             ownerColonyScript.resourcesOwned.moneyValue += moneyGainDollars;
             ownerColonyScript.resourcesOwned.resourceValue += resourceProduction;
-
-
-
         }
         
-
         TriValueStruct total = new TriValueStruct
         {
             moneyValue = moneyGainDollars,
             resourceValue = resourceProduction,
             populationValue = totalPopGrowth
-
         };
 
         return total;
-
-
-
-
-
-
     }
  
     void deSettle()
