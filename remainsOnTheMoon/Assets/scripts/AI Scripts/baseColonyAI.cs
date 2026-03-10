@@ -265,7 +265,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     goal.priority = Mathf.Clamp01(economicPressure);
                     break;
                 case "expansionPressure":
-                    goal.priority = 0.5f * (1 - (thisColonyScript.totalIncome().populationValue * -1) / (thisColonyScript.allTilesOwned.Count * 10));
+                    goal.priority = 0.5f * (1 - thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
                     break;
             }
         }
@@ -275,6 +275,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
   
     public bool hasntWaited = true;
     void setupBeliefs()
+    
     {
         beliefs = new Dictionary<string, agentBelief>();
         beliefFactory factory = new beliefFactory(this, beliefs);

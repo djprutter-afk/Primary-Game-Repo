@@ -42,6 +42,7 @@ public class tileInfo : MonoBehaviour
 
     public TriValueStruct TotalIncome(bool alsoAdd = false)// this is the formula for determining all products of the tile
     {
+        Debug.Log("calculating income for tile " + gameObject.name);
         ownerColony = transform.parent.gameObject;// update owner cause might change 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
         float moneyGainDollars = (development * population) / 18 + 5;
@@ -51,10 +52,14 @@ public class tileInfo : MonoBehaviour
         if (ownerColonyScript != null)
         {
            
-            float developmentCap = Mathf.Max(0, 1f - (population / (development *250f))); 
-            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth * developmentCap * populationGrowthMultiplier;
+          //  float developmentCap = Mathf.Max(0, 1f - (population / (development *250f))); 
+            totalPopGrowth = population *ownerColonyScript.totalColonyPopGrowth  * populationGrowthMultiplier;
             
 
+        }
+        else
+        {
+            Debug.LogError("owner colony script is null for tile " + gameObject.name);
         }
 
 
