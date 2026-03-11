@@ -308,7 +308,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
          buildableScript.AIBuildableInfo.buildablePurposes[] purposeWanted = null;
         if(specificPurposes == null)
         { 
-            purposeWanted = colonyAI.desiredPurposesOfBuildable;
+            purposeWanted = (buildableScript.AIBuildableInfo.buildablePurposes[])Enum.GetValues(typeof(buildableScript.AIBuildableInfo.buildablePurposes));
             
         }
         else
@@ -369,9 +369,9 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
     
       
        
-        
+        // nuclear level bad, should never ever happen
     Debug.LogWarning("no buildable found");
-
+        builtTheThing= true; 
         return null;
 
         
@@ -433,7 +433,11 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
         for(int i = 0; i <amountToBuild;i++)
         {
             Debug.Log("checking if null: weathOwned is null? " + wealthOwned.ToString());
-            Debug.Log("checking if null: buildCost is null? " + buildableGameObject.IsUnityNull());
+           if(buildableGameObject.IsUnityNull())
+            {
+                Debug.LogError("buildableGameObject is null!");
+                return;
+            }
             bool canAfford = TriValueStruct.comapareCosts(wealthOwned,buildableGameObject.buildCost.multiply(amountToBuild - i));
             if(canAfford == true)
             {

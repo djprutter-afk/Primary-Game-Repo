@@ -11,7 +11,7 @@ using Unity.Mathematics;
 /// </summary>
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
-   public buildableScript.AIBuildableInfo.buildablePurposes[] desiredPurposesOfBuildable;
+   
    
 
 
@@ -179,10 +179,6 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     void updateFear()
     {
            
-        TriValueStruct satifcation = thisColonyScript.totalIncome().divide(desiredIncome);
-        float totalSatisfaction = (satifcation.moneyValue + satifcation.resourceValue + satifcation.populationValue) / 3f;
-
-       
         Vector3 GetAveragePosition()
         {
             Vector3 averagePosition = Vector3.zero;
@@ -221,7 +217,6 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
 
         // expansion infos
-            valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion] = (1 - totalSatisfaction) *0.50f;
 
 
          valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
