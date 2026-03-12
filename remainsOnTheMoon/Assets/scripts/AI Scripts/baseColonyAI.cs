@@ -157,14 +157,17 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
     void setupTimers()
     {
+        InvokeRepeating(nameof(updateValues),0f,5);
+        /*
         statsTimer = new CountDownTimer(2f);
         statsTimer.onTimerEnd += () =>
         {
-            updateValues();
+            Debug.LogError("about to update values");
+           
             statsTimer.Start();
         };
         statsTimer.Start();
-
+        */
     }
     
   
@@ -249,11 +252,13 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
        
         foreach(AgentGoal goal in goals)
         {
-            
+            Debug.Log("im about to eval");
             switch (goal.Name)
             {
                 case "militaryPressure":
+                
                     goal.priority = Mathf.Clamp01((otherColonyInfos.Sum(x=>x.threatLevel) * aggression)/ otherColonyInfos.Count);
+                    
                     break;
                 case "economicPressure":
                   float economicPressure = economicPressureCalc();
@@ -263,6 +268,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     goal.priority = 0.5f * (1 - thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
                     break;
             }
+            Debug.Log($"goal is: {goal.Name} and the priotry is {goal.priority}");
         }
        
     }
