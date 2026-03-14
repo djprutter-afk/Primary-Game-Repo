@@ -6,6 +6,7 @@ using UnityEngine;
 using Unity.Jobs;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEditor.PackageManager;
 /// <summary>
 /// putting this here so i dont forget, money you should be able to go into debt but you cant go into debt for resource or population
 /// </summary>
@@ -232,13 +233,15 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
   public  float economicPressureCalc()
     {
         TriValueStruct incomeRatios = thisColonyScript.incomeToExpensesRatios();
-        float totalRatio = (incomeRatios.moneyValue + incomeRatios.resourceValue + incomeRatios.populationValue) / 3f;
-
+        float totalRatio = incomeRatios.Average();
+        Debug.LogError(totalRatio +"fdsssssssssssss");
         TriValueStruct ticksTillBankruptcy = thisColonyScript.resourcesOwned.divide(thisColonyScript.totalIncome());
-        TriValueStruct scarcity = ticksTillBankruptcy.divide(TriValueStruct.one.multiply(30));
-         float totalScarcity = scarcity.Average();
+        TriValueStruct scarcity =ticksTillBankruptcy.divide(TriValueStruct.one.multiply(30));
+
+         float totalScarcity = Mathf.Clamp01(scarcity.Average());
     
         float pressure = 0.5f * (1 - totalRatio) + 0.5f * totalScarcity;
+        Debug.LogError($"total ratio is {totalRatio} and total scarcity is {totalScarcity} so economic pressure is {pressure}");
         
 
 
