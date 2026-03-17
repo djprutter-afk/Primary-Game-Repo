@@ -235,7 +235,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         float totalRatio = (incomeRatios.moneyValue + incomeRatios.resourceValue + incomeRatios.populationValue) / 3f;
 
         TriValueStruct ticksTillBankruptcy = thisColonyScript.resourcesOwned.divide(thisColonyScript.totalIncome());
-        TriValueStruct scarcity = ticksTillBankruptcy.divide(TriValueStruct.one.multiply(30));
+        TriValueStruct scarcity = TriValueStruct.one.multiply(30).divide(ticksTillBankruptcy);
          float totalScarcity = scarcity.Average();
     
         float pressure = 0.5f * (1 - totalRatio) + 0.5f * totalScarcity;
@@ -265,7 +265,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     goal.priority = Mathf.Clamp01(economicPressure);
                     break;
                 case "expansionPressure":
-                    goal.priority = 0.5f * (1 - thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
+                    goal.priority = Mathf.Clamp01 (1 - thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
                     break;
             }
             Debug.Log($"goal is: {goal.Name} and the priotry is {goal.priority}");
