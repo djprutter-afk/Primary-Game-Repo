@@ -110,6 +110,7 @@ public class colonyScript : MonoBehaviour
     }
      public TriValueStruct incomeToExpensesRatios()
     {
+        Debug.LogWarning("calculating income to expense ratios");
         TriValueStruct totalIncome = new TriValueStruct();      
          TriValueStruct totalExpenses = new TriValueStruct();     
         foreach (GameObject buildable in ownedBuildables)
