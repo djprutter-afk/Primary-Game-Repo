@@ -11,22 +11,22 @@ public class tileInfo : MonoBehaviour
    
     public bool occupid = false;
    
-    public float populationGrowthPercent = 1.003f;
+  
+    float currentResourceAmount = 100;
+    public float ResourceRegenerationRate = 0.02f;
+    public float ResourceCapacity { get; private set; }
     public List<TriValueStruct> buildingsOnTile = new List<TriValueStruct>();
 
+    float CurrentResourceLevel;
 
-    public float resource;
 
-    public float resourceModifyer = 1;// modifyed by bonuss
     public float development;
     public float population;
     public MoonScript theMoon;
     GameObject ownerColony;
     colonyScript ownerColonyScript;
     
-    private float damageRecoveryTimer = 0f;
-    private float damageRecoveryDuration = 30f; // Seconds to recover
-    private float populationGrowthMultiplier = 0f; // Added/subtracted from growth during recovery
+  
    
     void Start()
     {
@@ -46,8 +46,8 @@ public class tileInfo : MonoBehaviour
         Debug.Log("calculating income for tile " + gameObject.name);
         ownerColony = transform.parent.gameObject;// update owner cause might change 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
-        float moneyGainDollars = (development * population) / 18 + 5;
-        float resourceProduction = resource  * (population / 8);
+        
+       
 
         float totalPopGrowth = 1;
         if (ownerColonyScript != null)
@@ -66,13 +66,22 @@ public class tileInfo : MonoBehaviour
         {
             Debug.LogError("owner colony script is null for tile " + gameObject.name);
         }
-
+        float moneyGainDollars = 0;
+        float TotalResourceExtraction = 0;
         foreach (TriValueStruct building in buildingsOnTile)
         {
             moneyGainDollars -= building.moneyValue;
-            resourceProduction -= building.resourceValue;
+            TotalResourceExtraction -= building.resourceValue;
             totalPopGrowth -= building.populationValue;
         }
+        ResourceCapacity = 100 *math.sqrt(development);
+        CurrentResourceLevel += ResourceRegenerationRate * (1f - CurrentResourceLevel / ResourceCapacity);
+        if(CurrentResourceLevel > ResourceCapacity)
+        {
+            CurrentResourceLevel = ResourceCapacity;
+        }
+        CurrentResourceLevel += TotalResourceExtraction;
+
 
         if (alsoAdd == true)
         {
@@ -84,13 +93,13 @@ public class tileInfo : MonoBehaviour
                 return new TriValueStruct();
             }
             ownerColonyScript.resourcesOwned.moneyValue += moneyGainDollars;
-            ownerColonyScript.resourcesOwned.resourceValue += resourceProduction;
+            ownerColonyScript.resourcesOwned.resourceValue += TotalResourceExtraction;
         }
         
         TriValueStruct total = new TriValueStruct
         {
             moneyValue = moneyGainDollars,
-            resourceValue = resourceProduction,
+            resourceValue = TotalResourceExtraction,
             populationValue = totalPopGrowth
         };
 
@@ -117,26 +126,11 @@ public class tileInfo : MonoBehaviour
         // Reduce development (infrastructure damage)
         float developmentLoss = development * (power / 150f);
         development = Mathf.Max(0, development - developmentLoss);
+    
         
-        // Reduce resources (resource destruction)
-        float resourceLoss = resource * (power / 200f);
-        resource = Mathf.Max(0, resource - resourceLoss);
-        
-        // Damage/destroy buildings on the tile
-        for (int i = buildingsOnTile.Count - 1; i >= 0; i--)
-        {
-            if (UnityEngine.Random.value < Mathf.Min(power / 100f, 1f)) // Higher power = higher chance to destroy building
-            {
-                buildingsOnTile.RemoveAt(i);
-            }
-        }
-        
-        // Temporarily reduce population growth during recovery
-        damageRecoveryTimer = damageRecoveryDuration;
-        // Negative growth penalty: higher development = faster recovery
-        // Development acts as cushion against negative growth
+  
         float developmentFactor = Mathf.Clamp01(development / 100f); // 0-1 scale
-        populationGrowthMultiplier = -(power / 20f) * (1f - developmentFactor * 0.7f); // Dev reduces penalty by up to 70%
+       
         
         // If all population is dead, desettle the tile
         if (population <= 0)
