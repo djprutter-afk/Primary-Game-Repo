@@ -12,9 +12,9 @@ public class tileInfo : MonoBehaviour
     public bool occupid = false;
    
   
-    float currentResourceAmount = 100;
+   
     public float ResourceRegenerationRate = 0.02f;
-    public float ResourceCapacity { get; private set; }
+    public float ResourceCapacity;
     public List<TriValueStruct> buildingsOnTile = new List<TriValueStruct>();
 
     float CurrentResourceLevel;
@@ -75,16 +75,18 @@ public class tileInfo : MonoBehaviour
             totalPopGrowth -= building.populationValue;
         }
         ResourceCapacity = 100 *math.sqrt(development);
-        CurrentResourceLevel += ResourceRegenerationRate * (1f - CurrentResourceLevel / ResourceCapacity);
-        if(CurrentResourceLevel > ResourceCapacity)
+        float resourceLevelAfterExtration = CurrentResourceLevel;
+        resourceLevelAfterExtration += ResourceRegenerationRate * (1f - CurrentResourceLevel / ResourceCapacity);
+        if(TotalResourceExtraction > CurrentResourceLevel)
         {
-            CurrentResourceLevel = ResourceCapacity;
+            TotalResourceExtraction = CurrentResourceLevel;
         }
-        CurrentResourceLevel += TotalResourceExtraction;
+        resourceLevelAfterExtration += TotalResourceExtraction;
 
 
         if (alsoAdd == true)
         {
+            CurrentResourceLevel = resourceLevelAfterExtration;
             population += totalPopGrowth;
             if(population < 1)// a state cannot cannot express it's authority without people
             {

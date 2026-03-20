@@ -2,7 +2,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 public class moonScript : MonoBehaviour
-{// if youre reading this then say test in the commit
+{
+    [Header("resource amount should be at least 100")]
     [SerializeField] float resourceAmount;
 
     
@@ -28,7 +29,7 @@ public class moonScript : MonoBehaviour
 
             tileInfo TileInformation = transformOfChild.AddComponent<tileInfo>();
             transformOfChild.AddComponent<tileVisuals>();
-            TileInformation.resource = Random.Range(0.0f, resourceAmount);
+            TileInformation.ResourceCapacity = Random.Range(resourceAmount *0.5f, resourceAmount);
         }
 
     }
