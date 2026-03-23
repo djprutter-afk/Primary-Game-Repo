@@ -352,7 +352,7 @@ public class settlerUseStrat : buildableUseStrat
 
             tileInfo currentTileInfo = currentOutLineTile.GetComponent<tileInfo>();
 
-            tileValue += currentTileInfo.resource;
+            tileValue += currentTileInfo.ResourceRegenerationRate * currentTileInfo.ResourceCapacity;
 
             Collider[] tilesSurroundingCurrent = Physics.OverlapSphere(currentOutLineTile.transform.position, 0.05f);
 
