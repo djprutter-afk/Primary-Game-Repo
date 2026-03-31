@@ -86,7 +86,7 @@ public class baseColonyAI : MonoBehaviour// high level decision maker for colony
 
                }
             }
-            threatLevel = totalMilitaryValue;
+            threatLevel = Mathf.Clamp01( totalMilitaryValue - selfMilitaryStrength);
 
 
         }
@@ -138,22 +138,15 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     /// <summary>
     /// assigns how much the ai will care about building this particular buildable, theses values should change as the game progress to reflect how important having that thing at that time is
     /// </summary>
+   AIUtils utils;
     void setupBuildableAIValues()
     {
+       utils = new AIUtils(this);
       
         foreach(buildableScript.AIBuildableInfo.buildablePurposes purposes in buildablesPurposesGrouped.buildablePurposeDictonary.Keys)  //assign all purposes the same value just in case
         {
             valueOfBuildables.Add(purposes,0.01f);
         }
-
-        // manually assign values here, they should still drift from theses inital values though
-        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.antiMissile] = 0.15f;
-        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.defensive] = 0.20f;
-        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.economy] = 0.30f;
-       // valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.expansion] = 0.60f;
-        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = 0.35f;
-        //valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = 0.30f;// missiles should be a prevelent threat of the game
-
     }
 
     void setupTimers()
@@ -174,61 +167,14 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
   
     void updateValues()
     {
-        updateFear();
+        float currentFear = utils.updateFear();
+        Debug.Log($"my total fear is {currentFear}, im so scard");
         updateGoalPressure();
     
  
     }
 
-    void updateFear()
-    {
-           
-        Vector3 GetAveragePosition()
-        {
-            Vector3 averagePosition = Vector3.zero;
-            foreach(GameObject tile in thisColonyScript.allTilesOwned)
-            {
-                averagePosition += tile.transform.position;
-            }
-            return averagePosition /= thisColonyScript.allTilesOwned.Count;
-        }   
-
-        Vector3 colonyCenter = GetAveragePosition();
-         float totalMilitaryOfSelf = 0f;
-            foreach(GameObject indivdualBuildable in thisColonyScript.ownedBuildables)
-            {
-                 buildableScript indivdualBuildableScript = indivdualBuildable.GetComponent<buildableScript>();
-                foreach (buildableScript.AIBuildableInfo.biInfoStuct infoStuct in indivdualBuildableScript.purposes)
-                {
-                   if (infoStuct.purpose == buildableScript.AIBuildableInfo.buildablePurposes.offensive)
-                   {
-                       float distanceToCenter = Vector3.Distance(colonyCenter,indivdualBuildable.transform.position);// entire moon is 2 units across
-                       
-                       totalMilitaryOfSelf += infoStuct.strength * (2-distanceToCenter);
-                      
-
-                   }
-
-               }
-            }
-        float totalFear = 0f;
-        foreach(var colonyInfo in otherColonyInfos)
-        {
-            colonyInfo.evaluateThreatLevel(thisColonyScript,totalMilitaryOfSelf);
-            totalFear+= colonyInfo.threatLevel;
-        }
-        totalFear /= otherColonyInfos.Count;
-
-
-        // expansion infos
-
-
-         valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.offensive] = totalFear *0.5f;
-
-        valueOfBuildables[buildableScript.AIBuildableInfo.buildablePurposes.suicidieOffensive] = totalFear *0.40f;
-      
-
-    }
+    
     
   public  float economicPressureCalc()
     {
