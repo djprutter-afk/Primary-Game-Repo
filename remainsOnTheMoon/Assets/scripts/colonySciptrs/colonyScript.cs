@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -181,6 +182,8 @@ public class colonyScript : MonoBehaviour
             }
 
         }
+        totalExpenses.addition(TriValueStruct.one,true);// prevents divide by zero errors
+        // it will make ai more eco hungry, so its not that sloppy of a solution
 
         TriValueStruct incomeToExpenseRatios= totalIncome.divide(totalExpenses);
         Debug.LogWarning("income to expense ratios is " + incomeToExpenseRatios.moneyValue + " " + incomeToExpenseRatios.resourceValue + " " + incomeToExpenseRatios.populationValue);

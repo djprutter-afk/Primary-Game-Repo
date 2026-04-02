@@ -61,58 +61,49 @@ public class tileInfo : MonoBehaviour
             if (carryingCapacity > 0)
             {
                 growthModifier = Mathf.Max(0f, 1f - (population / carryingCapacity));
-                Debug.Log("growthModifier calculated: " + growthModifier + " (population / carryingCapacity = " + (population / carryingCapacity) + ")");
+               
             }
-            else
-            {
-                Debug.Log("carryingCapacity <= 0, growthModifier remains: " + growthModifier);
-            }
+
             totalPopGrowth = population * growthRate * growthModifier;
-            Debug.Log("totalPopGrowth after calculation: " + totalPopGrowth);
+           
         }
         else
         {
             Debug.LogError("owner colony script is null for tile " + gameObject.name);
         }
         float moneyGainDollars = 0;
+
         float TotalResourceExtraction = 0;
-        Debug.Log("Before building loop: moneyGainDollars: " + moneyGainDollars + ", TotalResourceExtraction: " + TotalResourceExtraction + ", totalPopGrowth: " + totalPopGrowth);
+       
         foreach (TriValueStruct building in buildingsOnTile)
         {
-            Debug.Log("Processing building: moneyValue: " + building.moneyValue + ", resourceValue: " + building.resourceValue + ", populationValue: " + building.populationValue);
+           
             moneyGainDollars -= building.moneyValue;
             TotalResourceExtraction -= building.resourceValue;
             totalPopGrowth -= building.populationValue;
         }
-        Debug.Log("After building loop: moneyGainDollars: " + moneyGainDollars + ", TotalResourceExtraction: " + TotalResourceExtraction + ", totalPopGrowth: " + totalPopGrowth);
-        ResourceCapacity = 100 *math.sqrt(development);
-        Debug.Log("ResourceCapacity: " + ResourceCapacity + " (100 * sqrt(" + development + "))");
+      
         float resourceLevelAfterExtration = CurrentResourceLevel;
-        Debug.Log("Initial resourceLevelAfterExtration: " + resourceLevelAfterExtration + ", CurrentResourceLevel: " + CurrentResourceLevel + ", ResourceRegenerationRate: " + ResourceRegenerationRate);
+       
         float regenerationAmount = ResourceRegenerationRate * (1f - CurrentResourceLevel / ResourceCapacity);
-        Debug.Log("Regeneration amount: " + regenerationAmount + " (ResourceRegenerationRate * (1f - CurrentResourceLevel / ResourceCapacity) = " + ResourceRegenerationRate + " * (1f - " + CurrentResourceLevel + " / " + ResourceCapacity + "))");
+        
         resourceLevelAfterExtration += regenerationAmount;
-        Debug.Log("resourceLevelAfterExtration after regeneration: " + resourceLevelAfterExtration);
+        TotalResourceExtraction *= development;
         if(TotalResourceExtraction > CurrentResourceLevel)
         {
-            Debug.Log("TotalResourceExtraction (" + TotalResourceExtraction + ") > CurrentResourceLevel (" + CurrentResourceLevel + "), clamping to CurrentResourceLevel");
+            
             TotalResourceExtraction = CurrentResourceLevel;
         }
-        else
-        {
-            Debug.Log("TotalResourceExtraction (" + TotalResourceExtraction + ") <= CurrentResourceLevel (" + CurrentResourceLevel + "), no clamping");
-        }
         resourceLevelAfterExtration += TotalResourceExtraction;
-        Debug.Log("Final resourceLevelAfterExtration: " + resourceLevelAfterExtration + " (after adding TotalResourceExtraction: " + TotalResourceExtraction + ")");
-
+        
 
         if (alsoAdd == true)
         {
             Debug.Log("alsoAdd is true, updating values");
             CurrentResourceLevel = resourceLevelAfterExtration;
-            Debug.Log("Updated CurrentResourceLevel: " + CurrentResourceLevel);
+           
             population += totalPopGrowth;
-            Debug.Log("Updated population: " + population + " (added " + totalPopGrowth + ")");
+           
             if(population < 1)// a state cannot cannot express it's authority without people
             {
                 Debug.Log("Population < 1, desettling tile");
@@ -121,9 +112,9 @@ public class tileInfo : MonoBehaviour
                 return new TriValueStruct();
             }
             ownerColonyScript.resourcesOwned.moneyValue += moneyGainDollars;
-            Debug.Log("Updated colony money: " + ownerColonyScript.resourcesOwned.moneyValue + " (added " + moneyGainDollars + ")");
+
             ownerColonyScript.resourcesOwned.resourceValue += TotalResourceExtraction;
-            Debug.Log("Updated colony resources: " + ownerColonyScript.resourcesOwned.resourceValue + " (added " + TotalResourceExtraction + ")");
+           
         }
         else
         {
