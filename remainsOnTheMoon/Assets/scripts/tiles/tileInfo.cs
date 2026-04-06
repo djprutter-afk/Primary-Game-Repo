@@ -11,13 +11,12 @@ public class tileInfo : MonoBehaviour
    
     public bool occupid = false;
    
-  
+    [SerializeField] float resourceExtractionModifier = 0.03f;
    
     public float ResourceRegenerationRate = 0.02f;
+    float totalRegen;
     public float ResourceCapacity;
     public List<TriValueStruct> buildingsOnTile = new List<TriValueStruct>();
-
-    float CurrentResourceLevel;
 
 
     public float development;
@@ -25,6 +24,10 @@ public class tileInfo : MonoBehaviour
     public MoonScript theMoon;
     GameObject ownerColony;
     colonyScript ownerColonyScript;
+
+
+    public float lastExtractionAmount {private set; get; }
+    public float lastResourceRegeneration {private set; get; }
     
   
    
@@ -82,25 +85,18 @@ public class tileInfo : MonoBehaviour
             TotalResourceExtraction -= building.resourceValue;
             totalPopGrowth -= building.populationValue;
         }
-      
-        float resourceLevelAfterExtration = CurrentResourceLevel;
-       
-        float regenerationAmount = ResourceRegenerationRate * (1f - CurrentResourceLevel / ResourceCapacity);
-        
-        resourceLevelAfterExtration += regenerationAmount;
-        TotalResourceExtraction *= development;
-        if(TotalResourceExtraction > CurrentResourceLevel)
-        {
-            
-            TotalResourceExtraction = CurrentResourceLevel;
-        }
-        resourceLevelAfterExtration += TotalResourceExtraction;
+
+        TotalResourceExtraction += resourceExtractionModifier*(population / Mathf.Clamp(development,1,float.MaxValue) * 0.5f); 
+        totalRegen = ResourceRegenerationRate *ResourceCapacity;
+        TotalResourceExtraction = Mathf.Min(TotalResourceExtraction, totalRegen);
         
 
         if (alsoAdd == true)
         {
             Debug.Log("alsoAdd is true, updating values");
-            CurrentResourceLevel = resourceLevelAfterExtration;
+
+            lastExtractionAmount = TotalResourceExtraction;
+            lastResourceRegeneration = totalRegen;
            
             population += totalPopGrowth;
            
@@ -140,7 +136,7 @@ public class tileInfo : MonoBehaviour
         transform.SetParent(theMoon.transform);
     }
 /// <summary>
-/// Damages the tile based on explosion power, reducing population, development, and destroying buildings, this function was entirely made by ai, im sorry i was tired
+/// Damages the tile based on explosion power, reducing population, development, and destroying buildings, this function was entirely made by ai
 /// </summary>
 /// <param name="power">should range with explosion power</param>
     public void damageTile(float power)
@@ -150,7 +146,7 @@ public class tileInfo : MonoBehaviour
         population = Mathf.Max(0, population - populationLoss);
         
         // Reduce development (infrastructure damage)
-        float developmentLoss = development * (power / 150f);
+        float developmentLoss = development * (power / 0.5f);
         development = Mathf.Max(0, development - developmentLoss);
     
         

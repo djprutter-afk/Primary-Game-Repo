@@ -229,12 +229,33 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     {
         beliefs = new Dictionary<string, agentBelief>();
         beliefFactory factory = new beliefFactory(this, beliefs);
-
+        // the always unachievable goals
         factory.addBeliefs("Nothing", () => false);
         factory.addBeliefs("is feeling safe", () => false);// maybe make it an actual conditional at some point? 
         factory.addBeliefs("has good economy", () => false);
         factory.addBeliefs("satisfied with size", () => false);
- 
+
+        // actual beliefs about the world
+        factory.addBeliefs("has resource extraction capacity",hasResourceExtractionCapacity);
+        
+        bool hasResourceExtractionCapacity()
+        {
+            float sumOfUnusedExtraction = 0;
+            foreach(GameObject tile in thisColonyScript.allTilesOwned)
+            {
+                tileInfo tileInfo = tile.GetComponent<tileInfo>();
+                float extractionUnused = tileInfo.lastResourceRegeneration - tileInfo.lastExtractionAmount;
+                sumOfUnusedExtraction += extractionUnused;
+            }
+
+            return sumOfUnusedExtraction > 3; // the three is just for floating point wackiness
+        }
+
+
+
+
+
+
         factory.addBeliefs("has space to build", hasSpaceToBuild);
         bool hasSpaceToBuild()
         {
@@ -261,7 +282,11 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                 {
                     continue;
                 }
-                return buildable.purposes.Select(x=> x.purpose).Contains(purposeWanted); 
+                if( buildable.purposes.Select(x=> x.purpose).Contains(purposeWanted))
+                {
+                     return true; 
+                }
+               
             }
             return false;
 
@@ -501,95 +526,9 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         
 
     }
-    public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)
-    {
-    
-        List<buildableScript> selectedBuildables = new List<buildableScript>();
-        var dic = buildablesPurposesGrouped.buildablePurposeDictonary;
-       List<buildableGameObject> listOfBuildablesObjects =  dic[dog];
-    
-       foreach(buildableGameObject current in listOfBuildablesObjects)
-        {
-            buildableScript dsafjdbsnfn = current.buildableObject.GetComponent<buildableScript>();
-            selectedBuildables.Add(dsafjdbsnfn);
-        }
-
-       
-        return selectedBuildables.ToArray();
-    }
-    public buildableGameObject[] getTypeOfBuildableObject(buildableScript.AIBuildableInfo.buildablePurposes dog)
-    {
-    
-        List<buildableGameObject> selectedBuildables = new List<buildableGameObject>();
-        var dic = buildablesPurposesGrouped.buildablePurposeDictonary;
-       List<buildableGameObject> listOfBuildablesObjects =  dic[dog];
-    
-       foreach(buildableGameObject current in listOfBuildablesObjects)
-        {
-            
-            selectedBuildables.Add(current);
-        }
-
-       
-        return selectedBuildables.ToArray();
-    }
+   
   
 
-}
-public class CountDownTimer
-{
-    public event Action onTimerStart;
-    public event Action onTimerEnd;
-    bool isCounting;
-    float timeToWait;
-    float timeLeft;
-    
-    public CountDownTimer(float timeAmt)
-    {
-        timeToWait = timeAmt;
-
-
-    }
-    public void Start()
-    {
-        
-        isCounting = true;
-        timeLeft = timeToWait;
-
-        onTimerStart?.Invoke();
-    }
-    public void Stop()
-    {
-        isCounting = false;
-    }
-
-    public void tick(float timeElapsed)
-    {
-        
-
-        if (isCounting == false)
-        {
-            return;
-        }
-
-        
-        timeLeft -= timeElapsed;
-        if (timeLeft <= 0)
-        {
-            timerEnd();
-        }
-    }
-
-
-    void timerEnd()
-    {
-        Debug.Log(timeToWait + " FDF " + timeLeft);
-        onTimerEnd?.Invoke();
-
-        isCounting = false;
-
-    }
-   
 }
 
 

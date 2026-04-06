@@ -1,5 +1,8 @@
-
 using UnityEngine;
+
+using System.Collections.Generic;
+using System;
+
 public class  AIUtils
 {
     baseColonyAI colonyAI;
@@ -67,4 +70,93 @@ public class  AIUtils
       
 
     }
+
+     public buildableScript[] getTypeOfBuildable(buildableScript.AIBuildableInfo.buildablePurposes dog)
+    {
+    
+        List<buildableScript> selectedBuildables = new List<buildableScript>();
+        var dic = buildablesPurposesGrouped.buildablePurposeDictonary;
+       List<buildableGameObject> listOfBuildablesObjects =  dic[dog];
+    
+       foreach(buildableGameObject current in listOfBuildablesObjects)
+        {
+            buildableScript dsafjdbsnfn = current.buildableObject.GetComponent<buildableScript>();
+            selectedBuildables.Add(dsafjdbsnfn);
+        }
+
+       
+        return selectedBuildables.ToArray();
+    }
+    public buildableGameObject[] getTypeOfBuildableObject(buildableScript.AIBuildableInfo.buildablePurposes dog)
+    {
+    
+        List<buildableGameObject> selectedBuildables = new List<buildableGameObject>();
+        var dic = buildablesPurposesGrouped.buildablePurposeDictonary;
+       List<buildableGameObject> listOfBuildablesObjects =  dic[dog];
+    
+       foreach(buildableGameObject current in listOfBuildablesObjects)
+        {
+            
+            selectedBuildables.Add(current);
+        }
+
+       
+        return selectedBuildables.ToArray();
+    }
+}
+public class CountDownTimer
+{
+    
+    public event Action onTimerStart;
+    public event Action onTimerEnd;
+    bool isCounting;
+    float timeToWait;
+    float timeLeft;
+    
+    public CountDownTimer(float timeAmt)
+    {
+        timeToWait = timeAmt;
+
+
+    }
+    public void Start()
+    {
+        
+        isCounting = true;
+        timeLeft = timeToWait;
+
+        onTimerStart?.Invoke();
+    }
+    public void Stop()
+    {
+        isCounting = false;
+    }
+
+    public void tick(float timeElapsed)
+    {
+        
+
+        if (isCounting == false)
+        {
+            return;
+        }
+
+        
+        timeLeft -= timeElapsed;
+        if (timeLeft <= 0)
+        {
+            timerEnd();
+        }
+    }
+
+
+    void timerEnd()
+    {
+        Debug.Log(timeToWait + " FDF " + timeLeft);
+        onTimerEnd?.Invoke();
+
+        isCounting = false;
+
+    }
+   
 }
