@@ -87,6 +87,8 @@ public class tileInfo : MonoBehaviour
         }
 
         TotalResourceExtraction += resourceExtractionModifier*(population / Mathf.Clamp(development,1,float.MaxValue) * 0.5f); 
+
+        moneyGainDollars += Mathf.Sqrt(population * development);
         totalRegen = ResourceRegenerationRate *ResourceCapacity;
         TotalResourceExtraction = Mathf.Min(TotalResourceExtraction, totalRegen);
         
