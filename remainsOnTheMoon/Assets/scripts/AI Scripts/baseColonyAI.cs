@@ -341,6 +341,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         .WithStrat(new chooseAndBuildBuildableStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion))
         .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["has settlers"])
+        .AddEffect(beliefs["has resource extraction capacity"])
         .Build());
 
 
