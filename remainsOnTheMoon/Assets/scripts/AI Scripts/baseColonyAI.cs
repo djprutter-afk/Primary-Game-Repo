@@ -223,7 +223,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     }
     
   
-    public bool hasntWaited = true;
+
     void setupBeliefs()
     
     {
@@ -341,13 +341,13 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         .WithStrat(new chooseAndBuildBuildableStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion))
         .addPreCondition(beliefs["has space to build"])
         .AddEffect(beliefs["has settlers"])
-        .AddEffect(beliefs["has resource extraction capacity"])
         .Build());
 
 
        actions.Add(new agentAction.Builder("settle new land")
         .WithStrat(new settlerUseStrat(this,buildableScript.AIBuildableInfo.buildablePurposes.expansion,buildableScript.buildableActions.GenericAction,5,thingsToTargetEnum.tiles))
         .AddEffect(beliefs["satisfied with size"])
+        .AddEffect(beliefs["has resource extraction capacity"])
         .addPreCondition(beliefs["has settlers"])
         .Build());
 
@@ -527,7 +527,21 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         
 
     }
-   
+   public float MaxResourceExtraction()
+    {
+        tileInfo[] highestValue = thisColonyScript.allTilesOwned.Select(x=>x.GetComponent<tileInfo>()).ToArray();
+        float MostPotentialExtraction = float.MinValue;
+        foreach(tileInfo tile in highestValue)
+        {
+           float potentialExtraction = tile.lastResourceRegeneration - tile.lastExtractionAmount;
+           if(potentialExtraction >= MostPotentialExtraction)
+              {
+                MostPotentialExtraction = potentialExtraction;
+              }
+        }
+        return MostPotentialExtraction;
+
+    }
   
 
 }

@@ -384,7 +384,9 @@ public class settlerUseStrat : buildableUseStrat
 
             for(int i = 0; i < positionsToFind ;i++)
             {
+                Debug.Log("tile: " + sortedKvpOfTiles[i].Key.name + " has value of: " + sortedKvpOfTiles[i].Value+" "+i);
                 sortedGameObjects[i] = sortedKvpOfTiles[i].Key;
+
             }
 
           
