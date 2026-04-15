@@ -53,12 +53,13 @@ MonoBehaviour:
   tileOn: {fileID: 0}
   unitFloorDistance: 1
   isMoving: 0
+  isPerformingActions: 0
   timeToWait: 1
   movePath: []
   upkeepCosts:
-    moneyExpenses: 10
-    resourceExpenses: 25
-    populationExpenses: 0
+    moneyValue: 10
+    resourceValue: 2
+    populationValue: 0
     buildingName: development
   possibleActions: 
   isBuilding: 1

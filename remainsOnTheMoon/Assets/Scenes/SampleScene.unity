@@ -5988,9 +5988,9 @@ MonoBehaviour:
       buildableObject: {fileID: 7158736758787451057, guid: bc1cedb700b2cea459a9335c55a0f355, type: 3}
       nameOfBuildable: devlop tile(s)
     - buildCost:
-        moneyValue: 0
-        resourceValue: 0
-        populationValue: 0
+        moneyValue: 1000
+        resourceValue: 250
+        populationValue: 75
         buildingName: rkrkmsrk
       buildableObject: {fileID: 7158736758787451057, guid: a9a199d570b3c9743b135cc2e56b701b, type: 3}
       nameOfBuildable: Big Drill
@@ -5998,9 +5998,9 @@ MonoBehaviour:
     catagoryColour: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
     arrayOfBuildings:
     - buildCost:
-        moneyValue: 0
-        resourceValue: 0
-        populationValue: 0
+        moneyValue: 2500
+        resourceValue: 1000
+        populationValue: 20
         buildingName: ytmkfrkm
       buildableObject: {fileID: 6505261982738214531, guid: 35ca3f006d821dc4db96f1d378a519c3, type: 3}
       nameOfBuildable: cluster bomb
@@ -6008,16 +6008,16 @@ MonoBehaviour:
     catagoryColour: {r: 0.5566038, g: 0.03938234, b: 0.30102465, a: 1}
     arrayOfBuildings:
     - buildCost:
-        moneyValue: 0
-        resourceValue: 0
-        populationValue: 0
+        moneyValue: 2000
+        resourceValue: 3000
+        populationValue: 100
         buildingName: Tax Office
       buildableObject: {fileID: 7158736758787451057, guid: af744a84eebc64247a06b08f28894c3f, type: 3}
       nameOfBuildable: Tax Office
     - buildCost:
-        moneyValue: 0
-        resourceValue: 0
-        populationValue: 0
+        moneyValue: 3000
+        resourceValue: 5000
+        populationValue: 150
         buildingName: Tax Office
       buildableObject: {fileID: 7158736758787451057, guid: 619fbb11dca7e094d8bf74cb3b1e4aef, type: 3}
       nameOfBuildable: Clone Vats

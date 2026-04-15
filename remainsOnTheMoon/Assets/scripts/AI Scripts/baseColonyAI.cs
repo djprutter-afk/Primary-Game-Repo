@@ -214,7 +214,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     goal.priority = Mathf.Clamp01(economicPressure);
                     break;
                 case "expansionPressure":
-                    goal.priority = Mathf.Clamp01 (1 - thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
+                    goal.priority = Mathf.Clamp01 ( thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
                     break;
             }
             Debug.Log($"goal is: {goal.Name} and the priotry is {goal.priority}");
@@ -231,9 +231,9 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         beliefFactory factory = new beliefFactory(this, beliefs);
         // the always unachievable goals
         factory.addBeliefs("Nothing", () => false);
-        factory.addBeliefs("is feeling safe", () => false);// maybe make it an actual conditional at some point? 
-        factory.addBeliefs("has good economy", () => false);
-        factory.addBeliefs("satisfied with size", () => false);
+        factory.addBeliefs("is feeling safe", () => goals.Where(x=>x.Name == "militaryPressure").ToArray()[0].priority < 0.15f);// maybe make it an actual conditional at some point? 
+        factory.addBeliefs("has good economy", () => goals.Where(x=>x.Name == "economicPressure").ToArray()[0].priority < 0.12f);
+        factory.addBeliefs("satisfied with size", () => goals.Where(x=>x.Name == "expansionPressure").ToArray()[0].priority < 0.20f);
 
         // actual beliefs about the world
         factory.addBeliefs("has resource extraction capacity",hasResourceExtractionCapacity);
