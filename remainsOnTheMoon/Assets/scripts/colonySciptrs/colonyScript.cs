@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -139,6 +141,7 @@ public class colonyScript : MonoBehaviour
             {
                 totalIncome.resourceValue += buildableUpkeep.resourceValue;
             }
+            
             if (buildableUpkeep.populationValue >= 0)
             {
                 totalExpenses.populationValue += buildableUpkeep.populationValue;
@@ -182,7 +185,13 @@ public class colonyScript : MonoBehaviour
             }
 
         }
-        totalExpenses.addition(TriValueStruct.one,true);// prevents divide by zero errors
+        totalExpenses.absolute(true);
+        totalIncome.absolute(true);
+        if(totalExpenses.Count(x=>x==0) >0)
+        {
+            totalExpenses.addition(TriValueStruct.one,true);
+        }
+     
         // it will make ai more eco hungry, so its not that sloppy of a solution
 
         TriValueStruct incomeToExpenseRatios= totalIncome.divide(totalExpenses);

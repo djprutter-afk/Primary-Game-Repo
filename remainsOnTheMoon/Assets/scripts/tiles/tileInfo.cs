@@ -286,6 +286,22 @@ public struct TriValueStruct : IEnumerable<float>
         return buildingStruct;
         
     }
+     public TriValueStruct absolute( bool apply = false)
+    {
+        TriValueStruct buildingStruct = new TriValueStruct();
+        buildingStruct.moneyValue = Mathf.Abs(moneyValue);
+        buildingStruct.resourceValue = Mathf.Abs(resourceValue);
+        buildingStruct.populationValue = Mathf.Abs(populationValue);
+       
+        if (apply == true)
+        {
+            moneyValue = buildingStruct.moneyValue;
+            resourceValue = buildingStruct.resourceValue;
+            populationValue =  buildingStruct.populationValue;
+        }
+        return buildingStruct;
+        
+    }
     public TriValueStruct normalize()
     {
         float[] valuesOfStruct = new float[3]{moneyValue,resourceValue,populationValue};

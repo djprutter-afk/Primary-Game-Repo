@@ -119,7 +119,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     
 
         
-        gameManagerScript.GameTick += colonyAiTick;
+        InvokeRepeating(nameof(colonyAiTick),0,5f) ;
         
     }
     void setupJudgementSystem()
@@ -180,14 +180,13 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     {
         TriValueStruct incomeRatios = thisColonyScript.incomeToExpensesRatios();
         float totalRatio = incomeRatios.Average();
-        Debug.LogError(totalRatio +"fdsssssssssssss");
-        TriValueStruct ticksTillBankruptcy = thisColonyScript.resourcesOwned.divide(thisColonyScript.totalIncome());
-        TriValueStruct scarcity =ticksTillBankruptcy.divide(TriValueStruct.one.multiply(30));
-
-         float totalScarcity = Mathf.Clamp01(scarcity.Average());
+       
     
-        float pressure = 0.5f * (1 - totalRatio) + 0.5f * totalScarcity;
-        Debug.LogError($"total ratio is {totalRatio} and total scarcity is {totalScarcity} so economic pressure is {pressure}");
+
+      
+    
+        float pressure =1 - totalRatio ;
+        Debug.LogError($"total ratio is {totalRatio} so economic pressure is {pressure}");
         
 
 
@@ -214,7 +213,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     goal.priority = Mathf.Clamp01(economicPressure);
                     break;
                 case "expansionPressure":
-                    goal.priority = Mathf.Clamp01 ( thisColonyScript.totalIncome().populationValue / (thisColonyScript.allTilesOwned.Count * 10));
+                    goal.priority = Mathf.Clamp01 ( thisColonyScript.resourcesOwned.populationValue / (thisColonyScript.allTilesOwned.Count * 10));
                     break;
             }
             Debug.Log($"goal is: {goal.Name} and the priotry is {goal.priority}");
