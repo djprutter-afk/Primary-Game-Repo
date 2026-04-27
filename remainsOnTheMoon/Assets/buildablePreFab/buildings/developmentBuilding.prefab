@@ -63,9 +63,7 @@ MonoBehaviour:
     buildingName: development
   possibleActions: 
   isBuilding: 1
-  purposes:
-  - purpose: 3
-    strength: 0.75
+  purposes: []
 --- !u!114 &4282932697002007775
 MonoBehaviour:
   m_ObjectHideFlags: 0

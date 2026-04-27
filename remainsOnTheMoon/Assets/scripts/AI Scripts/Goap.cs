@@ -151,7 +151,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
          buildableScript.AIBuildableInfo.buildablePurposes[] purposeWanted = null;
         if(specificPurposes == null)
         { 
-            purposeWanted = (buildableScript.AIBuildableInfo.buildablePurposes[])Enum.GetValues(typeof(buildableScript.AIBuildableInfo.buildablePurposes));
+            purposeWanted = (buildableScript.AIBuildableInfo.buildablePurposes[])Enum.GetValues(typeof(buildableScript.AIBuildableInfo.buildablePurposes));// chose the most desired type at the time. ideally this should never happen
             
         }
         else
