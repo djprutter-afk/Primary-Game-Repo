@@ -232,7 +232,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
        
         buildableScript buildable = buildableGameObject.buildableObject.GetComponent<buildableScript>();
         TriValueStruct buildableUpkeep = buildable.upkeepCosts;
-        float totalBurden = costEvaluation(buildableUpkeep,colonyIncome,maxPotentialResourceExtraction) + costEvaluation(buildableGameObject.buildCost,colonyIncome,maxPotentialResourceExtraction)/2.5f; // buildableupkeep should be weighted more cause ai will have to live with it longer
+        float totalBurden = costEvaluation(buildableUpkeep,colonyIncome,maxPotentialResourceExtraction) + costEvaluation(buildableGameObject.buildCost,colonyIncome,float.MaxValue)/2.5f; // buildableupkeep should be weighted more cause ai will have to live with it longer
         return totalBurden;
     }
     
@@ -248,7 +248,13 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
 
        float dNBPopulation =1;
        if(changeAmount.populationValue<0 && initalValue.populationValue<0){dNBPopulation = doubleNegativeBurden;}
-       changeAmount.resourceValue = Mathf.Min(changeAmount.resourceValue,maxExtraction);
+        
+
+        if(changeAmount.resourceValue < 0)
+        {
+            changeAmount.resourceValue = -Mathf.Min(Mathf.Abs(changeAmount.resourceValue),maxExtraction);
+        }
+       
        TriValueStruct incomeChange = initalValue.subtract(changeAmount);
        TriValueStruct safeInitial = initalValue.addition(TriValueStruct.one.multiply(0.01f));
 

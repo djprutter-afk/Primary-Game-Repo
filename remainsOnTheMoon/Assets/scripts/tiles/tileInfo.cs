@@ -153,7 +153,7 @@ public class tileInfo : MonoBehaviour
     
         
   
-        float developmentFactor = Mathf.Clamp01(development / 100f); // 0-1 scale
+        float developmentFactor = Mathf.Clamp(development - power,0,float.MaxValue); // 0-1 scale
        
         
         // If all population is dead, desettle the tile
