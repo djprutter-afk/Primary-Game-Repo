@@ -60,7 +60,7 @@ MonoBehaviour:
     moneyValue: -25
     resourceValue: 10
     populationValue: 0.25
-    buildingName: development
+    buildingName: tax office
   possibleActions: 
   isBuilding: 1
   purposes:

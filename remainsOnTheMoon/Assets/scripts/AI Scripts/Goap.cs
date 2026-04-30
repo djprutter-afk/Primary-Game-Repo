@@ -156,6 +156,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
         }
         else
         {
+            Debug.Log("specific purposes given: " + specificPurposes[0]);
            purposeWanted = specificPurposes;
         }
        
@@ -204,6 +205,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
             cumulative += kvp.Value;
             if (roll <= cumulative)
             {
+                Debug.Log("chose to build: " + kvp.Key.buildableObject.name + " with value: " + kvp.Value);
                  return kvp.Key;
             }
                

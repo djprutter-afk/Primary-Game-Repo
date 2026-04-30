@@ -12,7 +12,10 @@ using UnityEditor.PackageManager;
 /// </summary>
 public class baseColonyAI : MonoBehaviour// high level decision maker for colony, does not directly control buildable but instead guides them
 {
-   
+   [SerializeField] string currentGoalName;
+   [SerializeField] string currentActionName;
+
+
    
 
 
@@ -119,7 +122,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     
 
         
-        InvokeRepeating(nameof(colonyAiTick),0,5f) ;
+        InvokeRepeating(nameof(colonyAiTick),5,5f) ;
         
     }
     void setupJudgementSystem()
@@ -186,7 +189,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
       
     
         float pressure =1 - totalRatio ;
-        Debug.LogError($"total ratio is {totalRatio} so economic pressure is {pressure}");
+        Debug.Log($"total ratio is {totalRatio} so economic pressure is {pressure}");
         
 
 
@@ -258,6 +261,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
         factory.addBeliefs("has space to build", hasSpaceToBuild);
         bool hasSpaceToBuild()
         {
+            Debug.Log("checking if i have space to build"); 
           
             foreach(GameObject tile in thisColonyScript.allTilesOwned)
             {
@@ -268,7 +272,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     return true;
                 }
             }
-
+ Debug.Log("no space to build found"); 
             return false;
         }
 
@@ -283,10 +287,12 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                 }
                 if( buildable.purposes.Select(x=> x.purpose).Contains(purposeWanted))
                 {
+                    Debug.Log($"found buildable with purpose {purposeWanted}");
                      return true; 
                 }
                
             }
+            Debug.Log($"did not find buildable with purpose {purposeWanted}");
             return false;
 
     }
@@ -432,9 +438,10 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
             if (actionplan != null && actionplan.Actions.Count > 0)
             {
                 currentGoal = actionplan.AgentGoal;
-               
+                currentGoalName = currentGoal.Name;
                 Debug.Log($"Goal: {currentGoal.Name} with {actionplan.Actions.Count} actions in plan");
                 currentAction = actionplan.Actions.Pop();
+                currentActionName = currentAction.name;
                 Debug.Log($"Popped action {currentAction.name}");
                 if(currentAction.preconditions.All(b => b.Evaluate()))
                 {
@@ -442,9 +449,13 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                 }
                 else
                 {
-                    Debug.Log("preconditions are not met, clearing current action and goal");
+                    string preconditionsNotMet = string.Join(", ", currentAction.preconditions.Where(b => !b.Evaluate()).Select(b => b.Name));
+                    Debug.Log($"Preconditions not met for action {currentAction.name}: {preconditionsNotMet}"); 
+                
                     currentAction = null;
                     currentGoal = null;
+                    currentGoalName = "none";
+                    currentActionName = "none";
                 }
             }
 

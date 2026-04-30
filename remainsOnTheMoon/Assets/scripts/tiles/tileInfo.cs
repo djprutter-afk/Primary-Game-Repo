@@ -46,19 +46,19 @@ public class tileInfo : MonoBehaviour
 
     public TriValueStruct TotalIncome(bool alsoAdd = false)// this is the formula for determining all products of the tile
     {
-        Debug.Log("calculating income for tile " + gameObject.name);
+        //Debug.Log("calculating income for tile " + gameObject.name);
         ownerColony = transform.parent.gameObject;// update owner cause might change 
         ownerColonyScript = ownerColony.GetComponent<colonyScript>();
         
        
 
         float totalPopGrowth = 1;
-        Debug.Log("Initial totalPopGrowth: " + totalPopGrowth + ", development: " + development + ", population: " + population + ", maxPopAddedPerDevelopment: " + maxPopAddedPerDevelopment);
+        
         if (ownerColonyScript != null)
         {
             // Carrying capacity based on development
             float carryingCapacity = development * maxPopAddedPerDevelopment;
-            Debug.Log("carryingCapacity: " + carryingCapacity);
+            
             float growthRate = 0.02f; 
             float growthModifier = 1f;
             if (carryingCapacity > 0)
@@ -95,7 +95,7 @@ public class tileInfo : MonoBehaviour
 
         if (alsoAdd == true)
         {
-            Debug.Log("alsoAdd is true, updating values");
+            //Debug.Log("alsoAdd is true, updating values");
 
             lastExtractionAmount = TotalResourceExtraction;
             lastResourceRegeneration = totalRegen;
@@ -116,7 +116,7 @@ public class tileInfo : MonoBehaviour
         }
         else
         {
-            Debug.Log("alsoAdd is false, not updating values");
+           // Debug.Log("alsoAdd is false, not updating values");
         }
         
         TriValueStruct total = new TriValueStruct
@@ -125,7 +125,7 @@ public class tileInfo : MonoBehaviour
             resourceValue = TotalResourceExtraction,
             populationValue = totalPopGrowth
         };
-        Debug.Log("Total income: moneyValue: " + total.moneyValue + ", resourceValue: " + total.resourceValue + ", populationValue: " + total.populationValue);
+        //Debug.Log("Total income: moneyValue: " + total.moneyValue + ", resourceValue: " + total.resourceValue + ", populationValue: " + total.populationValue);
 
         return total;
     }

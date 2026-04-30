@@ -88,58 +88,23 @@ public class cameraRotate : MonoBehaviour
 
 
 
-            float absoluteDistance = Vector3.Distance(playerCameraTarget.transform.position, Vector3.zero);// uses 0,0 as refrence
+            float mouseScrollMovement = -Input.mouseScrollDelta.y;
+            Vector3 localTargetPos = playerCameraTarget.transform.localPosition;
 
-            float mouseScrollMovement = Input.mouseScrollDelta.x - Input.mouseScrollDelta.y;
+            localTargetPos.x += mouseScrollMovement;
+            localTargetPos.x = Mathf.Clamp(localTargetPos.x, minZoomOut, maxZoomOut);
+            playerCameraTarget.transform.localPosition = localTargetPos;
 
-            if ((absoluteDistance >= minZoomOut) && (absoluteDistance <= maxZoomOut))
+            float targetPosition = Vector3.Distance(playerCameraTarget.transform.position, Vector3.zero);
+            if (targetPosition > minZoomOut && targetPosition < maxZoomOut)
             {
-
-
-                playerCameraTarget.transform.localPosition += new Vector3(mouseScrollMovement, 0, 0);
-
-                float targetPosition = Vector3.Distance(playerCameraTarget.transform.position, Vector3.zero);
-
-                if (targetPosition > minZoomOut && targetPosition < maxZoomOut) // if target is within bounds
-                {
-                    targetGoingOutofBounds = false;
-
-                    timeElapsed = 0;
-
-                }
-                else
-                {
-                    if (targetGoingOutofBounds == false)
-                    {
-                        timeElapsed = 0;
-                        targetGoingOutofBounds = true;
-                    }
-
-                }
-             
-
-
+                targetGoingOutofBounds = false;
+                timeElapsed = 0;
             }
-            absoluteDistance = Vector3.Distance(playerCameraTarget.transform.position, Vector3.zero);
-
-            if (absoluteDistance < minZoomOut)
+            else if (!targetGoingOutofBounds)
             {
-
-                float changeAmount = minZoomOut - absoluteDistance;
-              
-
-                playerCameraTarget.transform.localPosition += new Vector3(changeAmount, 0, 0);
-
-
-            }
-            if (absoluteDistance > maxZoomOut)
-            {
-
-                float changeAmount = maxZoomOut - absoluteDistance;
-               
-                playerCameraTarget.transform.localPosition += new Vector3(changeAmount, 0, 0);
-
-
+                timeElapsed = 0;
+                targetGoingOutofBounds = true;
             }
 
 

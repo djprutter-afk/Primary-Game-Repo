@@ -130,7 +130,7 @@ buildableScript.buildableActions actionToUse;
 
         int amountOfBuildables = valueOfBuildable.Count();
 
-        int targetsPerPosition = Mathf.CeilToInt((float)amountOfBuildables / positionsToUse.Length) + 1;; // plus 1 just to be safe, it doesnt effect anything if all goes well
+        int targetsPerPosition = Mathf.CeilToInt((float)amountOfBuildables / positionsToUse.Length) + 1; // plus 1 just to be safe, it doesnt effect anything if all goes well
         
         Dictionary<UnityEngine.Vector3,GameObject[]> tileClosestToPosition = new Dictionary<UnityEngine.Vector3, GameObject[]>();  
         foreach(UnityEngine.Vector3 position in positionsToUse)
@@ -211,10 +211,12 @@ buildableScript.buildableActions actionToUse;
             {
             
                 KeyValuePair<buildableScript,float>  bestBuildable = buildableDecider(position.Key,valueOfBuildable);
-                if(bestBuildable.Value == 0)
+                if(bestBuildable.Key == null)
                 {
-                    break;
+                    finishedAction = true;// means there are no more buildables to do work
+                    return;
                 }
+               
                 if(currentValueUsed + bestBuildable.Value < valueNeed || atLeastOneUsed == false)
                 {
 
@@ -323,8 +325,9 @@ public class settlerUseStrat : buildableUseStrat
     }
     public override Vector3[] postionDecider()
     {
+        positionsToFind =5; // bandaid solution
        
-         GameObject[] sortedGameObjects = new GameObject[positionsToFind];// end result
+        
 
         colonyScript colonyScript = colonyAI.gameObject.GetComponent<colonyScript>();
         GameObject[] outlineTiles = colonyMethoods.findOUterEdgeTiles(colonyAI.gameObject);
@@ -371,6 +374,10 @@ public class settlerUseStrat : buildableUseStrat
           
             if (dictonaryOfTiles.ContainsKey(currentOutLineTile) == false && colonyScript.allTilesOwned.Contains(currentOutLineTile) == false)
             {
+                if(currentOutLineTile == null)
+                {
+                    Debug.LogError("current outline tile was null, CHECK CODE");
+                }
                 dictonaryOfTiles.Add(currentOutLineTile, tileValue);
 
             }
@@ -380,19 +387,29 @@ public class settlerUseStrat : buildableUseStrat
 
             var sortedKvpOfTiles = kvpOfTiles.OrderByDescending(pair => pair.Value).ToList();
 
+            positionsToFind = Mathf.Min(positionsToFind, sortedKvpOfTiles.Count);
+            GameObject[] sortedTiles = new GameObject[positionsToFind];
            
 
             for(int i = 0; i < positionsToFind ;i++)
             {
-                Debug.Log("tile: " + sortedKvpOfTiles[i].Key.name + " has value of: " + sortedKvpOfTiles[i].Value+" "+i);
-                sortedGameObjects[i] = sortedKvpOfTiles[i].Key;
+                Debug.Log($"length of sorted tiles: {sortedKvpOfTiles.Count} and i is: {i}");
+                Debug.Log("tile: " + sortedKvpOfTiles[i].Key.name +" has value of: " + sortedKvpOfTiles[i].Value+" "+i);
+                sortedTiles[i] = sortedKvpOfTiles[i].Key;
 
             }
 
           
 
-        
-         return sortedGameObjects.Select(x=>x.transform.position).ToArray();
+        foreach(GameObject tile in sortedTiles)
+        {
+            if(tile == null)
+            {
+                Debug.LogError("tile was null, CHECK CODE");
+            }
+        }
+        Debug.Log("the best tile to expand to is: " + sortedTiles[0].name);
+        return sortedTiles.Select(x=>x.transform.position).ToArray();
 
 
     }
