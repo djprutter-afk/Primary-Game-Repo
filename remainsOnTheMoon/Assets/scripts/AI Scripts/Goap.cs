@@ -240,7 +240,7 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
     
     float costEvaluation(TriValueStruct changeAmount,TriValueStruct initalValue,float maxExtraction)
     {
-       float doubleNegativeBurden = -2;
+       float doubleNegativeBurden = 2;
        
        float dNBMoney = 1;
        if(changeAmount.moneyValue<0 && initalValue.moneyValue<0){dNBMoney = doubleNegativeBurden;}
@@ -257,11 +257,17 @@ buildableScript.AIBuildableInfo.buildablePurposes[] specificPurposes;
             changeAmount.resourceValue = -Mathf.Min(Mathf.Abs(changeAmount.resourceValue),maxExtraction);
         }
        
-       TriValueStruct incomeChange = initalValue.subtract(changeAmount);
-       TriValueStruct safeInitial = initalValue.addition(TriValueStruct.one.multiply(0.01f));
+       TriValueStruct absoluteChange = changeAmount.absolute();
+       TriValueStruct effectiveInitial = initalValue.absolute().addition(TriValueStruct.one.multiply(0.01f));
+       TriValueStruct changePercent = absoluteChange.divide(effectiveInitial);
 
-       TriValueStruct changePercent = incomeChange.divide(safeInitial);
-       return (1- changePercent.moneyValue) *dNBMoney + (1-changePercent.resourceValue)*dNBResource + (1-changePercent.populationValue)*dNBPopulation;
+       float moneySign = changeAmount.moneyValue < 0 ? -1f : 1f;
+       float resourceSign = changeAmount.resourceValue < 0 ? -1f : 1f;
+       float populationSign = changeAmount.populationValue < 0 ? -1f : 1f;
+
+       return changePercent.moneyValue * moneySign * dNBMoney
+            + changePercent.resourceValue * resourceSign * dNBResource
+            + changePercent.populationValue * populationSign * dNBPopulation;
       
     }
     

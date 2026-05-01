@@ -122,7 +122,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
     
 
         
-        InvokeRepeating(nameof(colonyAiTick),5,5f) ;
+        InvokeRepeating(nameof(colonyAiTick),2f,2f) ;
         
     }
     void setupJudgementSystem()
@@ -188,7 +188,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
       
     
-        float pressure =1 - totalRatio ;
+        float pressure = totalRatio ;
         Debug.Log($"total ratio is {totalRatio} so economic pressure is {pressure}");
         
 
@@ -216,7 +216,7 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
                     goal.priority = Mathf.Clamp01(economicPressure);
                     break;
                 case "expansionPressure":
-                    goal.priority = Mathf.Clamp01 ( thisColonyScript.resourcesOwned.populationValue / (thisColonyScript.allTilesOwned.Count * 10));
+                    goal.priority = Mathf.Clamp01 ( thisColonyScript.resourcesOwned.populationValue / (thisColonyScript.allTilesOwned.Count * 500));
                     break;
             }
             Debug.Log($"goal is: {goal.Name} and the priotry is {goal.priority}");
@@ -332,9 +332,6 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
 
         
  
-        
-    
-
         ////////////////////////////////////////////////////////////////////////
       
 
@@ -396,7 +393,6 @@ public List<otherColonyInfo> otherColonyInfos = new List<otherColonyInfo>();
    
     void setupGoals()
     {
-
         goals = new HashSet<AgentGoal>();
         
 
